@@ -1,11 +1,13 @@
 #include "app/init.h"
-#include "board/osh.h"
 
 #include "hal/sys.h"
 #include "hal/evsys.h"
 #include "hal/tcb.h"
 #include "hal/sch.h"
+
 #include "board/ish.h"
+#include "board/osh.h"
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
