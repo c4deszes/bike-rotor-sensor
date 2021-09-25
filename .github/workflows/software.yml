@@ -3,6 +3,7 @@ name: Software
 on:
   pull_request:
     paths:
+      - '.github/workflows/software*.yml'
       - 'software/**'
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
       - name: Configure build
         working-directory: software
         run: |
-          cmake --preset=avr-release .
+          cmake --preset=avr-release-unix .
 
       - name: Build application
         working-directory: software
