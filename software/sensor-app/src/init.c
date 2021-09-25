@@ -1,7 +1,4 @@
 #include "app/init.h"
-
-#include "app/init.h"
-
 #include "app/config.h"
 
 #include "hal/wdt.h"
