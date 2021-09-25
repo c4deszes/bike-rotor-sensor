@@ -1,0 +1,31 @@
+name: Software
+
+on:
+  pull_request:
+    paths:
+      - 'software/**'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/c4deszes/avr-gcc-docker:v1.0.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: GCC Problem Matcher
+        uses: ammaraskar/gcc-problem-matcher@0.1
+
+      - name: Configure build
+        working-directory: software
+        run: |
+          cmake --preset=avr-release .
+
+      - name: Build application
+        working-directory: software
+        run: |
+          cmake --build --preset=build-default-avr-release

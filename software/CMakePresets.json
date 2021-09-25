@@ -1,0 +1,78 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "avr-default",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "MinGW Makefiles",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
+            },
+            "hidden": true
+        },
+        {
+            "name": "avr-debug",
+            "inherits": "avr-default",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "avr-release",
+            "inherits": "avr-default",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "mingw",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "MinGW Makefiles",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake",
+                "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "hidden": true
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-default",
+            "targets": ["rotor-sensor", "rotor-sensor-extras"],
+            "hidden": true
+        },
+        {
+            "name": "build-default-avr-release",
+            "inherits": "build-default",
+            "configurePreset": "avr-release"
+        },
+        {
+            "name": "build-test",
+            "targets": ["rotor-sensor-test"],
+            "hidden": true,
+            "cleanFirst": false
+        },
+        {
+            "name": "build-docs",
+            "targets": ["Sphinx"],
+            "cleanFirst": true,
+            "hidden": true
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "unittest",
+            "output": {
+                "outputOnFailure": true
+            },
+            "hidden": true
+        }
+    ]
+}

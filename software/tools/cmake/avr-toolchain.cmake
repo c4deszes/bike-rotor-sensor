@@ -1,0 +1,34 @@
+# Compiler configuration for AVR GCC compiler
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR avr)
+
+set(CMAKE_C_COMPILER_WORKS 1)
+
+set(CMAKE_C_COMPILER "avr-gcc" CACHE INTERNAL "")
+set(CMAKE_CXX_COMPILER "avr-g++" CACHE INTERNAL "")
+set(CMAKE_OBJCOPY "avr-objcopy" CACHE INTERNAL "")
+set(CMAKE_OBJDUMP "avr-objdump" CACHE INTERNAL "")
+set(CMAKE_OBJSIZE "avr-size" CACHE INTERNAL "")
+
+# C compiler flags
+set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -std=c11")
+set(CMAKE_C_FLAGS_DEBUG "-g3 -Og")
+set(CMAKE_C_FLAGS_MINSIZEREL "-Os")
+set(CMAKE_C_FLAGS_RELEASE "-O2")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+# C++ compiler flags
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -std=c++11")
+set(CMAKE_CXX_FLAGS_DEBUG "-g3 -Og")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+# Compiler detection
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+# Development environment
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

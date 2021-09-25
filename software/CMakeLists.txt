@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(
+    rotor-sensor
+    DESCRIPTION "Rotor Sensor"
+    LANGUAGES C CXX ASM)
+set(PROJECT_VERSION "0.1.0")
+
+# Profile selection
+include("config/internal-optical-analog-iref.cmake")
+
+# Test configuration
+enable_testing()
+set(CTEST_OUTPUT_ON_FAILURE ON)
+
+set(CTEST_COVERAGE_COMMAND "gcovr")
+set(CTEST_COVERAGE_EXTRA_FLAGS "--xml ${CMAKE_CURRENT_BINARY_DIR}/coverage.xml")
+
+include(CTest)
+include(GoogleTest)
+add_subdirectory("ext/googletest")
+
+# Linting configuration
+#set(CMAKE_C_CPPLINT "cpplint")
+
+# Tools
+include(tools/cmake/gcc-lto.cmake)
+
+# Project
+add_subdirectory(docs)
+add_subdirectory(sensor-app)
+add_subdirectory(sensor-bsp)
+add_subdirectory(sensor-lib)
+add_subdirectory(tiny-hal)
