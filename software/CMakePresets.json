@@ -9,7 +9,6 @@
         {
             "name": "avr-default",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "MinGW Makefiles",
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
             },
@@ -32,6 +31,11 @@
             }
         },
         {
+            "name": "avr-release-unix",
+            "inherits": "avr-release",
+            "generator": "Unix Makefiles"
+        },
+        {
             "name": "mingw",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "MinGW Makefiles",
@@ -51,7 +55,7 @@
         {
             "name": "build-default-avr-release",
             "inherits": "build-default",
-            "configurePreset": "avr-release"
+            "configurePreset": "avr-release-unix"
         },
         {
             "name": "build-test",
