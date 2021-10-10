@@ -8,7 +8,7 @@ tcb_capture_callback local_callback = NULL;
 
 void tcb_init(const tcb_configuration* configuration) {
     TCB0.CTRLA = TCB_CLKSEL_CLKDIV1_gc << TCB_CLKSEL_gp;
-    TCB0.CTRLB = TCB_CNTMODE_CAPT_gc << TCB_CNTMODE_gp;
+    TCB0.CTRLB = TCB_CNTMODE_FRQPW_gc << TCB_CNTMODE_gp;
     TCB0.EVCTRL = TCB_CAPTEI_bm;
 }
 

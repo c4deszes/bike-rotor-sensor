@@ -1,0 +1,81 @@
+/**
+ * 
+ *
+ */
+#include "signal_api.h"
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+enum {
+    INITIAL,
+    LENGTH_RECEIVED,
+    ID_RECEIVED
+} _rpc_frame_state;
+
+static uint8_t _length = 0;
+static uint8_t _id = 0;
+static uint8_t _index = 0;
+static uint8_t _buffer[16];
+
+static void _signal_rpc_handle() {
+    switch(_buffer[1]) {
+        {% for signal in signals -%}
+        case SIGNAL_RPC_{{ signal.name }}_ID: {
+            {% for arg in signal.args -%}
+                {{arg.type}} {{arg.name}};
+            {% endfor -%}
+            {%- set offset = namespace(value='&_buffer') %}
+            {% for arg in signal.args -%}
+                memcpy(&{{arg.name}}, {{offset.value}}, sizeof({{arg.type}}));
+                {%- set offset.value = offset.value + ' + sizeof(' + arg.type + ')' %}
+            {% endfor -%}
+            {% if signal.rtype=='void' -%}
+            signal_rpc_{{ signal.name }}(
+                {%- for arg in signal.args -%}
+                    {{arg.name}}
+                    {%- if not loop.last -%}
+                        ,
+                    {%- endif -%}
+                {%- endfor -%}
+            );
+            {% else -%}
+            {{signal.rtype}} return_val = signal_rpc_{{ signal.name }}(
+                {%- for arg in signal.args -%}
+                    {{arg.name}}
+                    {%- if not loop.last -%}
+                        ,
+                    {%- endif -%}
+                {%- endfor -%}
+            );
+            {% endif -%}
+            break;
+        }
+        {% endfor -%}
+        default: {
+
+            break;
+        }
+    }
+}
+
+void _signal_rpc_receive(uint8_t data) {
+    if (_rpc_frame_state == INITIAL) {
+        _length = data;
+        _index = 0;
+        _id = 0;
+        _rpc_frame_state = LENGTH_RECEIVED;
+    }
+    else if(_rpc_frame_state == LENGTH_RECEIVED) {
+        _id = data;
+        _rpc_frame_state = ID_RECEIVED;
+    }
+    else if(_rpc_frame_state == ID_RECEIVED) {
+        _buffer[_index] = data;
+        _index++;
+    }
+    else {
+        // Set internal error
+    }
+}

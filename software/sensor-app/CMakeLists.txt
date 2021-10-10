@@ -5,6 +5,7 @@ add_executable(
     rotor-sensor EXCLUDE_FROM_ALL
     src/main.c
     src/init.c
+    src/signals.c
     src/tasks.c
 )
 set_target_properties(rotor-sensor PROPERTIES SUFFIX ".elf")

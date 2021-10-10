@@ -3,25 +3,45 @@
 
 #include "hal/wdt.h"
 #include "hal/usart.h"
+#include "hal/tca.h"
+#include "hal/tcb.h"
+#include "hal/sch.h"
 #include "board/board.h"
 #include "sensor/pse.h"
 #include "sensor/spe.h"
 
-static const pse_configuration pse_config = {
-    .pulse_per_rotation = 64,
-    .index_threshold = 200,
-    .min_pulse_width = 10
+#include "hal/portmux.h"
+
+static const tca_configuration tca_config = {
+    .clksel = TCA_CLKSEL_CLKDIV1
 };
 
-static const usart_one_wire_configuration usart_config = {
-    .baudrate = 9600,
-    .rx_handler = 0
-};
+void tca_overflow_handler() {
+    sch_trigger();
+}
 
 void app_init() {
-    //wdt_init_normal(WDT_WINDOW_512CLK);
+    wdt_init_normal(WDT_PERIOD_512CLK);
 
     board_init();
+
+    /** Scheduler configuration */
+    tca_init(&tca_config);
+    tca_set_period(250);
+    tca_enable_overflow_interrupt(tca_overflow_handler);
+    tca_enable();
+
+    /**
+     * CLK_PER = 250 000
+     * 262ms period
+     */
+    tcb_init((void*)0);
+    tcb_enable_interrupt((void*)0);
+    tcb_enable();
+
+    /** Usart config */
+    usart_init_full_duplex((void*)0);
+    usart_sync_setup_stdio();
 
     //pse_init(&pse_config);
 }

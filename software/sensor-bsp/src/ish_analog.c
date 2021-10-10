@@ -16,7 +16,7 @@ const ac_configuration analog_settings = {
     .runstandy = false,
     .output_enable = false,
     .intmode = AC_INTERRUPT_MODE_BOTH,
-    .hysmode = AC_HYSTERESIS_MODE_50MV
+    .hysmode = AC_HYSTERESIS_MODE_OFF
 };
 
 /**

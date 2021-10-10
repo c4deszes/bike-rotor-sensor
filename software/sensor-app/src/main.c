@@ -4,6 +4,8 @@
 #include "hal/evsys.h"
 #include "hal/tcb.h"
 #include "hal/sch.h"
+#include "hal/usart.h"
+#include "hal/portmux.h"
 
 #include "board/ish.h"
 #include "board/osh.h"
@@ -12,15 +14,10 @@
 #include <avr/interrupt.h>
 
 ISR(TCB0_INT_vect) {
-    // PORTB.OUTTGL = _BV(5);
-    (uint16_t)TCB0.CCMP;
+    //PORTB.OUTTGL = _BV(5);
+    uint16_t posedge = TCB0.CNT;
+    uint16_t negedge = TCB0.CCMP;
     TCB0.INTFLAGS = TCB_CAPT_bm;
-}
-
-ISR(TCA0_OVF_vect) {
-    sch_trigger();
-    // clear flag
-    TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
 }
 
 int main(void) {
@@ -34,32 +31,11 @@ int main(void) {
 
     ish_enable();
 
-    // TCB0 user -> Async Generator 0
     evsys_user_async_select(0, 0x3);
-
-    /**
-     * @brief 
-     * TCA calculations
-     * 
-     * 1 000 000 Hz -> 0.000001 / tick
-     * div 4 -> 0.0000002 / tick
-     * 100us = 0.000004s * 25
-     * 100us period for scheduler
-     * Compare
-     */
-    TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV1_gc;
-    TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm;
-    TCA0.SINGLE.PER = 100;
-    TCA0.SINGLE.CTRLA |= TCA_SINGLE_ENABLE_bm;
-
-    tcb_init((void*)0);
-    tcb_enable_interrupt((void*)0);
-    tcb_enable();
 
     sys_enable_interrupts();
 
-    PORTB.OUTCLR = _BV(5);
-
+    /** Enter scheduler */
     sch_init();
 
     sch_enter();

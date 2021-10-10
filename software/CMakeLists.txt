@@ -7,7 +7,7 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-include("config/internal-optical-analog-iref.cmake")
+include("config/internal-optical-digital.cmake")
 
 # Test configuration
 enable_testing()
