@@ -1,4 +1,5 @@
 #include "board/ish.h"
+#include "board/ish_internal.h"
 
 #include "hal/port.h"
 #include "hal/ac.h"
@@ -24,7 +25,7 @@ const ac_configuration analog_settings = {
  * 
  * @param configuration 
  */
-void ish_init(ish_callback callback) {
+void ish_init() {
     // setup analog comparator
     ac_init(&analog_settings);
 

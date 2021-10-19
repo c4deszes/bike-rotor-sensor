@@ -2,14 +2,18 @@
 
 #include <stdbool.h>
 
-static uint16_t buffer[3];
-static pse_position_state state = PSE_POSITION_STATE_UNKNOWN;
-static uint16_t position_inc = 0; /** 0 - pulse_per_rotation */
+/** Configuration */
+static uint8_t pulse_per_rotation;
+static uint8_t index_threshold;
 
-static pse_configuration configuration;
+/** Internal state */
+static uint8_t buffer[3];
+static pse_position_state state = PSE_POSITION_STATE_UNKNOWN;
+static uint8_t position_inc = 0; /** 0 - pulse_per_rotation */
 
 void pse_init(const pse_configuration* conf) {
-    configuration = *conf;
+    pulse_per_rotation = conf->pulse_per_rotation;
+    index_threshold = conf->index_threshold;
 
     /** Reset internal state */
     state = PSE_POSITION_STATE_UNKNOWN;
@@ -20,20 +24,17 @@ void pse_init(const pse_configuration* conf) {
     buffer[2] = 0;
 }
 
-void pse_shift_buffer(uint16_t width) {
+void pse_shift_buffer(uint8_t width) {
     buffer[0] = buffer[1];
     buffer[1] = buffer[2];
     buffer[2] = width;
 }
 
 bool pse_find_index(void) {
-    if (buffer[0] < configuration.min_pulse_width) {
+    if (buffer[1] < buffer[0] + index_threshold) {
         return false;
     }
-    if (buffer[1] < buffer[0] + configuration.index_threshold) {
-        return false;
-    }
-    if (buffer[1] < buffer[2] + configuration.index_threshold ) {
+    if (buffer[1] < buffer[2] + index_threshold ) {
         return false;
     }
     return true;
@@ -44,14 +45,14 @@ void pse_zero(void) {
     position_inc = 0;
 }
 
-void pse_update(uint16_t width) {
-    // Filter noise
-    if (width < configuration.min_pulse_width) {
+void pse_update(uint8_t pos, uint8_t neg) {
+    if (pos == 0) {
+        /** Ignore timeout */
         return;
     }
 
     // Shift in 
-    pse_shift_buffer(width);
+    pse_shift_buffer(pos);
 
     if (state == PSE_POSITION_STATE_UNKNOWN && pse_find_index()) {
         /** Synchronize */
@@ -63,7 +64,7 @@ void pse_update(uint16_t width) {
         /** Synchronized and pulse received */
         position_inc += 1;
 
-        if (position_inc > configuration.pulse_per_rotation) {
+        if (position_inc > pulse_per_rotation) {
             if (pse_find_index()) {
                 pse_zero();
             }

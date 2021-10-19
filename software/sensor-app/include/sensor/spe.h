@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#include <stdint.h>
+
 typedef enum {
     SPE_SPEED_STATE_UNKNOWN,
     SPE_SPEED_STATE_OK
@@ -15,7 +17,7 @@ typedef enum {
 
 void spe_init(void);
 
-void spe_update(uint16_t width);
+void spe_update(uint8_t pos, uint8_t neg);
 
 uint16_t spe_get_speed(void);
 

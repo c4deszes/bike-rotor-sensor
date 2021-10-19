@@ -29,16 +29,16 @@ typedef struct {
     bool capture_event_enable;
 } tcb_configuration;
 
-typedef void (*tcb_capture_callback)(const uint16_t capture);
-
 void tcb_init(const tcb_configuration* configuration);
 
 void tcb_enable(void);
 
 void tcb_disable(void);
 
-void tcb_enable_interrupt(tcb_capture_callback callback);
+void tcb_enable_interrupt();
 
 void tcb_disable_interrupt(void);
+
+void tcb_capture_handler(const uint16_t capture, const uint16_t count);
 
 bool tcb_is_running(void);

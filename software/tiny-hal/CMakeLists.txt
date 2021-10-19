@@ -8,6 +8,7 @@ add_library(
     src/port.c
     src/portmux.c
     src/rstctrl.c
+    src/rtc.c
     src/sch.c
     src/slpctrl.c
     src/sys.c

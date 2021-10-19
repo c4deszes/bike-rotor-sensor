@@ -47,7 +47,7 @@ void board_init() {
 
     osh_init();
 
-    ish_init(NULL);
+    ish_init();
 
     vcom_init();
 }

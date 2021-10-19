@@ -17,8 +17,6 @@ typedef struct {
     tca_clksel clksel;
 } tca_configuration;
 
-typedef void (*tca_ovf_handler)(void);
-
 void tca_init(const tca_configuration* configuration);
 
 void tca_enable(void);
@@ -27,6 +25,10 @@ void tca_disable(void);
 
 void tca_set_period(uint16_t period);
 
-void tca_enable_overflow_interrupt(tca_ovf_handler handler);
+void tca_set_count(uint16_t count);
+
+void tca_enable_overflow_interrupt();
 
 void tca_disable_overflow_interrupt(void);
+
+void tca_overflow_handler(void);

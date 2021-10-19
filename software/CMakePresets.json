@@ -58,12 +58,6 @@
             "configurePreset": "avr-release-unix"
         },
         {
-            "name": "build-test",
-            "targets": ["rotor-sensor-test"],
-            "hidden": true,
-            "cleanFirst": false
-        },
-        {
             "name": "build-docs",
             "targets": ["Sphinx"],
             "cleanFirst": true,

@@ -1,6 +1,8 @@
 #include "board/ish.h"
+#include "board/ish_internal.h"
 
 #include "hal/port.h"
+#include "hal/tca.h"
 #include "hal/tcb.h"
 #include "hal/evsys.h"
 
@@ -15,12 +17,16 @@ const port_input_configuration ish_config = {
     .pullup = false
 };
 
-void ish_init(ish_callback callback) {
+void ish_init() {
     port_setup_input(ish_pin, &ish_config);
+
+    ish_tcb_init();
 }
 
 void ish_enable(void) {
     evsys_gen_async_select(evsys_channel, EVSYS_ASYNCCH0_PORTA_PIN0_gc + ish_pin);
+    tca_enable();
+    tcb_enable();
 }
 
 void ish_disable(void) {

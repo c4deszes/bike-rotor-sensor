@@ -9,14 +9,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef void (*ish_callback)(const uint16_t width);
+typedef struct {
+    uint8_t positive;
+    uint8_t negative;
+} ish_data;
 
 /**
- * @brief Initializes the input stage driver with the given configuration
- * 
- * @param configuration 
+ * @brief Initializes the input stage driver
  */
-void ish_init(ish_callback callback);
+void ish_init(void);
 
 /**
  * @brief Enables the input stage
@@ -43,3 +44,17 @@ uint8_t ish_get_event_channel(void);
  * @return false 
  */
 bool ish_get_state(void);
+
+/**
+ * @brief Returns the number of not processed pulses
+ * 
+ * @return uint8_t 
+ */
+uint8_t ish_available();
+
+/**
+ * @brief Returns the 
+ * 
+ * @return ish_data 
+ */
+ish_data ish_get();

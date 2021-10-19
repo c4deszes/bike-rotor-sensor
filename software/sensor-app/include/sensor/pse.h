@@ -12,8 +12,7 @@
 
 typedef struct {
     uint8_t pulse_per_rotation;
-    uint16_t min_pulse_width;
-    uint16_t index_threshold;
+    uint8_t index_threshold;
 } pse_configuration;
 
 typedef enum {
@@ -23,7 +22,7 @@ typedef enum {
 
 void pse_init(const pse_configuration* conf);
 
-void pse_update(uint16_t width);
+void pse_update(uint8_t pos, uint8_t neg);
 
 uint16_t pse_get_position(void);
 

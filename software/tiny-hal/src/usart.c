@@ -98,6 +98,6 @@ uint8_t usart_async_available() {
 }
 
 ISR(USART0_RXC_vect) {
-   //received = USART0.RXDATAL;
+   uint8_t received = USART0.RXDATAL;
    PORTB.OUTTGL = _BV(5);
 }
