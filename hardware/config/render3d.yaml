@@ -1,0 +1,10 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: 'render3d'
+    comment: 'Generate 3D Model'
+    type: step
+    dir: build
+    options:
+      output: pcb.step

@@ -1,0 +1,7 @@
+kibot:
+  version: 1
+
+preflight:
+  run_erc: true
+  # TODO: enable this once this feature has been released
+  #erc_warnings: false

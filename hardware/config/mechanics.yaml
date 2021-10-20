@@ -1,0 +1,12 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: 'pcb_edge'
+    comment: 'Generate layout DXF'
+    type: dxf
+    dir: build
+    layers:
+      - 'Edge.Cuts'
+    options:
+      output: pcb_edge.dxf

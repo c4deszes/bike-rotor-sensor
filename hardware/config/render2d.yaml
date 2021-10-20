@@ -1,0 +1,10 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: 'render2d'
+    comment: 'Generate 2D Image'
+    type: pcbdraw
+    dir: build
+    options:
+      output: render.png
