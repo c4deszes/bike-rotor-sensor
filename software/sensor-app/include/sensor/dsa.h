@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 typedef struct {
-    uint8_t pulse_per_rotations;
+    uint8_t pulse_per_rotation;
 } dsa_configuration;
 
 /**

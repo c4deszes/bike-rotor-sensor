@@ -1,7 +1,11 @@
 #pragma once
 
-#define PULSE_PER_ROTATION 64
-#define PULSE_MIN_WIDTH 10
+/**
+ * @brief Defines the number of pulses for a complete rotation of the disk
+ */
+#define SENSOR_PULSE_PER_ROTATION 8
 
-#define PSE_INDEX_THRESHOLD 100
-#define PSE_MIN_PULSE_WIDTH PULSE_MIN_WIDTH
+/**
+ * @brief 
+ */
+#define SENSOR_INDEX_THRESHOLD 100

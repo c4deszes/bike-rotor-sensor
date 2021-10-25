@@ -2,6 +2,7 @@
 #include "board/ish_internal.h"
 
 #include "hal/sys.h"
+#include "hal/evsys.h"
 #include "hal/tca.h"
 #include "hal/tcb.h"
 
@@ -10,15 +11,21 @@
 
 #define BUFFER_SIZE 32
 
+static bool overflow = false;
 static uint8_t pos_buffer[BUFFER_SIZE];
 static uint8_t neg_buffer[BUFFER_SIZE];
 static uint8_t head = 0;
 static uint8_t tail = 0;
 
 void ish_put(uint8_t pos, uint8_t neg) {
+    uint8_t next = (head + 1) % BUFFER_SIZE;
+    if (next == tail) {
+        overflow = true;
+        return;
+    }
     pos_buffer[head] = pos;
     neg_buffer[head] = neg;
-    head = (head + 1) % BUFFER_SIZE;
+    head = next;
 }
 
 uint8_t ish_available() {
@@ -45,15 +52,32 @@ void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
     ish_put(pos, neg);
 }
 
-static const tca_configuration tca_config = {
-    .clksel = TCA_CLKSEL_CLKDIV1
-};
+// static const tca_configuration tca_config = {
+//     .clksel = TCA_CLKSEL_CLKDIV1
+// };
 
-void ish_tcb_init() {
-    tca_init(&tca_config);
-    tca_set_period(63750);  // 255ms
-    tca_enable_overflow_interrupt();
+void ish_init() {
+    /** Sets up the input stage peripheral (variant specific) */
+    ish_setup_io();
 
+    // tca_init(&tca_config);
+    // tca_set_period(63750);  // 255ms
+    // tca_enable_overflow_interrupt();
+
+    /** Initializes TCB0 in Frequency and Pulse Width measurement mode */
     tcb_init((void*)0);
     tcb_enable_interrupt();
+
+    /** Connects Event user TCB0 (0) to Event generator Async channel 0 (0x3) */
+    evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);
+}
+
+void ish_enable(void) {
+    evsys_gen_async_select(0, ish_get_event_channel());
+    tcb_enable();
+}
+
+void ish_disable(void) {
+    evsys_gen_async_disable(0);
+    tcb_disable();
 }

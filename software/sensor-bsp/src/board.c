@@ -4,8 +4,10 @@
 #include "hal/clkctrl.h"
 #include "hal/port.h"
 #include "hal/portmux.h"
+
 #include "board/osh.h"
 #include "board/ish.h"
+
 #include <stddef.h>
 
 const uint32_t MCLK_FREQUENCY = 16000000UL;
@@ -22,12 +24,13 @@ void clock_init(void) {
 }
 
 const uint8_t vcom_tx_pin = 1;
+const uint8_t vcom_rx_pin = 2;
+
 const port_output_configuration vcom_tx_config = {
     .input_sense = PORT_INPUT_SENSE_INTDISABLE,
     .inverted = false
 };
 
-const uint8_t vcom_rx_pin = 2;
 const port_input_configuration vcom_rx_config = {
     .input_sense = PORT_INPUT_SENSE_INTDISABLE,
     .inverted = false,

@@ -4,14 +4,9 @@
 #include "hal/port.h"
 #include "hal/ac.h"
 #include "hal/vref.h"
-#include "hal/tcb.h"
-#include "hal/evsys.h"
+#include "board/pins.h"
 
 #include <avr/io.h>
-#include <stddef.h>
-
-const uint8_t ish_pin = 7;
-const uint8_t evsys_channel = 0;
 
 const ac_configuration analog_settings = {
     .runstandy = false,
@@ -25,11 +20,10 @@ const ac_configuration analog_settings = {
  * 
  * @param configuration 
  */
-void ish_init() {
-    // setup analog comparator
+void ish_setup_io() {
     ac_init(&analog_settings);
 
-    port_setup_standy(ish_pin);
+    port_setup_standby(ISH_INPUT_PIN);
 
     #ifdef BOARD_SENSOR_ANALOG_REF_EXTERNAL
     ac_setmux(false, AC_MUX_POSITIVE_P0, AC_MUX_NEGATIVE_N0);
@@ -55,20 +49,10 @@ void ish_init() {
     ac_enable();
 }
 
-void ish_enable(void) {
-    // 
-    evsys_gen_async_select(evsys_channel, 0);
-}
-
-void ish_disable(void) {
-    evsys_gen_async_disable(evsys_channel);
-}
-
 uint8_t ish_get_event_channel(void) {
-    return evsys_channel;
+    return EVSYS__ASYNCCH0_AC0_OUT_gc;
 }
 
 bool ish_get_state(void) {
-    // return ac state
     return ac_get_state();
 }

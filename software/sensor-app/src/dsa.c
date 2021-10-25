@@ -1,16 +1,18 @@
 #include "sensor/dsa.h"
 
 /** Configuration */
-static uint8_t pulse_per_rotations;
+static uint8_t pulse_per_rotation;
 
 /** State */
 static uint8_t steps;
 static uint32_t rotations;
 
 void dsa_init(const dsa_configuration* conf) {
-    pulse_per_rotations = conf->pulse_per_rotations;
-    steps = 0;
-    rotations = 0;
+    /** Load configuration */
+    pulse_per_rotation = conf->pulse_per_rotation;
+
+    /** Reset state */
+    dsa_reset();
 }
 
 void dsa_update(uint8_t pos, uint8_t neg) {
@@ -18,9 +20,9 @@ void dsa_update(uint8_t pos, uint8_t neg) {
         /** Ignore timeout */
     }
     else {
-        /** Increment rotation counter */
+        /** Increment rotation counters */
         steps++;
-        if (steps >= pulse_per_rotations) {
+        if (steps >= pulse_per_rotation) {
             rotations++;
             steps = 0;
         }

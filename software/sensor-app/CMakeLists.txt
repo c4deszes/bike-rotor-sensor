@@ -2,7 +2,6 @@ add_executable(
     rotor-sensor EXCLUDE_FROM_ALL
     src/main.c
     src/init.c
-    src/signals.c
     src/tasks.c
     src/dsa.c
     src/pse.c
