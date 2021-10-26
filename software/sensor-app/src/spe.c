@@ -20,14 +20,7 @@ void spe_update(uint8_t pos, uint8_t neg) {
         state = SPE_SPEED_STATE_OK;
     }
     else {
-        /**
-         * Positive Impulse length = 50ms
-         * Negative Impulse length = 50ms
-         * Pulse per rotation = 8
-         * -> Total rotation time = (pos + neg) * pulse_per_rot
-         * -> RPM = 60 * 1000 / total_rotation_time
-         */
-        uint16_t current_speed = (60 * 1000) / (pos + neg) * pulse_per_rotation;
+        uint16_t current_speed = (60u * 1000u) / ((pos + neg) * pulse_per_rotation);
 
         speed = current_speed;
         state = SPE_SPEED_STATE_OK;

@@ -5,6 +5,11 @@
 #include <stdio.h>
 
 typedef enum {
+    USART_COM_MODE_ASYNC = 0x00,
+    USART_COM_MODE_SYNC = 0x01
+} usart_com_mode;
+
+typedef enum {
     USART_PARITY_MODE_NONE = 0x00,
     USART_PARITY_MODE_EVEN = 0x02,
     USART_PARITY_MODE_ODD = 0x03
@@ -25,12 +30,14 @@ typedef void (*usart_tx_handler)(uint8_t* data);
 
 typedef struct {
     uint16_t baudrate;
+    usart_com_mode com_mode;
+    usart_parity_mode parity_mode;
 } usart_full_duplex_configuration;
 
 typedef struct {
     uint16_t baudrate;
-    bool open_drain;
-    usart_rx_handler rx_handler;
+    usart_com_mode com_mode;
+    usart_parity_mode parity_mode;
 } usart_one_wire_configuration;
 
 void usart_init_full_duplex(const usart_full_duplex_configuration* configuration);

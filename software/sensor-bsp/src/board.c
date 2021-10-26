@@ -10,7 +10,7 @@
 
 #include <stddef.h>
 
-const uint32_t MCLK_FREQUENCY = 16000000UL;
+const uint32_t MCLK_FREQUENCY = 16000000UL / 64UL;
 
 /**
  * @brief Initializes the clock settings

@@ -1,21 +1,28 @@
 #include "hal/usart.h"
 
+#include "hal/sys.h"
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-void usart_init_one_wire(const usart_one_wire_configuration* configuration) {
+inline uint16_t usart_calc_baud_async(uint32_t clk_per, uint32_t baudrate) {
+    return (64 * clk_per) / (16 * baudrate);
+}
 
+void usart_init_one_wire(const usart_one_wire_configuration* configuration) {
+    USART0.BAUD = usart_calc_baud_async(sys_get_cpu_frequency(), configuration->baudrate);
+    USART0.CTRLA = USART_LBME_bm;
+    USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm | USART_ODME_bm;
+    USART0.CTRLC = (configuration->com_mode << USART_CMODE_gp) | 
+                   (configuration->parity_mode << USART_PMODE_gp);
 }
 
 void usart_init_full_duplex(const usart_full_duplex_configuration* configuration) {
-    /**
-     * @brief 
-     * 64 * 250000 / (9600 * 16)
-     */
-    USART0.BAUD = 104;
-    //USART0.CTRLC = 0;
-    //USART0.CTRLA = USART_RXCIE_bm;
+    USART0.BAUD = usart_calc_baud_async(sys_get_cpu_frequency(), configuration->baudrate);
+    USART0.CTRLA = 0;
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
+    USART0.CTRLC = (configuration->com_mode << USART_CMODE_gp) | 
+                   (configuration->parity_mode << USART_PMODE_gp);
 }
 
 void usart_disable(void) {
@@ -35,8 +42,6 @@ void usart_sync_write(uint8_t data) {
 
     /** Wait for the data register to be empty */
     while ((USART0.STATUS & USART_DREIF_bm) == 0);
-
-    return 0;
 }
 
 uint8_t usart_sync_read() {
@@ -46,13 +51,6 @@ uint8_t usart_sync_read() {
     return USART0.RXDATAL;
 }
 
-/**
- * @brief Adapter to connect stdout to the synchronuous USART driver
- * 
- * @param c 
- * @param stream 
- * @return int 
- */
 static int _stdio_usart_sync_write(char c, FILE* stream) {
     usart_sync_write((uint8_t)c);
     return 0;
@@ -69,13 +67,11 @@ struct {
     uint8_t rx_buffer_size;
     uint8_t rx_buffer_head;
     uint8_t rx_buffer_tail;
-    uint8_t rx_buffer_index;
 
     uint8_t* tx_buffer;
     uint8_t tx_buffer_size;
     uint8_t tx_buffer_head;
     uint8_t tx_buffer_tail;
-    uint8_t tx_buffer_index;
 } usart_async_state;
 
 void usart_async_write(uint8_t data) {
@@ -83,7 +79,7 @@ void usart_async_write(uint8_t data) {
 }
 
 uint8_t usart_async_read() {
-    if (usart_async_state.rx_buffer_head == usart_async_state.rx_buffer_index) {
+    if (usart_async_state.rx_buffer_head == usart_async_state.rx_buffer_tail) {
         return -1;
     }
     uint8_t data = usart_async_state.rx_buffer[usart_async_state.rx_buffer_tail];
@@ -99,5 +95,4 @@ uint8_t usart_async_available() {
 
 ISR(USART0_RXC_vect) {
    uint8_t received = USART0.RXDATAL;
-   PORTB.OUTTGL = _BV(5);
 }

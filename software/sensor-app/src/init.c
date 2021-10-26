@@ -21,6 +21,12 @@ static const rtc_configuration rtc_config = {
     .prescaler = RTC_PRESCALER_DIV1
 };
 
+static const usart_full_duplex_configuration usart_phy_config = {
+    .com_mode = USART_COM_MODE_ASYNC,
+    .baudrate = 9600,
+    .parity_mode = USART_PARITY_MODE_NONE
+};
+
 static const dsa_configuration dsa_config = {
     .pulse_per_rotation = SENSOR_PULSE_PER_ROTATION
 };
@@ -60,8 +66,7 @@ void app_init() {
     rtc_enable();
 
     /** Usart config */
-    usart_init_full_duplex((void*)0);
-    usart_sync_setup_stdio();
+    usart_init_full_duplex(&usart_phy_config);
 
     /** Initialize sensor data processing components */
     pse_init(&pse_config);

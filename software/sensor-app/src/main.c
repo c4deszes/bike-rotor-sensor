@@ -7,8 +7,8 @@
 
 int main(void) {
     // Enable user peripherals
-    PORTB.OUTSET = _BV(5);              /** Turn off User LED */
-    PORTB.DIRSET = _BV(5);              /** Initialize User LED */
+    //PORTB.OUTSET = _BV(5);              /** Turn off User LED */
+    //PORTB.DIRSET = _BV(5);              /** Initialize User LED */
 
     app_init();
 
