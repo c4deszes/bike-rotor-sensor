@@ -25,6 +25,10 @@ jobs:
         working-directory: software
         run: |
           cmake --preset=avr-release-unix .
+          
+      - name: Print config
+        working-directory: software
+        run: cat build/avr-release-unix/compile_commands.json
 
       - name: Build application
         working-directory: software
