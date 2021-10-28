@@ -1,1 +1,1 @@
-FROM ghcr.io/c4deszes/avr-gcc-docker:v1.1.0
+FROM ghcr.io/c4deszes/avr-gcc-docker:v1.2.0
