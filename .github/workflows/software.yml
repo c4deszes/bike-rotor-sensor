@@ -11,7 +11,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/c4deszes/avr-gcc-docker:v1.2.0
+      image: ghcr.io/c4deszes/avr-gcc-docker:v1.2.1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,13 +24,9 @@ jobs:
       - name: Configure build
         working-directory: software
         run: |
-          cmake --preset=avr-release-unix .
-          
-      - name: Print config
-        working-directory: software
-        run: cat build/avr-release-unix/compile_commands.json
+          cmake --preset=avr-release .
 
       - name: Build application
         working-directory: software
         run: |
-          cmake --build --preset=build-default-avr-release
+          cmake --build --preset=build-release
