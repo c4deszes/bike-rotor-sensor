@@ -1,0 +1,133 @@
+name: Hardware
+
+on:
+  pull_request:
+    paths:
+      - 'hardware/**'
+
+jobs:
+  ERC:
+    name: ERC
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run ERC
+      working-directory: hardware
+      run: |
+        kibot -e rotor-sensor.sch -c config/erc.yaml
+
+  DRC:
+    name: DRC
+    needs: ERC
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run DRC
+      working-directory: hardware
+      run: |
+        kibot -b rotor-sensor.kicad_pcb -c config/drc.yaml
+
+  documentation:
+    name: Export Schematic & Layout
+    needs: ERC
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Generate schematic document
+      working-directory: hardware
+      run: |
+        kibot -e rotor-sensor.sch -c config/schematic.yaml
+
+    - name: Archive schematic
+      uses: actions/upload-artifact@v2
+      with:
+        name: schematic
+        path: hardware/build/schematic.pdf
+        if-no-files-found: error
+
+    - name: Generate layout document
+      working-directory: hardware
+      run: |
+        kibot -b rotor-sensor.kicad_pcb -c config/layout.yaml
+
+    - name: Archive layout
+      uses: actions/upload-artifact@v2
+      with:
+        name: layout
+        path: hardware/build/layout.pdf
+        if-no-files-found: error
+
+  render:
+    name: Render
+    needs: ERC
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate Step file
+        working-directory: hardware
+        run: |
+          kibot -b rotor-sensor.kicad_pcb -c config/render3d.yaml
+
+      - name: Archive Gerbers
+        uses: actions/upload-artifact@v2
+        with:
+          name: model
+          path: hardware/build/pcb.step
+          if-no-files-found: error
+
+      - name: Generate Image
+        working-directory: hardware
+        run: |
+          kibot -b rotor-sensor.kicad_pcb -c config/render2d.yaml
+
+      - name: Archive Gerbers
+        uses: actions/upload-artifact@v2
+        with:
+          name: render
+          path: hardware/build/render.png
+          if-no-files-found: error
+
+  manufacturing:
+    name: Export Gerbers & BOM
+    needs: DRC
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate Gerbers
+        working-directory: hardware
+        run: |
+          kibot -b rotor-sensor.kicad_pcb -c config/gerbers.yaml
+
+      - name: Archive Gerbers
+        uses: actions/upload-artifact@v2
+        with:
+          name: gerbers
+          path: hardware/build/gerbers
+          if-no-files-found: error
+
+      - name: Generate BOM
+        working-directory: hardware
+        run: |
+          kibot -b rotor-sensor.kicad_pcb -c config/bom.yaml
+
+      - name: Archive BOM
+        uses: actions/upload-artifact@v2
+        with:
+          name: bom
+          path: hardware/build/bom/*.csv
+          if-no-files-found: error

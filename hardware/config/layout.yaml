@@ -1,0 +1,13 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: 'layout-pdf'
+    comment: 'Generate layout PDF'
+    type: pdf_pcb_print
+    dir: build
+    layers:
+      - copper
+    options:
+      output: layout.pdf
+      separated: true

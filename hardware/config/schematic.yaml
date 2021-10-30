@@ -1,0 +1,10 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: 'schematic-pdf'
+    comment: 'Generate schematic PDF'
+    type: pdf_sch_print
+    dir: build
+    options:
+      output: schematic.pdf
