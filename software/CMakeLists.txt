@@ -7,7 +7,7 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-include("config/internal-optical-analog-iref.cmake")
+include("config/internal-optical-digital.cmake")
 
 # Test configuration
 enable_testing()
@@ -30,5 +30,4 @@ include(tools/cmake/gcc-lto.cmake)
 add_subdirectory(docs)
 add_subdirectory(sensor-app)
 add_subdirectory(sensor-bsp)
-add_subdirectory(sensor-lib)
 add_subdirectory(tiny-hal)

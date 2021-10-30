@@ -6,8 +6,7 @@
 void sch_init(void);
 
 /**
- * @brief 
- * 
+ * @brief Starts running tasks
  */
 void sch_enter(void);
 
@@ -15,11 +14,6 @@ void sch_enter(void);
  * @brief Triggers the scheduler
  */
 void sch_trigger(void);
-
-/**
- * @brief Task executed every 100us
- */
-void sch_task100us(void);
 
 /**
  * @brief Task executed every 1ms

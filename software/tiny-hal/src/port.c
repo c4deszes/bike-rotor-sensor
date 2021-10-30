@@ -14,7 +14,7 @@ inline uint8_t port_get_input_sense_reg(const port_input_sense input_sense) {
     }
 }
 
-void port_setup_standy(const uint8_t pin) {
+void port_setup_standby(const uint8_t pin) {
     PORTA.DIRCLR = _BV(pin);
     volatile uint8_t* pinctrl = &(PORTA.PIN0CTRL);
     pinctrl[pin] = port_get_input_sense_reg(PORT_INPUT_SENSE_DISABLE) | PORT_PULLUPEN_bm;

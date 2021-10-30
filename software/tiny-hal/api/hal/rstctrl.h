@@ -17,7 +17,6 @@ typedef enum {
 rstctrl_cause rstctrl_get_cause();
 
 /**
- * @brief 
- * 
+ * @brief Resets the microcontroller
  */
 void rstctrl_software_reset(void);

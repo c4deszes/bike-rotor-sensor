@@ -15,8 +15,22 @@ typedef enum {
     WDT_PERIOD_8192CLK = 11
 } wdt_period;
 
+/**
+ * @brief Initializes the watchdog in normal mode
+ * 
+ * @param period Watchdog period
+ */
 void wdt_init_normal(const wdt_period period);
 
+/**
+ * @brief Initializes the watchdog in windowed mode
+ * 
+ * @param open Open window period
+ * @param closed Closed window period
+ */
 void wdt_init_window(const wdt_period open, const wdt_period closed);
 
+/**
+ * @brief Acknowledges the watchdog
+ */
 void wdt_acknowledge();

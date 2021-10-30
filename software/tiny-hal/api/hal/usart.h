@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef enum {
     USART_COM_MODE_ASYNC = 0x00,
@@ -29,17 +30,54 @@ typedef void (*usart_tx_handler)(uint8_t* data);
 
 typedef struct {
     uint16_t baudrate;
-    bool open_drain;
-    usart_rx_handler rx_handler;
-    usart_tx_handler tx_handler;
+    usart_com_mode com_mode;
+    usart_parity_mode parity_mode;
+} usart_full_duplex_configuration;
+
+typedef struct {
+    uint16_t baudrate;
+    usart_com_mode com_mode;
+    usart_parity_mode parity_mode;
 } usart_one_wire_configuration;
+
+void usart_init_full_duplex(const usart_full_duplex_configuration* configuration);
 
 void usart_init_one_wire(const usart_one_wire_configuration* configuration);
 
-void usart_rx_enable(void);
+/**
+ * @brief Disables the USART peripheral
+ * 
+ */
+void usart_disable(void);
 
-void usart_rx_disable(void);
+/**
+ * @brief Writes a single byte synchronuously over the USART
+ * 
+ * @param data 
+ */
+void usart_sync_write(uint8_t data);
 
-void usart_tx_enable(void);
+/**
+ * @brief Reads a single byte synchronuously from USART port
+ * 
+ * @return uint8_t 
+ */
+uint8_t usart_sync_read();
 
-void usart_tx_disable(void);
+void usart_sync_setup_stdio();
+
+typedef struct {
+    bool auto_flush;
+    uint8_t* rx_buffer;
+    uint8_t rx_buffer_size;
+    uint8_t* tx_buffer;
+    uint8_t tx_buffer_size;
+} usart_async_configuration;
+
+void usart_async_init(const usart_async_configuration configuration);
+
+void usart_async_write(uint8_t data);
+
+uint8_t usart_async_read();
+
+uint8_t usart_async_available();

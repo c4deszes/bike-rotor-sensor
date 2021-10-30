@@ -1,15 +1,19 @@
-add_library(rotor-sensor-lib-cfg INTERFACE)
-target_link_libraries(rotor-sensor-lib-cfg INTERFACE tiny-hal-cfg)
-
 add_executable(
     rotor-sensor EXCLUDE_FROM_ALL
     src/main.c
     src/init.c
     src/tasks.c
+    src/dsa.c
+    src/pse.c
+    src/spe.c
 )
 set_target_properties(rotor-sensor PROPERTIES SUFFIX ".elf")
 target_include_directories(rotor-sensor PRIVATE include)
-target_link_libraries(rotor-sensor PRIVATE rotor-sensor-lib rotor-sensor-bsp tiny-hal)
+
+target_link_libraries(rotor-sensor PRIVATE rotor-sensor-bsp tiny-hal)
+set(APPLICATION_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/ld/application.ld)
+set_target_properties(rotor-sensor PROPERTIES LINK_DEPENDS ${APPLICATION_LINKER_SCRIPT})
+target_link_options(rotor-sensor PRIVATE "-Wl,-T${APPLICATION_LINKER_SCRIPT}")
 target_link_options(rotor-sensor PRIVATE "-Wl,-Map=${PROJECT_NAME}.map" "-Wl,--gc-sections")
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")

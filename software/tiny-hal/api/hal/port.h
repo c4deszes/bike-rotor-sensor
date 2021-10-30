@@ -29,7 +29,7 @@ typedef struct {
     port_input_sense input_sense;
 } port_output_configuration;
 
-void port_setup_standy(const uint8_t pin);
+void port_setup_standby(const uint8_t pin);
 
 void port_setup_input(const uint8_t pin, const port_input_configuration* configuration);
 
