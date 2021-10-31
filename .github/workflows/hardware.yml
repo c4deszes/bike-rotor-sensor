@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'hardware/**'
+      - '.github/workflows/hardware*.yml'
 
 jobs:
   ERC:
@@ -16,8 +17,7 @@ jobs:
 
     - name: Run ERC
       working-directory: hardware
-      run: |
-        kibot -e rotor-sensor.sch -c config/erc.yaml
+      run: ./scripts/run_erc.sh
 
   DRC:
     name: DRC
@@ -30,8 +30,7 @@ jobs:
 
     - name: Run DRC
       working-directory: hardware
-      run: |
-        kibot -b rotor-sensor.kicad_pcb -c config/drc.yaml
+      run: ./scripts/run_drc.sh
 
   documentation:
     name: Export Schematic & Layout
@@ -44,8 +43,7 @@ jobs:
 
     - name: Generate schematic document
       working-directory: hardware
-      run: |
-        kibot -e rotor-sensor.sch -c config/schematic.yaml
+      run: ./scripts/export_schematic.sh
 
     - name: Archive schematic
       uses: actions/upload-artifact@v2
@@ -56,8 +54,7 @@ jobs:
 
     - name: Generate layout document
       working-directory: hardware
-      run: |
-        kibot -b rotor-sensor.kicad_pcb -c config/layout.yaml
+      run: ./scripts/export_layout.sh
 
     - name: Archive layout
       uses: actions/upload-artifact@v2
@@ -77,26 +74,13 @@ jobs:
 
       - name: Generate Step file
         working-directory: hardware
-        run: |
-          kibot -b rotor-sensor.kicad_pcb -c config/render3d.yaml
+        run: ./scripts/export_step.sh
 
-      - name: Archive Gerbers
+      - name: Archive Step file
         uses: actions/upload-artifact@v2
         with:
           name: model
           path: hardware/build/pcb.step
-          if-no-files-found: error
-
-      - name: Generate Image
-        working-directory: hardware
-        run: |
-          kibot -b rotor-sensor.kicad_pcb -c config/render2d.yaml
-
-      - name: Archive Gerbers
-        uses: actions/upload-artifact@v2
-        with:
-          name: render
-          path: hardware/build/render.png
           if-no-files-found: error
 
   manufacturing:
@@ -110,8 +94,7 @@ jobs:
 
       - name: Generate Gerbers
         working-directory: hardware
-        run: |
-          kibot -b rotor-sensor.kicad_pcb -c config/gerbers.yaml
+        run: ./scripts/export_gerbers.sh
 
       - name: Archive Gerbers
         uses: actions/upload-artifact@v2
@@ -122,8 +105,7 @@ jobs:
 
       - name: Generate BOM
         working-directory: hardware
-        run: |
-          kibot -b rotor-sensor.kicad_pcb -c config/bom.yaml
+        run: ./scripts/export_bom.sh
 
       - name: Archive BOM
         uses: actions/upload-artifact@v2

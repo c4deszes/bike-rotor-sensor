@@ -31,7 +31,7 @@ fp-info-cache*
 *.csv
 
 # Exported step files
-*.step
+#*.step
 
 # DRC and ERC report files
 *-?rc.txt
