@@ -1,9 +1,0 @@
-kibot:
-  version: 1
-
-outputs:
-  - name: 'gerbers'
-    comment: 'Generate Gerbers'
-    type: gerber
-    dir: build/gerbers
-    layers: 'all'

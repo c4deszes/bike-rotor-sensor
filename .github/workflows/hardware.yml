@@ -33,10 +33,18 @@ jobs:
       run: ./scripts/run_drc.sh
 
   documentation:
-    name: Export Schematic & Layout
-    needs: ERC
+    name: Export Hardware documents
+    needs: DRC
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
+    strategy:
+      matrix:
+        variant:
+          - OPTICAL
+          - EXTERNAL
+          - HALL
+    env:
+      VARIANT: ${{ matrix.variant }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -45,49 +53,34 @@ jobs:
       working-directory: hardware
       run: ./scripts/export_schematic.sh
 
-    - name: Archive schematic
-      uses: actions/upload-artifact@v2
-      with:
-        name: schematic
-        path: hardware/build/schematic.pdf
-        if-no-files-found: error
-
     - name: Generate layout document
       working-directory: hardware
       run: ./scripts/export_layout.sh
 
+    - name: Generate step file
+      working-directory: hardware
+      run: ./scripts/export_step.sh
+
     - name: Archive layout
       uses: actions/upload-artifact@v2
       with:
-        name: layout
-        path: hardware/build/layout.pdf
+        name: documentation
+        path: hardware/build/
         if-no-files-found: error
-
-  render:
-    name: Render
-    needs: ERC
-    runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Generate Step file
-        working-directory: hardware
-        run: ./scripts/export_step.sh
-
-      - name: Archive Step file
-        uses: actions/upload-artifact@v2
-        with:
-          name: model
-          path: hardware/build/pcb.step
-          if-no-files-found: error
 
   manufacturing:
     name: Export Gerbers & BOM
     needs: DRC
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
+    strategy:
+      matrix:
+        variant:
+          - OPTICAL
+          - EXTERNAL
+          - HALL
+    env:
+      VARIANT: ${{ matrix.variant }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -95,13 +88,6 @@ jobs:
       - name: Generate Gerbers
         working-directory: hardware
         run: ./scripts/export_gerbers.sh
-
-      - name: Archive Gerbers
-        uses: actions/upload-artifact@v2
-        with:
-          name: gerbers
-          path: hardware/build/gerbers
-          if-no-files-found: error
 
       - name: Generate BOM
         working-directory: hardware
@@ -111,5 +97,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: bom
-          path: hardware/build/bom/*.csv
+          path: hardware/build/
           if-no-files-found: error
