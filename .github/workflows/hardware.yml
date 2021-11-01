@@ -61,15 +61,15 @@ jobs:
       working-directory: hardware
       run: ./scripts/export_step.sh
 
-    - name: Archive layout
+    - name: Archive Output
       uses: actions/upload-artifact@v2
       with:
-        name: documentation
+        name: documentation-${{ matrix.variant }}
         path: hardware/build/
         if-no-files-found: error
 
   manufacturing:
-    name: Export Gerbers & BOM
+    name: Export Manufacturing documents
     needs: DRC
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
@@ -93,9 +93,9 @@ jobs:
         working-directory: hardware
         run: ./scripts/export_bom.sh
 
-      - name: Archive BOM
+      - name: Archive Output
         uses: actions/upload-artifact@v2
         with:
-          name: bom
+          name: manufacturing-${{ matrix.variant }}
           path: hardware/build/
           if-no-files-found: error
