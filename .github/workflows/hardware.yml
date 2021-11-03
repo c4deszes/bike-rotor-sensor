@@ -104,14 +104,18 @@ jobs:
     name: Panelize
     needs: DRC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: yaqwsx/kikit
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Kikit
-        run: pip install kikit
-
       - name: Panelize
         working-directory: hardware
         run: kikit panelize grid --space 3 --gridsize 3 3 --tabwidth 3 --tabheight 3 --htabs 2 --vtabs 1 --mousebites 0.5 1 0.25 --radius 1 rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
+
+      - name: Archive Output
+        uses: actions/upload-artifact@v2
+        with:
+          name: panelized-board
+          path: hardware/rotor-sensor-panelized.kicad_pcb
+          if-no-files-found: error
