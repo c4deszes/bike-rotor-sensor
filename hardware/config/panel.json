@@ -1,0 +1,47 @@
+{
+    "layout": {
+        "type": "grid",
+        "rows": 3,
+        "cols": 4,
+        "hspace": "5mm",
+        "vspace": "5mm",
+        "rotation": "0deg",
+        "alternation": "none",
+        "renamenet": "Board_{n}-{orig}",
+        "renameref": "{orig}"
+    },
+    "source": {
+        "type": "auto",
+        "tolerance": "1mm"
+    },
+    "tabs": {
+        "type": "fixed",
+        "width": "3mm",
+        "vcount": 1
+    },
+    "cuts": {
+        "type": "mousebites",
+        "drill": "0.5mm",
+        "spacing": "1mm",
+        "offset": "0.2mm"
+    },
+    "framing": {
+        "type": "railstb",
+        "width": "5mm",
+        "space": "3mm",
+        "copperFill": false
+    },
+    "tooling": {
+        "type": "4hole",
+        "hoffset": "2.5mm",
+        "voffset": "2.5mm",
+        "size": "1.5mm"
+    },
+    "fiducials": {
+        "type": "2fid",
+        "hoffset": "5mm",
+        "voffset": "2.5mm",
+        "coppersize": "2mm",
+        "opening": "1mm"
+    }
+}
