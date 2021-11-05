@@ -50,7 +50,7 @@
         {
             "name": "build-debug",
             "inherits": "build-default",
-            "configurePreset": "avr-release"
+            "configurePreset": "avr-debug"
         }
     ]
 }
