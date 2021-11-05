@@ -1,10 +1,12 @@
 {
     "layout": {
         "type": "grid",
-        "rows": 3,
+        "rows": 4,
         "cols": 4,
         "hspace": "5mm",
         "vspace": "5mm",
+        "hbackbone": "3mm",
+        "vbackbone": "3mm",
         "rotation": "0deg",
         "alternation": "none",
         "renamenet": "Board_{n}-{orig}",
@@ -29,6 +31,7 @@
         "type": "railstb",
         "width": "5mm",
         "space": "3mm",
+        "chamfer": "1mm",
         "copperFill": false
     },
     "tooling": {
@@ -38,7 +41,7 @@
         "size": "1.5mm"
     },
     "fiducials": {
-        "type": "2fid",
+        "type": "4fid",
         "hoffset": "5mm",
         "voffset": "2.5mm",
         "coppersize": "2mm",

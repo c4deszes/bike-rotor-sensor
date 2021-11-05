@@ -874,4 +874,26 @@ Text Notes 7700 3250 0    50   ~ 0
 VARIANT=OPTICAL
 Text Notes 6550 5050 0    50   ~ 0
 VARIANT=IREF
+$Comp
+L Mechanical:Fiducial FID1
+U 1 1 61844077
+P 2600 3700
+F 0 "FID1" H 2685 3746 50  0000 L CNN
+F 1 "Fiducial" H 2685 3655 50  0000 L CNN
+F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 2600 3700 50  0001 C CNN
+F 3 "~" H 2600 3700 50  0001 C CNN
+	1    2600 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:Fiducial FID2
+U 1 1 6184520E
+P 2950 3700
+F 0 "FID2" H 3035 3746 50  0000 L CNN
+F 1 "Fiducial" H 3035 3655 50  0000 L CNN
+F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 2950 3700 50  0001 C CNN
+F 3 "~" H 2950 3700 50  0001 C CNN
+	1    2950 3700
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
