@@ -128,14 +128,6 @@ jobs:
     needs: panelize
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
-    strategy:
-      matrix:
-        variant:
-          - OPTICAL
-          - EXTERNAL
-          - HALL
-    env:
-      VARIANT: ${{ matrix.variant }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -144,15 +136,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: panelized-board
+          path: hardware
 
       - name: Generate Gerbers
         working-directory: hardware
-        run: kibot \
-          -b rotor-sensor.kicad_pcb \
-          -e rotor-sensor.sch \
-          -c config/outputs.yaml \
-          -g variant=$VARIANT \
-          gerbers
+        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers
 
       - name: Archive Output
         uses: actions/upload-artifact@v2
