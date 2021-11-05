@@ -3,9 +3,6 @@
  * @author your name (you@domain.com)
  * @brief Distance Accumulator processes impulses and accumulates them into
  * the number of accumulated rotations
- * 
- * 
- * 
  */
 #pragma once
 

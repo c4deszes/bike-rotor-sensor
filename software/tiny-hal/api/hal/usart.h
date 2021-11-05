@@ -46,14 +46,13 @@ void usart_init_one_wire(const usart_one_wire_configuration* configuration);
 
 /**
  * @brief Disables the USART peripheral
- * 
  */
 void usart_disable(void);
 
 /**
  * @brief Writes a single byte synchronuously over the USART
  * 
- * @param data 
+ * @param data Data to write
  */
 void usart_sync_write(uint8_t data);
 

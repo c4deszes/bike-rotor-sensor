@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/c4deszes/avr-gcc-docker:v1.2.1
+    strategy:
+      matrix:
+        build_type: [release, debug]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,9 +27,9 @@ jobs:
       - name: Configure build
         working-directory: software
         run: |
-          cmake --preset=avr-release .
+          cmake --preset=avr-${{ matrix.build_type }} .
 
       - name: Build application
         working-directory: software
         run: |
-          cmake --build --preset=build-release
+          cmake --build --preset=build-${{ matrix.build_type }}
