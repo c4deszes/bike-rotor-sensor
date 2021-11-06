@@ -2,6 +2,7 @@
 
 #define ISH_INPUT_PIN 7
 
+// TODO: provide alternative pin on the development board
 #define OSH_OUTPUT_PIN 2
 
 #if defined(BOARD_TYPE_XPLAINED)

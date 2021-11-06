@@ -1,5 +1,11 @@
 # Board support configuration
-set(MCU_NAME "attiny416")
+if (BOARD_TYPE STREQUAL "XPLAINED")
+    set(MCU_NAME "attiny416")
+elseif(BOARD_TYPE STREQUAL "STANDARD")
+    set(MCU_NAME "attiny202")
+else()
+    message(SEND_ERROR "Unknown board type '${BOARD_TYPE}'!")
+endif()
 
 # Hardware Abstraction configuration
 add_library(tiny-hal-cfg INTERFACE)
