@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         build_type: [release, debug]
-        profile:
+        sensor_profile:
           - 'internal-optical-digital'
           - 'development-digital'
     steps:
@@ -30,7 +30,7 @@ jobs:
       - name: Configure build
         working-directory: software
         run: |
-          cmake -DROTOR_SENSOR_PROFILE=config/ --preset=avr-${{ matrix.build_type }} .
+          cmake -DROTOR_SENSOR_PROFILE=${{ matrix.sensor_profile }} --preset=avr-${{ matrix.build_type }} .
 
       - name: Build application
         working-directory: software
