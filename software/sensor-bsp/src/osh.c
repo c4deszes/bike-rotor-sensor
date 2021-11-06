@@ -2,8 +2,7 @@
 
 #include "hal/port.h"
 #include "hal/adc.h"
-
-const uint8_t osh_pin = 2;
+#include "board/pins.h"
 
 const port_output_configuration osh_config = {
     .input_sense = PORT_INPUT_SENSE_INTDISABLE,
@@ -11,15 +10,15 @@ const port_output_configuration osh_config = {
 };
 
 void osh_init(void) {
-    port_setup_output(osh_pin, &osh_config);
+    port_setup_output(OSH_OUTPUT_PIN, &osh_config);
 }
 
 void osh_output_on(void) {
-    port_write(osh_pin, PORT_IO_STATE_HIGH);
+    port_write(OSH_OUTPUT_PIN, PORT_IO_STATE_HIGH);
 }
 
 void osh_output_off(void) {
-    port_write(osh_pin, PORT_IO_STATE_LOW);
+    port_write(OSH_OUTPUT_PIN, PORT_IO_STATE_LOW);
 }
 
 uint16_t osh_get_current(void) {

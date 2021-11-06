@@ -11,6 +11,7 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Unix Makefiles",
             "cacheVariables": {
+                "ROTOR_SENSOR_PROFILE": "internal-optical-digital",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
             }
         },
@@ -19,6 +20,20 @@
             "inherits": "avr-default",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "avr-minsizerel",
+            "inherits": "avr-default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel"
+            }
+        },
+        {
+            "name": "avr-debug",
+            "inherits": "avr-default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ],
@@ -32,6 +47,11 @@
             "name": "build-release",
             "inherits": "build-default",
             "configurePreset": "avr-release"
+        },
+        {
+            "name": "build-debug",
+            "inherits": "build-default",
+            "configurePreset": "avr-debug"
         }
     ]
 }

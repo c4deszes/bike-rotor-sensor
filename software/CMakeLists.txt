@@ -7,7 +7,10 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-include("config/internal-optical-digital.cmake")
+message("-- Rotor Sensor profile: ${ROTOR_SENSOR_PROFILE}")
+include("config/${ROTOR_SENSOR_PROFILE}.cmake")
+message("\tBoard type: ${BOARD_TYPE}")
+message("\tBoard sensor type: ${BOARD_SENSOR_TYPE}")
 
 # Test configuration
 enable_testing()

@@ -78,6 +78,9 @@ void app_init() {
     ish_enable();
 }
 
+/**
+ * @brief Unexpected interrupt handler
+ */
 void __attribute__((used, noinline)) _fatal(void) {
     while(1);
 }

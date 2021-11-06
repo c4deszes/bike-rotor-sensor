@@ -6,16 +6,13 @@
 #include <avr/io.h>
 
 int main(void) {
-    // Enable user peripherals
-    //PORTB.OUTSET = _BV(5);              /** Turn off User LED */
-    //PORTB.DIRSET = _BV(5);              /** Initialize User LED */
-
+    /** Initialize configuration */
     app_init();
 
     sys_enable_interrupts();
 
-    /** Enter scheduler */
     sch_init();
 
+    /** Enter scheduler */
     sch_enter();
 }

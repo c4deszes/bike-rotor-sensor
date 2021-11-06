@@ -1,5 +1,11 @@
 # Board support configuration
-set(MCU_NAME "attiny416")
+if (BOARD_TYPE STREQUAL "XPLAINED")
+    set(MCU_NAME "attiny416")
+elseif(BOARD_TYPE STREQUAL "STANDARD")
+    set(MCU_NAME "attiny202")
+else()
+    message(SEND_ERROR "Unknown board type '${BOARD_TYPE}'!")
+endif()
 
 # Hardware Abstraction configuration
 add_library(tiny-hal-cfg INTERFACE)
@@ -29,6 +35,7 @@ target_include_directories(rotor-sensor-bsp PRIVATE include)
 target_compile_definitions(
     rotor-sensor-bsp
     PRIVATE
+    "BOARD_TYPE_${BOARD_TYPE}"
     "BOARD_SENSOR_LOC_${BOARD_SENSOR_LOC}"
     "BOARD_SENSOR_PHY_${BOARD_SENSOR_PHY}"
     "BOARD_SENSOR_TYPE_${BOARD_SENSOR_TYPE}"
