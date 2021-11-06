@@ -1,6 +1,6 @@
-# external-optical-digital
-#   Sensor: Optical sensor connected to PCB
-#   Sensing: Digital
+set(BOARD_TYPE "STANDARD")
+#set(BOARD_TYPE "XPLAINED")
+
 set(BOARD_SENSOR_LOC "EXTERNAL")
 set(BOARD_SENSOR_PHY "OPTICAL")
 

@@ -9,9 +9,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/**
+ * @brief 
+ * 
+ */
 typedef struct {
-    uint8_t positive;
-    uint8_t negative;
+    uint8_t positive;   /**< Positive pulse length in milliseconds */
+    uint8_t negative;   /**< Negative pulse length in milliseconds */
 } ish_data;
 
 /**
@@ -32,8 +36,8 @@ void ish_disable(void);
 /**
  * @brief Returns the immediate state of the input stage
  * 
- * @return true 
- * @return false 
+ * @return true if the input is high
+ * @return false if the input is low
  */
 bool ish_get_state(void);
 

@@ -1,6 +1,6 @@
-# internal-optical-analog-iref
-#   Sensor: Optical sensor on PCB
-#   Sensing: Analog with internal reference voltage
+set(BOARD_TYPE "STANDARD")
+#set(BOARD_TYPE "XPLAINED")
+
 set(BOARD_SENSOR_LOC "INTERNAL")
 set(BOARD_SENSOR_PHY "OPTICAL")
 

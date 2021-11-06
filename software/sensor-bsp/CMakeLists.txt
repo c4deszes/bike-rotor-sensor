@@ -29,6 +29,7 @@ target_include_directories(rotor-sensor-bsp PRIVATE include)
 target_compile_definitions(
     rotor-sensor-bsp
     PRIVATE
+    "BOARD_TYPE_${BOARD_TYPE}"
     "BOARD_SENSOR_LOC_${BOARD_SENSOR_LOC}"
     "BOARD_SENSOR_PHY_${BOARD_SENSOR_PHY}"
     "BOARD_SENSOR_TYPE_${BOARD_SENSOR_TYPE}"

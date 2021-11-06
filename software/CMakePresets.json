@@ -11,6 +11,7 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Unix Makefiles",
             "cacheVariables": {
+                "ROTOR_SENSOR_PROFILE": "internal-optical-digital",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
             }
         },

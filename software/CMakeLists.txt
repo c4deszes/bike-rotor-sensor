@@ -7,7 +7,8 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-include("config/internal-optical-digital.cmake")
+message("Rotor sensor profile: ${ROTOR_SENSOR_PROFILE}")
+include("config/${ROTOR_SENSOR_PROFILE}.cmake")
 
 # Test configuration
 enable_testing()

@@ -42,27 +42,15 @@ ish_data ish_get() {
     return data;
 }
 
-void tca_overflow_handler() {
-    //ish_put(0, 0xFF);
-}
-
 void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
     uint8_t neg = ((uint32_t)capture) * 1000 / 250000;
     uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000;
     ish_put(pos, neg);
 }
 
-// static const tca_configuration tca_config = {
-//     .clksel = TCA_CLKSEL_CLKDIV1
-// };
-
 void ish_init() {
     /** Sets up the input stage peripheral (variant specific) */
     ish_setup_io();
-
-    // tca_init(&tca_config);
-    // tca_set_period(63750);  // 255ms
-    // tca_enable_overflow_interrupt();
 
     /** Initializes TCB0 in Frequency and Pulse Width measurement mode */
     tcb_init((void*)0);
