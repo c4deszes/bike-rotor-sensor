@@ -31,6 +31,7 @@ include(tools/cmake/gcc-lto.cmake)
 
 # Project
 add_subdirectory(docs)
+add_subdirectory(sensor-bootloader)
 add_subdirectory(sensor-app)
 add_subdirectory(sensor-bsp)
 add_subdirectory(tiny-hal)

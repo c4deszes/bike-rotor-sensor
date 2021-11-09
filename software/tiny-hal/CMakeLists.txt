@@ -3,6 +3,7 @@ add_library(
     src/ac.c
     src/adc.c
     src/cpu.c
+    src/cpuint.c
     src/clkctrl.c
     src/evsys.c
     src/port.c

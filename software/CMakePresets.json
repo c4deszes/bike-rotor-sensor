@@ -11,7 +11,7 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Unix Makefiles",
             "cacheVariables": {
-                "ROTOR_SENSOR_PROFILE": "internal-optical-digital",
+                "ROTOR_SENSOR_PROFILE": "development-digital",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
             }
         },
@@ -40,7 +40,12 @@
     "buildPresets": [
         {
             "name": "build-default",
-            "targets": ["rotor-sensor", "rotor-sensor-extras"],
+            "targets": ["rotor-sensor", "rotor-sensor-merged", "rotor-sensor-extras"],
+            "hidden": true
+        },
+        {
+            "name": "build-bootloader",
+            "targets": ["rotor-sensor-bootloader", "rotor-sensor-bootloader-extras"],
             "hidden": true
         },
         {
@@ -52,6 +57,11 @@
             "name": "build-debug",
             "inherits": "build-default",
             "configurePreset": "avr-debug"
+        },
+        {
+            "name": "build-bootloader-release",
+            "inherits": "build-bootloader",
+            "configurePreset": "avr-release"
         }
     ]
 }
