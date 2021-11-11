@@ -4,8 +4,10 @@
 #include "hal/evsys.h"
 #include "hal/cpuint.h"
 #include "hal/wdt.h"
+#include "hal/nvmctrl.h"
 #include "hal/usart.h"
 #include "hal/sch.h"
+#include "hal/sys.h"
 #include "hal/rtc.h"
 #include "hal/rstctrl.h"
 
@@ -15,8 +17,11 @@
 #include <avr/fuse.h>
 
 FUSES = {
+    .OSCCFG = FREQSEL_16MHZ_gc,
+    .SYSCFG0 = CRCSRC_NOCRC_gc | RSTPINCFG_UPDI_gc,
+    .SYSCFG1 = SUT_16MS_gc,
     .APPEND = 0x00,
-    .BOOTEND = 0x00 /** < 2 * 256 bytes (512B) allocated to the bootloader */
+    .BOOTEND = 0x02 /** < 2 * 256 bytes (512B) allocated to the bootloader */
 };
 
 static const rtc_configuration rtc_config = {
@@ -38,26 +43,27 @@ void rtc_pit_handler(void) {
     sch_trigger();
 }
 
-extern uint16_t __data_load_end;
-
-void boot_startapp() {
+__attribute__((noreturn)) void boot_startapp() {
+    /** Shutdown the bootloader */
+    sys_disable_interrupts();
     rtc_disable();
-    
-    // TODO: Enable bootlock
+
+    /** Lock BOOT section */
+    nvmctrl_bootlock();
 
     /** Relocate interrupt vectors to APP section */
     cpuint_ivsel(CPUINT_IVSEL_APP);
 
     /** Jump to application */
-    SP = RAMEND;
     __asm("jmp __application_start__");
+
+    __builtin_unreachable();
 }
 
 boot_state_t boot_state __attribute__((__used__));
 
 void boot_init(void) {
     PORTB.DIRSET = _BV(5);
-    PORTB.OUTSET = _BV(5);
     PORTB.OUTCLR = _BV(5);
 
     /** Initialize the Watchdog */
@@ -69,12 +75,12 @@ void boot_init(void) {
     /** Relocate interrupt vectors to BOOT section */
     cpuint_ivsel(CPUINT_IVSEL_BOOT);
 
-    if (rstctrl_get_cause() == RSTCTRCL_CAUSE_POWER_ON) {
-        boot_state.boot_count = 0;
-    }
-    else {
-        boot_state.boot_count++;
-    }
+    // if (rstctrl_get_cause() == RSTCTRCL_CAUSE_POWER_ON) {
+    //     boot_state.boot_count = 0;
+    // }
+    // else {
+    //     boot_state.boot_count++;
+    // }
 
     /**
      * @note Calculations:
@@ -88,7 +94,7 @@ void boot_init(void) {
     rtc_enable();
 
     /** Uart portmux */
-    board_vcom_init();
+    //board_vcom_init();
 
     /** Usart config */
     //usart_init_full_duplex(&usart_phy_config);

@@ -6,6 +6,9 @@
 #include <avr/io.h>
 
 int main(void) {
+    PORTB.DIRSET = _BV(5);
+    PORTB.OUTCLR = _BV(5);
+
     /** Initialize configuration */
     app_init();
 

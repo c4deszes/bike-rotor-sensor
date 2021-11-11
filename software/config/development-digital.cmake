@@ -18,4 +18,4 @@ set(BOARD_SENSOR_ANALOG_REF "UNSET")
 #set(BOARD_SENSOR_ANALOG_REF "2V5")
 #set(BOARD_SENSOR_ANALOG_REF "4V3")
 
-option(APP_BOOTLOADER_ENABLED "Enables bootloader for the application" OFF)
+option(APP_BOOTLOADER_ENABLED "Enables bootloader for the application" ON)

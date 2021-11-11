@@ -15,6 +15,7 @@ add_executable(
     ${PROJECT_NAME} EXCLUDE_FROM_ALL
     src/bootloader.c
     src/main.c
+    src/tasks.c
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
 target_include_directories(${PROJECT_NAME} PRIVATE include)

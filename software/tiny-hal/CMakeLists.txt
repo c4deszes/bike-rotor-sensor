@@ -6,6 +6,7 @@ add_library(
     src/cpuint.c
     src/clkctrl.c
     src/evsys.c
+    src/nvmctrl.c
     src/port.c
     src/portmux.c
     src/rstctrl.c
