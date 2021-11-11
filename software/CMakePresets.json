@@ -39,12 +39,12 @@
     "buildPresets": [
         {
             "name": "build-default",
-            "targets": ["rotor-sensor", "rotor-sensor-merged", "rotor-sensor-extras", "rotor-sensor-bootloader-extras"],
+            "targets": ["rotor-sensor-app-full", "rotor-sensor-standalone-full"],
             "hidden": true
         },
         {
             "name": "build-bootloader",
-            "targets": ["rotor-sensor-bootloader", "rotor-sensor-bootloader-extras"],
+            "targets": ["uart-bootloader-full"],
             "hidden": true
         },
         {

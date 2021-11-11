@@ -43,6 +43,6 @@ target_compile_definitions(
 )
 target_link_libraries(rotor-sensor-bsp PRIVATE tiny-hal)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(rotor-sensor-bsp)
 endif()

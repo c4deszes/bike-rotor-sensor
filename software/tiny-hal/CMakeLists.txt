@@ -23,6 +23,6 @@ add_library(
 target_include_directories(tiny-hal PUBLIC api)
 target_link_libraries(tiny-hal PUBLIC tiny-hal-cfg)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(tiny-hal)
 endif()

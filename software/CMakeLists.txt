@@ -27,6 +27,7 @@ add_subdirectory("ext/googletest")
 #set(CMAKE_C_CPPLINT "cpplint")
 
 # Tools
+include(tools/cmake/application.cmake)
 include(tools/cmake/gcc-lto.cmake)
 
 # Project
