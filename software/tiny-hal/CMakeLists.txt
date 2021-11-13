@@ -4,6 +4,7 @@ add_library(
     src/adc.c
     src/cpu.c
     src/cpuint.c
+    src/crcscan.c
     src/clkctrl.c
     src/evsys.c
     src/nvmctrl.c
