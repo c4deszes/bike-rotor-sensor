@@ -6,8 +6,7 @@
 #include "hal/tca.h"
 #include "hal/tcb.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
+//#include <avr/io.h>
 
 #define BUFFER_SIZE 32
 
@@ -57,7 +56,8 @@ void ish_init() {
     tcb_enable_interrupt();
 
     /** Connects Event user TCB0 (0) to Event generator Async channel 0 (0x3) */
-    evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);
+    //evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);
+    evsys_user_async_select(0, 0x3);
 }
 
 void ish_enable(void) {

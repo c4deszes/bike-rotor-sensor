@@ -12,6 +12,23 @@ add_library(tiny-hal-cfg INTERFACE)
 target_compile_options(tiny-hal-cfg INTERFACE -mmcu=${MCU_NAME})
 target_link_options(tiny-hal-cfg INTERFACE -mmcu=${MCU_NAME})
 
+# Board support package public interface
+add_library(rotor-sensor-bsp-api INTERFACE)
+target_include_directories(rotor-sensor-bsp-api INTERFACE api)
+target_compile_definitions(
+    rotor-sensor-bsp-api
+    INTERFACE
+    "BOARD_TYPE_${BOARD_TYPE}"
+    "BOARD_SENSOR_LOC_${BOARD_SENSOR_LOC}"
+    "BOARD_SENSOR_PHY_${BOARD_SENSOR_PHY}"
+    "BOARD_SENSOR_TYPE_${BOARD_SENSOR_TYPE}"
+    "BOARD_SENSOR_ANALOG_REF_${BOARD_SENSOR_ANALOG_REF}"
+)
+
+# Board support package private interface
+add_library(rotor-sensor-bsp-private-api INTERFACE)
+target_include_directories(rotor-sensor-bsp-private-api INTERFACE include)
+
 set(SOURCES
     src/board.c
     src/osh.c
@@ -30,19 +47,15 @@ add_library(
     rotor-sensor-bsp STATIC EXCLUDE_FROM_ALL
     ${SOURCES}
 )
-target_include_directories(rotor-sensor-bsp PUBLIC api)
-target_include_directories(rotor-sensor-bsp PRIVATE include)
-target_compile_definitions(
-    rotor-sensor-bsp
-    PRIVATE
-    "BOARD_TYPE_${BOARD_TYPE}"
-    "BOARD_SENSOR_LOC_${BOARD_SENSOR_LOC}"
-    "BOARD_SENSOR_PHY_${BOARD_SENSOR_PHY}"
-    "BOARD_SENSOR_TYPE_${BOARD_SENSOR_TYPE}"
-    "BOARD_SENSOR_ANALOG_REF_${BOARD_SENSOR_ANALOG_REF}"
-)
-target_link_libraries(rotor-sensor-bsp PRIVATE tiny-hal)
-
+target_link_libraries(rotor-sensor-bsp PUBLIC rotor-sensor-bsp-api tiny-hal)
+target_link_libraries(rotor-sensor-bsp PRIVATE rotor-sensor-bsp-private-api)
 if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(rotor-sensor-bsp)
 endif()
+
+add_library(
+    rotor-sensor-bsp-test STATIC EXCLUDE_FROM_ALL
+    ${SOURCES}
+)
+target_link_libraries(rotor-sensor-bsp-test PUBLIC rotor-sensor-bsp-api tiny-hal-fake)
+target_link_libraries(rotor-sensor-bsp-test PUBLIC rotor-sensor-bsp-private-api)

@@ -1,3 +1,6 @@
+add_library(tiny-hal-api INTERFACE)
+target_include_directories(tiny-hal-api INTERFACE api)
+
 add_library(
     tiny-hal STATIC EXCLUDE_FROM_ALL
     src/ac.c
@@ -21,9 +24,10 @@ add_library(
     src/vref.c
     src/wdt.c
 )
-target_include_directories(tiny-hal PUBLIC api)
-target_link_libraries(tiny-hal PUBLIC tiny-hal-cfg)
+target_link_libraries(tiny-hal PUBLIC tiny-hal-api tiny-hal-cfg)
 
 if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(tiny-hal)
 endif()
+
+add_subdirectory(fake)

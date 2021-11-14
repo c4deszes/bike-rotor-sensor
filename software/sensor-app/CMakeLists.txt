@@ -3,8 +3,9 @@ project(rotor-sensor
     LANGUAGES C CXX ASM)
 set(PROJECT_VERSION "0.1.0")
 
-add_library(
-    ${PROJECT_NAME}-objlib OBJECT EXCLUDE_FROM_ALL
+add_library(${PROJECT_NAME}-api INTERFACE)
+target_include_directories(${PROJECT_NAME}-api INTERFACE include)
+set(APP_SOURCES
     src/main.c
     src/init.c
     src/tasks.c
@@ -12,8 +13,12 @@ add_library(
     src/pse.c
     src/spe.c
 )
-target_include_directories(${PROJECT_NAME}-objlib PUBLIC include)
-target_link_libraries(${PROJECT_NAME}-objlib PUBLIC tiny-hal rotor-sensor-bsp uart-bootloader-api)
+
+add_library(
+    ${PROJECT_NAME}-objlib OBJECT EXCLUDE_FROM_ALL
+    ${APP_SOURCES}
+)
+target_link_libraries(${PROJECT_NAME}-objlib PUBLIC tiny-hal rotor-sensor-bsp ${PROJECT_NAME}-api uart-bootloader-api)
 if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(${PROJECT_NAME}-objlib)
 endif()
@@ -25,7 +30,7 @@ add_executable(
     ${BOOTLOADER_PROJECT}
     $<TARGET_OBJECTS:${PROJECT_NAME}-objlib>
 )
-target_link_libraries(${BOOTLOADER_PROJECT} PUBLIC tiny-hal rotor-sensor-bsp uart-bootloader-api)
+target_link_libraries(${BOOTLOADER_PROJECT} PUBLIC tiny-hal rotor-sensor-bsp ${PROJECT_NAME}-api uart-bootloader-api)
 set_target_properties(${BOOTLOADER_PROJECT} PROPERTIES SUFFIX ".elf")
 set(APPLICATION_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/ld/application-bootloader.ld)
 set_target_properties(${BOOTLOADER_PROJECT} PROPERTIES LINK_DEPENDS
@@ -51,7 +56,7 @@ add_executable(
     ${STANDALONE_PROJECT}
     $<TARGET_OBJECTS:${PROJECT_NAME}-objlib>
 )
-target_link_libraries(${STANDALONE_PROJECT} PUBLIC tiny-hal rotor-sensor-bsp uart-bootloader-api)
+target_link_libraries(${STANDALONE_PROJECT} PUBLIC tiny-hal rotor-sensor-bsp ${PROJECT_NAME}-api uart-bootloader-api)
 set_target_properties(${STANDALONE_PROJECT} PROPERTIES SUFFIX ".elf")
 set(APPLICATION_LINKER_SCRIPT_STANDALONE ${CMAKE_CURRENT_SOURCE_DIR}/ld/application.ld)
 set_target_properties(${STANDALONE_PROJECT} PROPERTIES LINK_DEPENDS ${APPLICATION_LINKER_SCRIPT_STANDALONE})
@@ -68,3 +73,12 @@ add_custom_target(
     ${STANDALONE_PROJECT}-lss
     ${STANDALONE_PROJECT}-memory
 )
+
+add_library(
+    rotor-sensor-test STATIC EXCLUDE_FROM_ALL
+    ${APP_SOURCES}
+)
+target_link_libraries(rotor-sensor-test PUBLIC rotor-sensor-api rotor-sensor-bsp-test)
+
+add_subdirectory(test/sil)
+add_subdirectory(test/unit)

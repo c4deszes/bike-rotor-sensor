@@ -12,7 +12,8 @@
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
-            }
+            },
+            "hidden": true
         },
         {
             "name": "avr-release",
@@ -31,6 +32,22 @@
         {
             "name": "avr-debug",
             "inherits": "avr-default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "mingw-default",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "MinGW Makefiles",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
+            },
+            "hidden": true
+        },
+        {
+            "name": "mingw-debug",
+            "inherits": "mingw-default",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
@@ -61,6 +78,16 @@
             "name": "build-bootloader-release",
             "inherits": "build-bootloader",
             "configurePreset": "avr-release"
+        },
+        {
+            "name": "build-tests",
+            "targets": ["rotor-sensor-unittest", "rotor-sensor-siltest"],
+            "hidden": true
+        },
+        {
+            "name": "build-tests-mingw-debug",
+            "inherits": "build-tests",
+            "configurePreset": "mingw-debug"
         }
     ]
 }
