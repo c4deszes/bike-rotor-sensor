@@ -7,8 +7,8 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-message("-- Rotor Sensor profile: ${ROTOR_SENSOR_PROFILE}")
-include("config/${ROTOR_SENSOR_PROFILE}.cmake")
+message("-- Rotor Sensor profile: development-digital")
+include("config/development-digital.cmake")
 message("\tBoard type: ${BOARD_TYPE}")
 message("\tBoard sensor type: ${BOARD_SENSOR_TYPE}")
 
@@ -27,10 +27,12 @@ add_subdirectory("ext/googletest")
 #set(CMAKE_C_CPPLINT "cpplint")
 
 # Tools
+include(tools/cmake/application.cmake)
 include(tools/cmake/gcc-lto.cmake)
 
 # Project
 add_subdirectory(docs)
+add_subdirectory(sensor-bootloader)
 add_subdirectory(sensor-app)
 add_subdirectory(sensor-bsp)
 add_subdirectory(tiny-hal)

@@ -42,11 +42,11 @@ ish_data ish_get() {
     return data;
 }
 
-void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
-    uint8_t neg = ((uint32_t)capture) * 1000 / 250000;
-    uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000;
-    ish_put(pos, neg);
-}
+// void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
+//     uint8_t neg = ((uint32_t)capture) * 1000 / 250000;
+//     uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000;
+//     ish_put(pos, neg);
+// }
 
 void ish_init() {
     /** Sets up the input stage peripheral (variant specific) */

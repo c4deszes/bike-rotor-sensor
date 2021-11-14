@@ -28,3 +28,10 @@ void sch_enter(void) {
         }
     }
 }
+
+static void dummy_task(void) {
+    /** Do nothing */
+}
+
+void sch_task1ms(void) __attribute__ ((weak, alias("dummy_task")));
+void sch_task10ms(void) __attribute__ ((weak, alias("dummy_task")));

@@ -18,7 +18,8 @@ const uint32_t MCLK_FREQUENCY = 16000000UL / 64UL;
  * 
  * @note Initial settings depend on the fuse settings
  */
-void clock_init(void) {
+void board_clock_init(void) {
+    sys_init(MCLK_FREQUENCY);
     clkctrl_set_clock(CLKCTRL_CLOCK_SELECT_OSC20M);
     clkctrl_set_prescaler(CLKCTRL_PRESCALER_DIV64);
     clkctrl_lock();
@@ -35,22 +36,25 @@ const port_input_configuration vcom_rx_config = {
     .pullup = true
 };
 
-void vcom_init(void) {
+void board_vcom_init(void) {
     portmux_alt_enable(PORTMUX_FUNC_USART0);
     port_setup_output(VCOM_TX_PIN, &vcom_tx_config);
+
     #if defined(BOARD_TYPE_XPLAINED)
+    /**
+     * On the Xplained development board the mEDBG debugger is connected to the target
+     * with full duplex UART
+     */
     port_setup_input(VCOM_RX_PIN, &vcom_rx_config);
     #endif
 }
 
 void board_init() {
-    sys_init(MCLK_FREQUENCY);
-
-    clock_init();
+    board_clock_init();
 
     osh_init();
 
     ish_init();
 
-    vcom_init();
+    board_vcom_init();
 }

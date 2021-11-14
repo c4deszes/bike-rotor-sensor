@@ -11,10 +11,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/c4deszes/avr-gcc-docker:v1.2.1
+      image: ghcr.io/c4deszes/avr-gcc-docker:v1.3.0
     strategy:
       matrix:
-        build_type: [release, debug]
+        build_type: [release]
         sensor_profile:
           - 'internal-optical-digital'
           - 'development-digital'

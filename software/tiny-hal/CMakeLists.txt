@@ -3,8 +3,11 @@ add_library(
     src/ac.c
     src/adc.c
     src/cpu.c
+    src/cpuint.c
+    src/crcscan.c
     src/clkctrl.c
     src/evsys.c
+    src/nvmctrl.c
     src/port.c
     src/portmux.c
     src/rstctrl.c
@@ -21,6 +24,6 @@ add_library(
 target_include_directories(tiny-hal PUBLIC api)
 target_link_libraries(tiny-hal PUBLIC tiny-hal-cfg)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(tiny-hal)
 endif()

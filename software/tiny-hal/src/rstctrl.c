@@ -1,5 +1,7 @@
 #include "hal/rstctrl.h"
 
+#include "hal/cpu.h"
+
 #include <avr/io.h>
 
 rstctrl_cause rstctrl_get_cause() {
@@ -25,5 +27,5 @@ rstctrl_cause rstctrl_get_cause() {
 }
 
 void rstctrl_software_reset(void) {
-    RSTCTRL.SWRR = RSTCTRL_SWRE_bm;
+    ccp_write_io(&(RSTCTRL.SWRR), RSTCTRL_SWRE_bm);
 }

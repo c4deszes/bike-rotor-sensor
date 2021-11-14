@@ -30,9 +30,9 @@ bool tcb_is_running(void) {
     return TCB0.STATUS & TCB_RUN_bm;
 }
 
-ISR(TCB0_INT_vect) {
-    uint16_t count = TCB0.CNT;
-    uint16_t cmp = TCB0.CCMP;
-    tcb_capture_handler(cmp, count);
-    TCB0.INTFLAGS = TCB_CAPT_bm;
-}
+// ISR(TCB0_INT_vect) {
+//     uint16_t count = TCB0.CNT;
+//     uint16_t cmp = TCB0.CCMP;
+//     tcb_capture_handler(cmp, count);
+//     TCB0.INTFLAGS = TCB_CAPT_bm;
+// }
