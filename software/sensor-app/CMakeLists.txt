@@ -5,6 +5,7 @@ set(PROJECT_VERSION "0.1.0")
 
 add_library(${PROJECT_NAME}-api INTERFACE)
 target_include_directories(${PROJECT_NAME}-api INTERFACE include)
+
 set(APP_SOURCES
     src/main.c
     src/init.c
@@ -19,6 +20,7 @@ add_library(
     ${APP_SOURCES}
 )
 target_link_libraries(${PROJECT_NAME}-objlib PUBLIC tiny-hal rotor-sensor-bsp ${PROJECT_NAME}-api uart-bootloader-api)
+target_include_directories(${PROJECT_NAME}-objlib PUBLIC include)
 if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(${PROJECT_NAME}-objlib)
 endif()

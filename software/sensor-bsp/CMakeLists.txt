@@ -49,6 +49,17 @@ add_library(
 )
 target_link_libraries(rotor-sensor-bsp PUBLIC rotor-sensor-bsp-api tiny-hal)
 target_link_libraries(rotor-sensor-bsp PRIVATE rotor-sensor-bsp-private-api)
+target_compile_definitions(
+    rotor-sensor-bsp
+    PRIVATE
+    "BOARD_TYPE_${BOARD_TYPE}"
+    "BOARD_SENSOR_LOC_${BOARD_SENSOR_LOC}"
+    "BOARD_SENSOR_PHY_${BOARD_SENSOR_PHY}"
+    "BOARD_SENSOR_TYPE_${BOARD_SENSOR_TYPE}"
+    "BOARD_SENSOR_ANALOG_REF_${BOARD_SENSOR_ANALOG_REF}"
+)
+target_link_libraries(rotor-sensor-bsp PRIVATE tiny-hal)
+
 if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     enable_lto(rotor-sensor-bsp)
 endif()

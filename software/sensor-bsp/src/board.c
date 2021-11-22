@@ -50,8 +50,7 @@ void board_vcom_init(void) {
 }
 
 void board_user_led_init(void) {
-    //PORTB.DIRSET = _BV(5);
-    //PORTB.OUTCLR = _BV(5);
+
 }
 
 void board_user_led_set(void) {

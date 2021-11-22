@@ -81,7 +81,7 @@
         },
         {
             "name": "build-tests",
-            "targets": ["rotor-sensor-unittest", "rotor-sensor-siltest"],
+            "targets": ["rotor-sensor-unittest"],
             "hidden": true
         },
         {
