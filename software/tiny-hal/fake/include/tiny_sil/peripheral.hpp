@@ -1,12 +1,16 @@
 #pragma once
 
 #include <stdint.h>
-#include "tiny_sil/scheduler.hpp"
+#include "tiny_sil/sch.hpp"
 
-class Peripheral {
-    Scheduler& scheduler;
-protected:
-    Peripheral(const Scheduler& scheduler);
+namespace SIL {
 
-    void Update(const uint64_t nanoseconds);
-};
+    class Peripheral {
+        const Scheduler& scheduler;
+    public:
+        Peripheral(const Scheduler& scheduler);
+
+        virtual void Update(const uint64_t nanoseconds) = 0;
+    };
+
+}

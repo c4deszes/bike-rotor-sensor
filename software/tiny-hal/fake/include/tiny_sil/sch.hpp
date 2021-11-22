@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdint.h>
+
+namespace SIL {
+
 enum class SchedulerState {
     NOT_INITIALIZED,
     INITIALIZED,
@@ -21,3 +25,7 @@ class Scheduler {
     SchedulerState GetState();
 
 };
+
+extern Scheduler global_scheduler;
+
+}

@@ -17,4 +17,4 @@ int app_main(void) {
     return 0;
 }
 
-int main(void)  __attribute__((weak, alias("app_main")));
+int main(void) __attribute__((weak, alias("app_main")));
