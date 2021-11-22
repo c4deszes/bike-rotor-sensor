@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include "board/board.h"
 #include "board/ish.h"
 #include "sensor/pse.h"
 #include "sensor/spe.h"
@@ -18,15 +19,13 @@ void sch_task1ms(void) {
     // }
 }
 
-#include <avr/io.h>
-
 static uint8_t cnt = 0;
 
 void sch_task10ms(void) {
     wdt_acknowledge();
 
     if (cnt > 200) {
-        PORTB.OUTTGL = _BV(5);
+        board_user_led_toggle();
         cnt = 0;
     }
     cnt ++;

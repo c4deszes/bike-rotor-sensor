@@ -49,6 +49,22 @@ void board_vcom_init(void) {
     #endif
 }
 
+void board_user_led_init(void) {
+
+}
+
+void board_user_led_set(void) {
+
+}
+
+void board_user_led_clear(void) {
+
+}
+
+void board_user_led_toggle(void) {
+    
+}
+
 void board_init() {
     board_clock_init();
 

@@ -4,7 +4,7 @@
 #include "hal/port.h"
 #include "board/pins.h"
 
-#include <avr/io.h>
+//#include <avr/io.h>
 
 const port_input_configuration ish_config = {
     .input_sense = PORT_INPUT_SENSE_INTDISABLE,
@@ -17,7 +17,8 @@ void ish_setup_io() {
 }
 
 uint8_t ish_get_event_channel(void) {
-    return EVSYS_ASYNCCH0_PORTA_PIN0_gc + ISH_INPUT_PIN;
+    //return EVSYS_ASYNCCH0_PORTA_PIN0_gc + ISH_INPUT_PIN;
+    return 0xA + ISH_INPUT_PIN;
 }
 
 bool ish_get_state(void) {

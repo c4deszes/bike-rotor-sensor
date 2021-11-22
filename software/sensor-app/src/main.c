@@ -3,12 +3,7 @@
 #include "hal/sys.h"
 #include "hal/sch.h"
 
-#include <avr/io.h>
-
-int main(void) {
-    PORTB.DIRSET = _BV(5);
-    PORTB.OUTCLR = _BV(5);
-
+int app_main(void) {
     /** Initialize configuration */
     app_init();
 
@@ -18,4 +13,8 @@ int main(void) {
 
     /** Enter scheduler */
     sch_enter();
+
+    return 0;
 }
+
+int main(void) __attribute__((weak, alias("app_main")));

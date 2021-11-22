@@ -3,13 +3,11 @@
 #include <vector>
 
 extern "C" {
-    #include "app/pse.h"
+    #include "sensor/pse.h"
 }
 
 const pse_configuration conf = {
-    .pulse_per_rotation = 64,
-    .min_pulse_width = 10,
-    .index_threshold = 50
+    .pulse_per_rotation = 64
 };
 
 class TestPositionEstimator : public testing::Test {
@@ -32,9 +30,7 @@ class TestPositionEstimatorSequences :
 
 TEST_P(TestPositionEstimatorSequences, SequenceShouldEndInCorrectStateAndPosition) {
     pse_configuration conf = {
-        .pulse_per_rotation = 8,
-        .min_pulse_width = 5,
-        .index_threshold = 50
+        .pulse_per_rotation = 8
     };
     pse_init(&conf);
 
@@ -43,7 +39,7 @@ TEST_P(TestPositionEstimatorSequences, SequenceShouldEndInCorrectStateAndPositio
     uint16_t expected_position = std::get<2>(GetParam());
 
     for (size_t i = 0; i < sequence.size(); i++) {
-        pse_update(sequence[i]);
+        pse_update(sequence[i], sequence[i]);
     }
 
     EXPECT_EQ(pse_get_position_state(), expected_state);

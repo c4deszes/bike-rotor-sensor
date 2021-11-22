@@ -3,12 +3,17 @@
 #include <vector>
 
 extern "C" {
-    #include "sensor/dsa.h"
+    #include "app/init.h"
 }
 
-class TestDistanceAccumulator : public testing::Test {
+class TestSensor : public testing::Test {
 protected:
     void SetUp() override {
 
     }
 };
+
+TEST_F(TestSensor, CallMain) {
+    app_main();
+
+}
