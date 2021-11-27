@@ -1,110 +1,79 @@
 #include "bootloader/bootloader.h"
 #include "bootloader/bootloader_internal.h"
+#include "bootloader/memory.h"
 
-#include "hal/evsys.h"
-#include "hal/cpuint.h"
-#include "hal/wdt.h"
-#include "hal/nvmctrl.h"
-#include "hal/usart.h"
-#include "hal/sch.h"
-#include "hal/sys.h"
-#include "hal/rtc.h"
-#include "hal/rstctrl.h"
+#include "bootloader/flash_util.h"
+#include "bootloader/usart_drv.h"
 
-#include "board/board.h"
+#include <stddef.h>
 
 #include <avr/io.h>
-#include <avr/fuse.h>
 
-FUSES = {
-    .OSCCFG = FREQSEL_16MHZ_gc,
-    .SYSCFG0 = CRCSRC_NOCRC_gc | RSTPINCFG_UPDI_gc,
-    .SYSCFG1 = SUT_16MS_gc,
-    .APPEND = 0x00,
-    .BOOTEND = 0x02 /** < 2 * 256 bytes (512B) allocated to the bootloader */
-};
+#include "hal/cpu.h"
+#include "board/pins.h"
 
-static const rtc_configuration rtc_config = {
-    .clksel = RTC_CLKSEL_INT32K,
-    .standby = false,
-    .prescaler = RTC_PRESCALER_DIV1
-};
-
-static const usart_full_duplex_configuration usart_phy_config = {
-    .com_mode = USART_COM_MODE_ASYNC,
-    .baudrate = 9600,
-    .parity_mode = USART_PARITY_MODE_NONE
-};
+uint16_t* flash_ptr = NULL;
 
 /**
- * @brief RTC Periodic Interrupt handler configured trigger the scheduler every 1 millisecond
+ * Flash command: [LENGTH] 0x32 [ADDR] [DATA]
+ * Erase command: 0x03 0x33 [SECTION]
  */
-void rtc_pit_handler(void) {
-    sch_trigger();
+void command_handle(uint8_t cmd, uint8_t* data, uint8_t length) {
+    if (cmd == 0x33) {
+        PORTA.OUTCLR = _BV(5);
+        // Do erase
+        boot_erase_section(data[0]);
+    }
+    else if (cmd == 0x32) {
+        // Do flash
+        boot_write_section();
+        uint8_t i = 0;
+        while(i < length) {
+            *flash_ptr = *((uint16_t*)(data + i));
+            flash_ptr++;
+            i++;
+        }
+    }
 }
 
-__attribute__((noreturn)) void boot_startapp() {
-    /** Shutdown the bootloader */
-    sys_disable_interrupts();
-    rtc_disable();
+enum {
+    WAITING,
+    LENGTH_RECEIVED,
+    RECEIVING,
+    MESSAGE_RECEIVED
+} com_state = WAITING;
+uint8_t com_length = 0;
+uint8_t* message_begin = NULL;
+uint8_t* message_end = NULL;
 
-    /** Lock BOOT section */
-    nvmctrl_bootlock();
+void usart_handle(uint8_t* data) {
+    if (com_state == WAITING) {
+        com_length = *data;
+        message_begin = data;
+        com_state = LENGTH_RECEIVED;
+    }
+    else if (com_state == LENGTH_RECEIVED || com_state == RECEIVING) {
+        com_state = RECEIVING;
+        com_length--;
 
-    /** Relocate interrupt vectors to APP section */
-    cpuint_ivsel(CPUINT_IVSEL_APP);
+        if (com_length == 0) {
+            message_end = data;
+            com_state = MESSAGE_RECEIVED;
 
-    /** Jump to application */
-    __asm("jmp __application_start__");
+            command_handle(message_begin[1], message_begin + 2, message_begin[0]-2);
 
-    __builtin_unreachable();
+            com_state = WAITING;
+        }
+    }
 }
 
-boot_state_t boot_state __attribute__((__used__));
+void boot_enter(void) {
+    flash_ptr = (uint16_t*)__application_start__;
 
-void boot_init(void) {
-    PORTB.DIRSET = _BV(5);
-    PORTB.OUTCLR = _BV(5);
-
-    /** Initialize the Watchdog */
-    wdt_init_normal(WDT_PERIOD_512CLK);
-
-    /** Set system clock */
-    board_clock_init();
-
-    /** Relocate interrupt vectors to BOOT section */
-    cpuint_ivsel(CPUINT_IVSEL_BOOT);
-
-    // if (rstctrl_get_cause() == RSTCTRCL_CAUSE_POWER_ON) {
-    //     boot_state.boot_count = 0;
-    // }
-    // else {
-    //     boot_state.boot_count++;
-    // }
-
-    /**
-     * @note Calculations:
-     *  CLK_RTC = 32768 Hz
-     *  TimePerTick = 1 / CLK_RTC = 0.000030517578125s
-     *  PitPeriod = round(0.001ms / TimePerTick) = 32
-     */
-    rtc_init(&rtc_config);
-    rtc_set_pit_period(RTC_PIT_PERIOD_CYC32);
-    rtc_enable_pit_interrupt();
-    rtc_enable();
-
-    /** Uart portmux */
-    //board_vcom_init();
-
-    /** Usart config */
-    //usart_init_full_duplex(&usart_phy_config);
-
-    //boot_startapp();
-}
-
-/**
- * @brief Unexpected interrupt handler
- */
-void __attribute__((used, noinline)) _fatal(void) {
-    while(1);
+    while(1) {
+        if (usart_available() > 0) {
+            uint8_t* data = usart_read();
+            usart_handle(data);
+        }
+    }
 }

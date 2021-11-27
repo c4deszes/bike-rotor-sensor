@@ -5,6 +5,8 @@
  */
 void boot_init(void);
 
+void boot_enter(void);
+
 /**
  * @brief Starts the application
  */
