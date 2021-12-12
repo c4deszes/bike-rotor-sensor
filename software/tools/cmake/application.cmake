@@ -15,6 +15,15 @@ function(hexify TARGET HEX)
     add_custom_target(${TARGET}-hex DEPENDS ${HEX})
 endfunction()
 
+# function(pymcuprog HEX DEVICE)
+#     add_custom_command(
+#         DEPENDS ${HEX}
+#         COMMAND "pymcuprog" -C -d ${DEVICE} write -f ${HEX}
+#         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#         OUTPUT ${}
+#     )
+# endfunction()
+
 # This function converts an .elf file into a binary file
 # Usage:
 #   add_executable(MyApp main.c)

@@ -46,7 +46,7 @@ __DATA_REGION_ORIGIN__ = DEFINED(__DATA_REGION_ORIGIN__) ? __DATA_REGION_ORIGIN_
 MEMORY
 {
   bootloader   (rx)   : ORIGIN = 0, LENGTH = 512
-  application  (rw!x) : ORIGIN = 512, LENGTH = __TEXT_REGION_LENGTH__ - 256
+  application  (rw!x) : ORIGIN = 512, LENGTH = __TEXT_REGION_LENGTH__ - 512
   data   (rw!x) : ORIGIN = __DATA_REGION_ORIGIN__, LENGTH = __DATA_REGION_LENGTH__
   eeprom (rw!x) : ORIGIN = 0x810000, LENGTH = __EEPROM_REGION_LENGTH__
   fuse      (rw!x) : ORIGIN = 0x820000, LENGTH = __FUSE_REGION_LENGTH__

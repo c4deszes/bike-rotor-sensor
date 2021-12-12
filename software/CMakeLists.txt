@@ -14,6 +14,7 @@ message("\tBoard sensor type: ${BOARD_SENSOR_TYPE}")
 
 # Test configuration
 enable_testing()
+include(CTest)
 set(CTEST_OUTPUT_ON_FAILURE ON)
 
 set(CTEST_COVERAGE_COMMAND "gcovr")

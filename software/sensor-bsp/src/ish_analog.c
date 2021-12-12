@@ -50,7 +50,7 @@ void ish_setup_io() {
 }
 
 uint8_t ish_get_event_channel(void) {
-    return EVSYS__ASYNCCH0_AC0_OUT_gc;
+    return EVSYS_ASYNCCH0_AC0_OUT_gc;
 }
 
 bool ish_get_state(void) {

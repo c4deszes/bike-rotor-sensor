@@ -22,7 +22,8 @@ void usart_init_full_duplex(const usart_full_duplex_configuration* configuration
     USART0.CTRLA = 0;
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
     USART0.CTRLC = (configuration->com_mode << USART_CMODE_gp) |
-                   (configuration->parity_mode << USART_PMODE_gp);
+                   (configuration->parity_mode << USART_PMODE_gp) |
+                   USART_CHSIZE_8BIT_gc;
 }
 
 void usart_disable(void) {

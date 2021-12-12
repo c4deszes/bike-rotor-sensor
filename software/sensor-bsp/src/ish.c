@@ -15,6 +15,9 @@ static uint8_t pos_buffer[BUFFER_SIZE];
 static uint8_t neg_buffer[BUFFER_SIZE];
 static uint8_t head = 0;
 static uint8_t tail = 0;
+static const tca_configuration tca_config = {
+    .clksel = TCA_CLKSEL_CLKDIV1
+};
 
 void ish_put(uint8_t pos, uint8_t neg) {
     uint8_t next = (head + 1) % BUFFER_SIZE;
@@ -41,11 +44,23 @@ ish_data ish_get() {
     return data;
 }
 
-// void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
-//     uint8_t neg = ((uint32_t)capture) * 1000 / 250000;
-//     uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000;
-//     ish_put(pos, neg);
-// }
+static volatile bool tcb_overflow = false;
+
+void tca_overflow_handler(void) {
+    tcb_overflow = true;
+    ish_put(0, 0xFF);
+}
+
+void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
+    tca_set_count(0);
+    if (tcb_overflow) {
+        tcb_overflow = false;
+        return;
+    }
+    uint8_t neg = ((uint32_t)capture) * 1000 / 250000u;
+    uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000u;
+    ish_put(pos, neg);
+}
 
 void ish_init() {
     /** Sets up the input stage peripheral (variant specific) */
@@ -55,6 +70,10 @@ void ish_init() {
     tcb_init((void*)0);
     tcb_enable_interrupt();
 
+    tca_init(&tca_config);
+    tca_set_period(0xFFFF);
+    tca_enable_overflow_interrupt();
+
     /** Connects Event user TCB0 (0) to Event generator Async channel 0 (0x3) */
     //evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);
     evsys_user_async_select(0, 0x3);
@@ -62,10 +81,12 @@ void ish_init() {
 
 void ish_enable(void) {
     evsys_gen_async_select(0, ish_get_event_channel());
+    tca_enable();
     tcb_enable();
 }
 
 void ish_disable(void) {
     evsys_gen_async_disable(0);
+    tca_disable();
     tcb_disable();
 }

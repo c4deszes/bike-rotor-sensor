@@ -15,10 +15,25 @@ void board_clock_init(void);
  */
 void board_vcom_init(void);
 
+#ifdef BOARD_TYPE_XPLAINED
+/**
+ * @brief Initializes the user LED
+ */
 void board_user_led_init(void);
 
-void board_user_led_set(void);
+/**
+ * @brief Turns on the user LED
+ */
+void board_user_led_on(void);
 
-void board_user_led_clear(void);
+/**
+ * @brief Turns off the user LED
+ */
+void board_user_led_off(void);
 
+/**
+ * @brief Toggles the user LED
+ */
 void board_user_led_toggle(void);
+
+#endif

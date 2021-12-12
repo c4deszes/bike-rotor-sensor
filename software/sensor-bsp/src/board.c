@@ -49,20 +49,23 @@ void board_vcom_init(void) {
     #endif
 }
 
+#include <avr/io.h>
+
 void board_user_led_init(void) {
-
+    PORTB.OUTSET = _BV(5);
+    PORTB.DIRSET = _BV(5);
 }
 
-void board_user_led_set(void) {
-
+void board_user_led_on(void) {
+    PORTB.OUTCLR = _BV(5);
 }
 
-void board_user_led_clear(void) {
-
+void board_user_led_off(void) {
+    PORTB.OUTSET = _BV(5);
 }
 
 void board_user_led_toggle(void) {
-    
+    PORTB.OUTTGL = _BV(5);
 }
 
 void board_init() {
@@ -73,4 +76,6 @@ void board_init() {
     ish_init();
 
     board_vcom_init();
+
+    board_user_led_init();
 }
