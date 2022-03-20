@@ -6,8 +6,6 @@
 #include "hal/tca.h"
 #include "hal/tcb.h"
 
-//#include <avr/io.h>
-
 #define BUFFER_SIZE 32
 
 static bool overflow = false;
@@ -70,9 +68,9 @@ void ish_init() {
     tcb_init((void*)0);
     tcb_enable_interrupt();
 
-    tca_init(&tca_config);
-    tca_set_period(0xFFFF);
-    tca_enable_overflow_interrupt();
+    //tca_init(&tca_config);
+    //tca_set_period(0xFFFF);
+    //tca_enable_overflow_interrupt();
 
     /** Connects Event user TCB0 (0) to Event generator Async channel 0 (0x3) */
     //evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);

@@ -7,17 +7,14 @@
 #pragma once
 
 #include <stdint.h>
-
-typedef struct {
-    uint8_t pulse_per_rotation;
-} dsa_configuration;
+#include "sensor/common.h"
 
 /**
  * @brief Initializes the Distance Accumulator with the given settings
  * 
  * @param conf DSA settings
  */
-void dsa_init(const dsa_configuration* conf);
+void dsa_init(sensor_configuration_t* conf);
 
 /**
  * @brief Updates the position signal by 

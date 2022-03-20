@@ -10,6 +10,7 @@ set(APP_SOURCES
     src/main.c
     src/init.c
     src/tasks.c
+    src/data.c
     src/dsa.c
     src/pse.c
     src/spe.c

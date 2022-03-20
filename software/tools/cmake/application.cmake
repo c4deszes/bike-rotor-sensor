@@ -74,3 +74,12 @@ function(dump_size TARGET)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "\tCreating memory usage report ${TARGET}")
 endfunction()
+
+# This function writes the given hex files 
+# function(write_program TARGET HEX)
+#     add_custom_command(
+#         DEPENDS ${HEX}
+#         COMMAND "pymcuprog write -C -p COM3 -f ${HEX}"
+#         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#         COMMENT "\tCreating memory usage report ${TARGET}")
+# endfunction()

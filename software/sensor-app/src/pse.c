@@ -11,7 +11,7 @@ static uint8_t buffer[3];
 static pse_position_state state = PSE_POSITION_STATE_UNKNOWN;
 static uint8_t position_inc = 0; /** 0 - pulse_per_rotation */
 
-void pse_init(const pse_configuration* conf) {
+void pse_init(sensor_configuration_t* conf) {
     pulse_per_rotation = conf->pulse_per_rotation;
     index_threshold = conf->index_threshold;
 

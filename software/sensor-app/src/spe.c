@@ -7,7 +7,7 @@ static uint8_t pulse_per_rotation;
 static uint16_t speed = 0;
 static spe_speed_state state = SPE_SPEED_STATE_UNKNOWN;
 
-void spe_init(const spe_configuration* conf) {
+void spe_init(sensor_configuration_t* conf) {
     pulse_per_rotation = conf->pulse_per_rotation;
 
     speed = 0;

@@ -7,7 +7,7 @@ static uint8_t pulse_per_rotation;
 static uint8_t steps;
 static uint32_t rotations;
 
-void dsa_init(const dsa_configuration* conf) {
+void dsa_init(sensor_configuration_t* conf) {
     /** Load configuration */
     pulse_per_rotation = conf->pulse_per_rotation;
 

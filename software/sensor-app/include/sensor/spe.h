@@ -9,22 +9,19 @@
 #pragma once
 
 #include <stdint.h>
+#include "sensor/common.h"
 
 typedef enum {
     SPE_SPEED_STATE_UNKNOWN,
     SPE_SPEED_STATE_OK
 } spe_speed_state;
 
-typedef struct {
-    uint8_t pulse_per_rotation;
-} spe_configuration;
-
 /**
  * @brief Initializes the Speed Estimator with the given configuration
  * 
  * @param conf 
  */
-void spe_init(const spe_configuration* conf);
+void spe_init(sensor_configuration_t* conf);
 
 /**
  * @brief Updates the speed estimator's state
