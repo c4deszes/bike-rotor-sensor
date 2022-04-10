@@ -60,9 +60,9 @@ jobs:
       working-directory: hardware
       run: ./scripts/export_layout.sh
 
-    - name: Generate step file
-      working-directory: hardware
-      run: ./scripts/export_step.sh
+    # - name: Generate step file
+    #   working-directory: hardware
+    #   run: ./scripts/export_step.sh
 
     - name: Archive Output
       uses: actions/upload-artifact@v2
