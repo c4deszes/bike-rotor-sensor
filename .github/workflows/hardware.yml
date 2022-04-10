@@ -50,7 +50,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install KiBot
-      run: pip install git+https://github.com/INTI-CMNB/KiBot.git
+      run: pip3 install git+https://github.com/INTI-CMNB/KiBot.git
 
     - name: Generate schematic document
       working-directory: hardware
