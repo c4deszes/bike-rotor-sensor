@@ -49,6 +49,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install KiBot
+      run: pip install git+https://github.com/INTI-CMNB/KiBot.git
+
     - name: Generate schematic document
       working-directory: hardware
       run: ./scripts/export_schematic.sh
