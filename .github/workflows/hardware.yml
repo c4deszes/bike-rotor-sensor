@@ -107,7 +107,7 @@ jobs:
     name: Panelize
     needs: DRC
     runs-on: ubuntu-latest
-    container: yaqwsx/kikit
+    container: yaqwsx/kikit:v0.7
     steps:
       - name: Checkout
         uses: actions/checkout@v2
