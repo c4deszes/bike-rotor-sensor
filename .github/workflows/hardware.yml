@@ -105,6 +105,7 @@ jobs:
 
   panelize:
     name: Panelize
+    if: 'false'
     needs: DRC
     runs-on: ubuntu-latest
     container: yaqwsx/kikit
