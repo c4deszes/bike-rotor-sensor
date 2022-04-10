@@ -105,7 +105,6 @@ jobs:
 
   panelize:
     name: Panelize
-    if: 'false'
     needs: DRC
     runs-on: ubuntu-latest
     container: yaqwsx/kikit
@@ -114,7 +113,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Kikit
-        run: pip3 install git+https://github.com/yaqwsx/KiKit@master
+        run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
 
       - name: Panelize
         working-directory: hardware
