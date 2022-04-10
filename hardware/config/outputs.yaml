@@ -68,3 +68,4 @@ outputs:
     dir: build
     options:
       output: pcb.step
+      download: true
