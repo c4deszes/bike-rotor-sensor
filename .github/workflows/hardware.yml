@@ -113,11 +113,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Kikit
-        run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
+        run: pip3 install git+https://github.com/yaqwsx/KiKit@master
 
       - name: Panelize
         working-directory: hardware
-        run: kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
+        run: |
+          export DISPLAY=:1.0
+          kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
 
       - name: Archive Output
         uses: actions/upload-artifact@v2

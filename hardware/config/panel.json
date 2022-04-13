@@ -25,7 +25,8 @@
         "type": "mousebites",
         "drill": "0.5mm",
         "spacing": "1mm",
-        "offset": "0.2mm"
+        "offset": "0.2mm",
+        "prolong": "0.5mm"
     },
     "framing": {
         "type": "railstb",
@@ -46,5 +47,8 @@
         "voffset": "2.5mm",
         "coppersize": "2mm",
         "opening": "1mm"
+    },
+    "post": {
+        "millradius": "0.3mm"
     }
 }
