@@ -19,7 +19,8 @@
     "tabs": {
         "type": "fixed",
         "width": "3mm",
-        "vcount": 1
+        "vcount": 1,
+        "hcount": 1
     },
     "cuts": {
         "type": "mousebites",
