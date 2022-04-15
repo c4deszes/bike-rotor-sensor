@@ -70,6 +70,7 @@ jobs:
         name: documentation-${{ matrix.variant }}
         path: hardware/build/
         if-no-files-found: error
+        retention-days: 5
 
   manufacturing:
     name: Export BOM & Gerbers
@@ -102,6 +103,7 @@ jobs:
           name: manufacturing-${{ matrix.variant }}
           path: hardware/build/
           if-no-files-found: error
+          retention-days: 5
 
   panelize:
     name: Panelize
@@ -126,6 +128,7 @@ jobs:
           name: panelized-board
           path: hardware/rotor-sensor-panelized.kicad_pcb
           if-no-files-found: error
+          retention-days: 5
 
   manufacturing-panelized:
     name: Export Panelized Gerbers
@@ -152,3 +155,4 @@ jobs:
           name: manufacturing-panelized
           path: hardware/build/
           if-no-files-found: error
+          retention-days: 5
