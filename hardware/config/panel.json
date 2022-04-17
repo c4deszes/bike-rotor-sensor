@@ -2,7 +2,7 @@
     "layout": {
         "type": "grid",
         "rows": 4,
-        "cols": 4,
+        "cols": 1,
         "hspace": "5mm",
         "vspace": "5mm",
         "hbackbone": "3mm",
@@ -14,7 +14,7 @@
     },
     "source": {
         "type": "auto",
-        "tolerance": "1mm"
+        "tolerance": "10mm"
     },
     "tabs": {
         "type": "fixed",
@@ -30,7 +30,7 @@
         "prolong": "0.5mm"
     },
     "framing": {
-        "type": "railstb",
+        "type": "tightframe",
         "width": "5mm",
         "space": "3mm",
         "chamfer": "1mm",
