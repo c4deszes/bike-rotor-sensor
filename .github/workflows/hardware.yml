@@ -147,7 +147,7 @@ jobs:
 
       - name: Generate Gerbers
         working-directory: hardware
-        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers
+        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers drill
 
       - name: Archive Output
         uses: actions/upload-artifact@v2
