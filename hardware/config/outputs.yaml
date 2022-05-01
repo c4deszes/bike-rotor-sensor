@@ -27,6 +27,11 @@ outputs:
     dir: build/gerbers
     layers: 'all'
 
+  - name: 'drill'
+    comment: 'Generate drill file'
+    type: excellon
+    dir: build/gerbers
+
   - name: 'bom'
     comment: 'Generate BOM'
     type: bom
@@ -68,3 +73,4 @@ outputs:
     dir: build
     options:
       output: pcb.step
+      download: true

@@ -10,7 +10,7 @@ jobs:
   ERC:
     name: ERC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: setsoft/kicad_auto:latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
     name: DRC
     needs: ERC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: setsoft/kicad_auto:latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -49,6 +49,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    # - name: Install KiBot
+    #   run: pip3 install git+https://github.com/INTI-CMNB/KiBot.git
+
     - name: Generate schematic document
       working-directory: hardware
       run: ./scripts/export_schematic.sh
@@ -58,6 +61,7 @@ jobs:
       run: ./scripts/export_layout.sh
 
     - name: Generate step file
+      if: 'false'
       working-directory: hardware
       run: ./scripts/export_step.sh
 
@@ -67,12 +71,13 @@ jobs:
         name: documentation-${{ matrix.variant }}
         path: hardware/build/
         if-no-files-found: error
+        retention-days: 5
 
   manufacturing:
     name: Export BOM & Gerbers
     needs: DRC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: setsoft/kicad_auto:latest
     strategy:
       matrix:
         variant:
@@ -99,22 +104,24 @@ jobs:
           name: manufacturing-${{ matrix.variant }}
           path: hardware/build/
           if-no-files-found: error
+          retention-days: 5
 
   panelize:
     name: Panelize
     needs: DRC
     runs-on: ubuntu-latest
-    container: yaqwsx/kikit
+    container: yaqwsx/kikit:v0.7
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup Kikit
-        run: pip3 install git+https://github.com/yaqwsx/KiKit@master
+        run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
 
       - name: Panelize
         working-directory: hardware
-        run: kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
+        run: |
+          kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
 
       - name: Archive Output
         uses: actions/upload-artifact@v2
@@ -122,12 +129,13 @@ jobs:
           name: panelized-board
           path: hardware/rotor-sensor-panelized.kicad_pcb
           if-no-files-found: error
+          retention-days: 5
 
   manufacturing-panelized:
     name: Export Panelized Gerbers
     needs: panelize
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: setsoft/kicad_auto:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -140,7 +148,7 @@ jobs:
 
       - name: Generate Gerbers
         working-directory: hardware
-        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers
+        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers drill
 
       - name: Archive Output
         uses: actions/upload-artifact@v2
@@ -148,3 +156,4 @@ jobs:
           name: manufacturing-panelized
           path: hardware/build/
           if-no-files-found: error
+          retention-days: 5
