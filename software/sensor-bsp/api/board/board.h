@@ -15,6 +15,17 @@ void board_clock_init(void);
  */
 void board_vcom_init(void);
 
+/**
+ * @brief 
+ */
+void board_vcom_select(void);
+
+/**
+ * @brief 
+ * 
+ */
+void board_goto_sleep(void);
+
 #ifdef BOARD_TYPE_XPLAINED
 /**
  * @brief Initializes the user LED

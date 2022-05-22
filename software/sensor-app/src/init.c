@@ -34,11 +34,11 @@ static sensor_configuration_t sensor_config = {
     .index_threshold = SENSOR_INDEX_THRESHOLD
 };
 
-static adc_configuration adc_config = {
-    .resolution = ADC_RESOLUTION_8BIT,
-    .runstandby = false,
-    .sampling = ADC_SAMPLING_ACC4
-};
+// static adc_configuration adc_config = {
+//     .resolution = ADC_RESOLUTION_8BIT,
+//     .runstandby = false,
+//     .sampling = ADC_SAMPLING_ACC4
+// };
 
 /**
  * @brief RTC Periodic Interrupt handler configured trigger the scheduler every 1 millisecond
@@ -54,8 +54,12 @@ void app_init() {
     /** Initialize system and board peripherals */
     board_init();
 
-    adc_init(&adc_config);
-    vref_select_adc0(VREF_VALUE_1V1);
+    /** Hold LIN Trans. CS Pin high after initialization*/
+    board_vcom_select();
+
+    // Initialize ADC0 for Temperature measurement
+    // adc_init(&adc_config);
+    // vref_select_adc0(VREF_VALUE_1V1);
 
     /**
      * @note Calculations:

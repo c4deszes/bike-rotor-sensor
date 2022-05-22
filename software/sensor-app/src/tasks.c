@@ -5,6 +5,7 @@
 
 #include "board/board.h"
 #include "board/ish.h"
+#include "board/osh.h"
 #include "sensor/pse.h"
 #include "sensor/spe.h"
 #include "sensor/dsa.h"
@@ -19,7 +20,6 @@ void sch_task1ms(void) {
         dsa_update(pulse.positive, pulse.negative);
         pse_update(pulse.positive, pulse.negative);
         spe_update(pulse.positive, pulse.negative);
-        //usart_sync_write((uint8_t)pulse.positive);
     }
 }
 
@@ -29,13 +29,10 @@ void sch_task10ms(void) {
     wdt_acknowledge();
 
     if (cnt > 100) {
-        board_user_led_toggle();
-
         // Read temperature
-        adc_setmux(ADC_MUXPOS_TEMPSENSE);
-        adc_start();
-        uint8_t temp = adc_sync_read();
-        usart_sync_write(temp);
+        // adc_setmux(ADC_MUXPOS_TEMPSENSE);
+        // adc_start();
+        // uint8_t temp = adc_sync_read();
 
         uint16_t speed = spe_get_speed();
         uint16_t pos = pse_get_position();

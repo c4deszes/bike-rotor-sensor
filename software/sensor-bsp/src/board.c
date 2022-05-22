@@ -11,7 +11,7 @@
 
 #include <stddef.h>
 
-const uint32_t MCLK_FREQUENCY = 16000000UL / 64UL;
+const uint32_t MCLK_FREQUENCY = 20000000UL / 64UL;
 
 /**
  * @brief Initializes the clock settings
@@ -36,19 +36,27 @@ const port_input_configuration vcom_rx_config = {
     .pullup = true
 };
 
+const port_output_configuration vcom_cs_config = {
+    .input_sense = PORT_INPUT_SENSE_DISABLE,
+    .inverted = false
+};
+
 void board_vcom_init(void) {
     portmux_alt_enable(PORTMUX_FUNC_USART0);
     port_setup_output(VCOM_TX_PIN, &vcom_tx_config);
-
-    #if defined(BOARD_TYPE_XPLAINED)
-    /**
-     * On the Xplained development board the mEDBG debugger is connected to the target
-     * with full duplex UART
-     */
     port_setup_input(VCOM_RX_PIN, &vcom_rx_config);
-    #endif
+    port_setup_output(VCOM_CS_PIN, &vcom_cs_config);
 }
 
+void board_vcom_select(void) {
+    port_write(VCOM_CS_PIN, PORT_IO_STATE_HIGH);
+}
+
+void board_goto_sleep(void) {
+    port_write(VCOM_CS_PIN, PORT_IO_STATE_LOW);
+}
+
+#if defined(BOARD_TYPE_XPLAINED)
 #include <avr/io.h>
 
 void board_user_led_init(void) {
@@ -67,6 +75,7 @@ void board_user_led_off(void) {
 void board_user_led_toggle(void) {
     PORTB.OUTTGL = _BV(5);
 }
+#endif
 
 void board_init() {
     board_clock_init();
@@ -77,5 +86,7 @@ void board_init() {
 
     board_vcom_init();
 
+    #if defined(BOARD_TYPE_XPLAINED)
     board_user_led_init();
+    #endif
 }
