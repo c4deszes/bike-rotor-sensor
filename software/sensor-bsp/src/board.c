@@ -10,7 +10,7 @@
 #include "board/ish.h"
 
 #include <stddef.h>
-#include <avr/boot.h>
+#include <avr/io.h>
 
 /**
  * @brief Initializes the clock settings
@@ -18,7 +18,7 @@
  * @note Initial settings depend on the fuse settings
  */
 void board_clock_init(void) {
-    uint8_t osccfg = boot_lock_fuse_bits_get(FUSE_OSCCFG - FUSES_START) & FUSE_FREQSEL_gm;
+    uint8_t osccfg = FUSE_OSCCFG & FUSE_FREQSEL_gm;
     if(osccfg == 0x01) {
         sys_init(16000000UL);
     }
