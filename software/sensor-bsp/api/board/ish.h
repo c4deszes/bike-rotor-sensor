@@ -14,8 +14,8 @@
  * 
  */
 typedef struct {
-    uint8_t positive;   /**< Positive pulse length in milliseconds */
-    uint8_t negative;   /**< Negative pulse length in milliseconds */
+    uint16_t positive;   /**< Positive pulse length in milliseconds */
+    uint16_t width;   /**< Pulse width in milliseconds */
 } ish_data;
 
 /**

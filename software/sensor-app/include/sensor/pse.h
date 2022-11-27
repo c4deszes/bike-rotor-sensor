@@ -26,10 +26,8 @@ void pse_init(sensor_configuration_t* conf);
 /**
  * @brief Updates the position estimator's state
  * 
- * @param pos Positive impulse length
- * @param neg Negative impulse length
  */
-void pse_update(uint8_t pos, uint8_t neg);
+void pse_update(uint16_t width, uint16_t period);
 
 /**
  * @brief Returns the current position

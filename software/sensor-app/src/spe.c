@@ -14,14 +14,14 @@ void spe_init(sensor_configuration_t* conf) {
     state = SPE_SPEED_STATE_UNKNOWN;
 }
 
-void spe_update(uint8_t pos, uint8_t neg) {
+void spe_update(uint16_t pos, uint16_t neg) {
     if (pos == 0) {
         speed = 0;
         state = SPE_SPEED_STATE_OK;
     }
     else {
-        uint16_t current_speed = (60u * 1000u) / ((pos + neg) * pulse_per_rotation);
-
+        //uint16_t current_speed = (60u * 1000u) / ((pos + neg) * pulse_per_rotation);
+        uint16_t current_speed = neg;
         speed = current_speed;
         state = SPE_SPEED_STATE_OK;
     }

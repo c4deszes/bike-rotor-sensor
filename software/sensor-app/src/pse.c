@@ -7,7 +7,7 @@ static uint8_t pulse_per_rotation;
 static uint8_t index_threshold;
 
 /** Internal state */
-static uint8_t buffer[3];
+static uint16_t buffer[3];
 static pse_position_state state = PSE_POSITION_STATE_UNKNOWN;
 static uint8_t position_inc = 0; /** 0 - pulse_per_rotation */
 
@@ -24,7 +24,7 @@ void pse_init(sensor_configuration_t* conf) {
     buffer[2] = 0;
 }
 
-void pse_shift_buffer(uint8_t width) {
+void pse_shift_buffer(uint16_t width) {
     buffer[0] = buffer[1];
     buffer[1] = buffer[2];
     buffer[2] = width;
@@ -45,7 +45,7 @@ void pse_zero(void) {
     position_inc = 0;
 }
 
-void pse_update(uint8_t pos, uint8_t neg) {
+void pse_update(uint16_t pos, uint16_t neg) {
     if (pos == 0) {
         /** Ignore timeout */
         return;

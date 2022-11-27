@@ -19,11 +19,8 @@ void dsa_init(sensor_configuration_t* conf);
 /**
  * @brief Updates the position signal by 
  * @note
- * 
- * @param pos Positive pulse length in milliseconds
- * @param neg Negative pulse length in milliseconds
  */
-void dsa_update(uint8_t pos, uint8_t neg);
+void dsa_update(uint16_t width, uint16_t period);
 
 /**
  * @brief Resets the state of the DSA, effectively resetting the number of rotations

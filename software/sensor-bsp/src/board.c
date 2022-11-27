@@ -10,8 +10,7 @@
 #include "board/ish.h"
 
 #include <stddef.h>
-
-const uint32_t MCLK_FREQUENCY = 20000000UL / 64UL;
+#include <avr/boot.h>
 
 /**
  * @brief Initializes the clock settings
@@ -19,9 +18,16 @@ const uint32_t MCLK_FREQUENCY = 20000000UL / 64UL;
  * @note Initial settings depend on the fuse settings
  */
 void board_clock_init(void) {
-    sys_init(MCLK_FREQUENCY);
+    uint8_t osccfg = boot_lock_fuse_bits_get(FUSE_OSCCFG - FUSES_START) & FUSE_FREQSEL_gm;
+    if(osccfg == 0x01) {
+        sys_init(16000000UL);
+    }
+    else if (osccfg == 0x02) {
+        sys_init(20000000UL);
+    }
+
     clkctrl_set_clock(CLKCTRL_CLOCK_SELECT_OSC20M);
-    clkctrl_set_prescaler(CLKCTRL_PRESCALER_DIV64);
+    clkctrl_set_prescaler(CLKCTRL_PRESCALER_NODIV);
     clkctrl_lock();
 }
 

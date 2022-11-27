@@ -6,18 +6,19 @@
 #include "hal/tca.h"
 #include "hal/tcb.h"
 
-#define BUFFER_SIZE 32
+#define BUFFER_SIZE 10
 
 static bool overflow = false;
-static uint8_t pos_buffer[BUFFER_SIZE];
-static uint8_t neg_buffer[BUFFER_SIZE];
+static uint16_t pos_buffer[BUFFER_SIZE];
+static uint16_t neg_buffer[BUFFER_SIZE];
 static uint8_t head = 0;
 static uint8_t tail = 0;
+
 static const tca_configuration tca_config = {
-    .clksel = TCA_CLKSEL_CLKDIV1
+    .clksel = TCA_CLKSEL_CLKDIV256
 };
 
-void ish_put(uint8_t pos, uint8_t neg) {
+void ish_put(uint16_t pos, uint16_t neg) {
     uint8_t next = (head + 1) % BUFFER_SIZE;
     if (next == tail) {
         overflow = true;
@@ -34,7 +35,7 @@ uint8_t ish_available() {
 
 ish_data ish_get() {
     if (head == tail) {
-        ish_data data = {0xFF, 0xFF};
+        ish_data data = {0xFFFF, 0xFFFF};
         return data;
     }
     ish_data data = {pos_buffer[tail], neg_buffer[tail]};
@@ -42,22 +43,29 @@ ish_data ish_get() {
     return data;
 }
 
-static volatile bool tcb_overflow = false;
+static volatile uint8_t pulses = 0;
+static volatile bool tca_oveflow = false;
 
 void tca_overflow_handler(void) {
-    tcb_overflow = true;
-    ish_put(0, 0xFF);
+    if(pulses > 0) {
+        pulses = 0;
+        tca_oveflow = false;
+    }
+    else {
+        tca_oveflow = true;
+        ish_put(0, 0xFFFF);
+    }
 }
 
 void tcb_capture_handler(const uint16_t capture, const uint16_t count) {
-    tca_set_count(0);
-    if (tcb_overflow) {
-        tcb_overflow = false;
-        return;
+    if(tca_oveflow) {
+        pulses++;
+        ish_put(0, 0xFFFF);
     }
-    uint8_t neg = ((uint32_t)capture) * 1000 / 250000u;
-    uint8_t pos = ((uint32_t)(count - capture)) * 1000 / 250000u;
-    ish_put(pos, neg);
+    else {
+        pulses++;
+        ish_put(capture, count);
+    }
 }
 
 void ish_init() {
@@ -68,9 +76,9 @@ void ish_init() {
     tcb_init((void*)0);
     tcb_enable_interrupt();
 
-    //tca_init(&tca_config);
-    //tca_set_period(0xFFFF);
-    //tca_enable_overflow_interrupt();
+    tca_init(&tca_config);
+    tca_set_period(0xFFFF);
+    tca_enable_overflow_interrupt();
 
     /** Connects Event user TCB0 (0) to Event generator Async channel 0 (0x3) */
     //evsys_user_async_select(0, EVSYS_ASYNCUSER0_ASYNCCH0_gc);

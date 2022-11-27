@@ -15,7 +15,7 @@ void dsa_init(sensor_configuration_t* conf) {
     dsa_reset();
 }
 
-void dsa_update(uint8_t pos, uint8_t neg) {
+void dsa_update(uint16_t pos, uint16_t neg) {
     if (pos == 0) {
         /** Ignore timeout */
     }

@@ -17,9 +17,9 @@
 void sch_task1ms(void) {
     if (ish_available() > 0) {
         ish_data pulse = ish_get();
-        dsa_update(pulse.positive, pulse.negative);
-        pse_update(pulse.positive, pulse.negative);
-        spe_update(pulse.positive, pulse.negative);
+        dsa_update(pulse.positive, pulse.width);
+        //pse_update(pulse.positive, pulse.width);
+        spe_update(pulse.positive, pulse.width);
     }
 }
 
@@ -35,14 +35,14 @@ void sch_task10ms(void) {
         // uint8_t temp = adc_sync_read();
 
         uint16_t speed = spe_get_speed();
-        uint16_t pos = pse_get_position();
+        //uint16_t pos = pse_get_position();
         uint32_t distance = dsa_get_rotations();
 
-        usart_sync_write((uint8_t)(speed >> 8));
+        usart_sync_write((uint8_t)((speed >> 8) & 0xFF));
         usart_sync_write((uint8_t)(speed & 0xFF));
 
-        usart_sync_write((uint8_t)(pos >> 8));
-        usart_sync_write((uint8_t)(pos & 0xFF));
+        usart_sync_write((uint8_t)0x69);
+        usart_sync_write((uint8_t)0x69);
 
         usart_sync_write((uint8_t)((distance >> 24) & 0xFF));
         usart_sync_write((uint8_t)((distance >> 16) & 0xFF));

@@ -26,10 +26,8 @@ void spe_init(sensor_configuration_t* conf);
 /**
  * @brief Updates the speed estimator's state
  * 
- * @param pos 
- * @param neg 
  */
-void spe_update(uint8_t pos, uint8_t neg);
+void spe_update(uint16_t width, uint16_t period);
 
 /**
  * @brief Returns the current angular velocity in Rotations per minute (RPM)
