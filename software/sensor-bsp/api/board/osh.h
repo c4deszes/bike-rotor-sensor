@@ -22,10 +22,3 @@ void osh_output_on(void);
  * @brief Turns off the output stage
  */
 void osh_output_off(void);
-
-/**
- * @brief 
- * 
- * @return uint16_t 
- */
-uint16_t osh_get_current(void);

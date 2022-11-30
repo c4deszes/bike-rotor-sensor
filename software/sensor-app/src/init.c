@@ -1,11 +1,13 @@
 #include "app/init.h"
 #include "app/config.h"
 
+#include "hal/adc.h"
 #include "hal/evsys.h"
 #include "hal/wdt.h"
 #include "hal/usart.h"
 #include "hal/sch.h"
 #include "hal/rtc.h"
+#include "hal/vref.h"
 
 #include "board/board.h"
 #include "board/ish.h"
@@ -27,18 +29,16 @@ static const usart_full_duplex_configuration usart_phy_config = {
     .parity_mode = USART_PARITY_MODE_NONE
 };
 
-static const dsa_configuration dsa_config = {
-    .pulse_per_rotation = SENSOR_PULSE_PER_ROTATION
-};
-
-static const pse_configuration pse_config = {
+static sensor_configuration_t sensor_config = {
     .pulse_per_rotation = SENSOR_PULSE_PER_ROTATION,
     .index_threshold = SENSOR_INDEX_THRESHOLD
 };
 
-static const spe_configuration spe_config = {
-    .pulse_per_rotation = SENSOR_PULSE_PER_ROTATION
-};
+// static adc_configuration adc_config = {
+//     .resolution = ADC_RESOLUTION_8BIT,
+//     .runstandby = false,
+//     .sampling = ADC_SAMPLING_ACC4
+// };
 
 /**
  * @brief RTC Periodic Interrupt handler configured trigger the scheduler every 1 millisecond
@@ -53,6 +53,13 @@ void app_init() {
 
     /** Initialize system and board peripherals */
     board_init();
+
+    /** Hold LIN Trans. CS Pin high after initialization*/
+    board_vcom_select();
+
+    // Initialize ADC0 for Temperature measurement
+    // adc_init(&adc_config);
+    // vref_select_adc0(VREF_VALUE_1V1);
 
     /**
      * @note Calculations:
@@ -69,9 +76,9 @@ void app_init() {
     usart_init_full_duplex(&usart_phy_config);
 
     /** Initialize sensor data processing components */
-    pse_init(&pse_config);
-    dsa_init(&dsa_config);
-    spe_init(&spe_config);
+    pse_init(&sensor_config);
+    dsa_init(&sensor_config);
+    spe_init(&sensor_config);
 
     /** Enables sensor hardware */
     osh_output_on();

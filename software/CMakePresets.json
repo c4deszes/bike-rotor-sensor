@@ -56,7 +56,7 @@
     "buildPresets": [
         {
             "name": "build-default",
-            "targets": ["rotor-sensor-app-full", "rotor-sensor-standalone-full"],
+            "targets": ["rotor-sensor-standalone-full"],
             "hidden": true
         },
         {

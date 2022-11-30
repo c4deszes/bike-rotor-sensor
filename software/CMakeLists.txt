@@ -7,13 +7,14 @@ project(
 set(PROJECT_VERSION "0.1.0")
 
 # Profile selection
-message("-- Rotor Sensor profile: development-digital")
+message("-- Rotor Sensor profile: internal-optical-digital")
 include("config/development-digital.cmake")
 message("\tBoard type: ${BOARD_TYPE}")
 message("\tBoard sensor type: ${BOARD_SENSOR_TYPE}")
 
 # Test configuration
 enable_testing()
+include(CTest)
 set(CTEST_OUTPUT_ON_FAILURE ON)
 
 set(CTEST_COVERAGE_COMMAND "gcovr")

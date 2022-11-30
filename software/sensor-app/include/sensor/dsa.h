@@ -7,26 +7,20 @@
 #pragma once
 
 #include <stdint.h>
-
-typedef struct {
-    uint8_t pulse_per_rotation;
-} dsa_configuration;
+#include "sensor/common.h"
 
 /**
  * @brief Initializes the Distance Accumulator with the given settings
  * 
  * @param conf DSA settings
  */
-void dsa_init(const dsa_configuration* conf);
+void dsa_init(sensor_configuration_t* conf);
 
 /**
  * @brief Updates the position signal by 
  * @note
- * 
- * @param pos Positive pulse length in milliseconds
- * @param neg Negative pulse length in milliseconds
  */
-void dsa_update(uint8_t pos, uint8_t neg);
+void dsa_update(uint16_t width, uint16_t period);
 
 /**
  * @brief Resets the state of the DSA, effectively resetting the number of rotations

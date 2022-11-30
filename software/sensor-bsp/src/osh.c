@@ -20,8 +20,3 @@ void osh_output_on(void) {
 void osh_output_off(void) {
     port_write(OSH_OUTPUT_PIN, PORT_IO_STATE_LOW);
 }
-
-uint16_t osh_get_current(void) {
-    // TODO: implement current sensing
-    return 0;
-}

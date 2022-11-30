@@ -9,11 +9,7 @@
 #pragma once
 
 #include <stdint.h>
-
-typedef struct {
-    uint8_t pulse_per_rotation;
-    uint8_t index_threshold;
-} pse_configuration;
+#include "sensor/common.h"
 
 typedef enum {
     PSE_POSITION_STATE_UNKNOWN,     /**< Signals that the current position is unknown */
@@ -25,15 +21,13 @@ typedef enum {
  * 
  * @param conf 
  */
-void pse_init(const pse_configuration* conf);
+void pse_init(sensor_configuration_t* conf);
 
 /**
  * @brief Updates the position estimator's state
  * 
- * @param pos Positive impulse length
- * @param neg Negative impulse length
  */
-void pse_update(uint8_t pos, uint8_t neg);
+void pse_update(uint16_t width, uint16_t period);
 
 /**
  * @brief Returns the current position

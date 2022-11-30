@@ -7,7 +7,7 @@ static uint8_t pulse_per_rotation;
 static uint8_t steps;
 static uint32_t rotations;
 
-void dsa_init(const dsa_configuration* conf) {
+void dsa_init(sensor_configuration_t* conf) {
     /** Load configuration */
     pulse_per_rotation = conf->pulse_per_rotation;
 
@@ -15,8 +15,8 @@ void dsa_init(const dsa_configuration* conf) {
     dsa_reset();
 }
 
-void dsa_update(uint8_t pos, uint8_t neg) {
-    if (pos == 0) {
+void dsa_update(uint16_t width, uint16_t period) {
+    if (width == 0) {
         /** Ignore timeout */
     }
     else {
