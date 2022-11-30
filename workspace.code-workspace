@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "software"
+		},
+		{
+			"path": "system"
+		},
+		{
+			"path": ".github"
 		}
 	]
 }

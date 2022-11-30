@@ -1,0 +1,9 @@
+Sphinx
+sphinx-data-viewer
+sphinx-rtd-theme
+sphinxcontrib-jsmath
+sphinxcontrib-kroki
+sphinxcontrib-needs
+sphinxcontrib-plantuml
+sphinxcontrib-wavedrom
+sphinxcontrib-mermaid
