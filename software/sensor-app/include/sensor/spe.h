@@ -13,6 +13,8 @@
 
 typedef enum {
     SPE_SPEED_STATE_UNKNOWN,
+    SPE_SPEED_STATE_LOW,
+    SPE_SPEED_STATE_HIGH,
     SPE_SPEED_STATE_OK
 } spe_speed_state;
 

@@ -1,4 +1,5 @@
 #include "sensor/spe.h"
+#include "hal/sys.h"
 
 /** Configuration */
 static uint8_t pulse_per_rotation;
@@ -14,16 +15,32 @@ void spe_init(sensor_configuration_t* conf) {
     state = SPE_SPEED_STATE_UNKNOWN;
 }
 
-void spe_update(uint16_t pos, uint16_t neg) {
-    if (pos == 0) {
-        speed = 0;
-        state = SPE_SPEED_STATE_OK;
+void spe_update(uint16_t width, uint16_t period) {
+    uint16_t current_speed = 0;
+    if (period == 0) {
+        speed = 0xFFFF;
+        state = SPE_SPEED_STATE_UNKNOWN;
     }
     else {
-        //uint16_t current_speed = (60u * 1000u) / ((pos + neg) * pulse_per_rotation);
-        uint16_t current_speed = neg;
-        speed = current_speed;
-        state = SPE_SPEED_STATE_OK;
+        // TODO: width / period should be 30-70%
+        if (width == 0) {
+            current_speed = 0;
+            state = SPE_SPEED_STATE_LOW;
+        }
+        else if (period < 100) {
+            current_speed = sys_get_cpu_frequency() / 256u / period * 60u / pulse_per_rotation;
+            state = SPE_SPEED_STATE_HIGH;
+        }
+        else if (period < 32768) {
+            current_speed = sys_get_cpu_frequency() / 256u / period * 60u / pulse_per_rotation;
+            speed = current_speed;
+            state = SPE_SPEED_STATE_OK;
+        }
+        else {
+            current_speed = 0;
+            state = SPE_SPEED_STATE_LOW;
+        }
+        speed = (uint32_t)(speed + current_speed) / 2;
     }
 }
 

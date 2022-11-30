@@ -29,13 +29,7 @@ void sch_task10ms(void) {
     wdt_acknowledge();
 
     if (cnt > 100) {
-        // Read temperature
-        // adc_setmux(ADC_MUXPOS_TEMPSENSE);
-        // adc_start();
-        // uint8_t temp = adc_sync_read();
-
         uint16_t speed = spe_get_speed();
-        //uint16_t pos = pse_get_position();
         uint32_t distance = dsa_get_rotations();
 
         usart_sync_write((uint8_t)((speed >> 8) & 0xFF));
