@@ -28,15 +28,14 @@ static uint8_t cnt = 0;
 void sch_task10ms(void) {
     wdt_acknowledge();
 
-    if (cnt > 100) {
+    if (cnt > 5) {
         uint16_t speed = spe_get_speed();
         uint32_t distance = dsa_get_rotations();
 
+        usart_sync_write((uint8_t)(0x55));
+
         usart_sync_write((uint8_t)((speed >> 8) & 0xFF));
         usart_sync_write((uint8_t)(speed & 0xFF));
-
-        usart_sync_write((uint8_t)0x69);
-        usart_sync_write((uint8_t)0x69);
 
         usart_sync_write((uint8_t)((distance >> 24) & 0xFF));
         usart_sync_write((uint8_t)((distance >> 16) & 0xFF));

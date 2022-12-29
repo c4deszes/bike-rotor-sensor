@@ -27,3 +27,15 @@ Signal RPC communication
 
 Output stage
     Overcurrent protection
+
+## Programming
+
+pymcuprog -C -d attiny202 write -f .\build\user-avr-release\sensor-app\rotor-sensor-standalone.hex --verify -c 125k -v debug
+
+pymcuprog -C -d attiny416 write -f .\build\user-avr-release\sensor-app\rotor-sensor-app-merged.hex
+
+## Bootloader
+
+https://github.com/microchip-pic-avr-examples/avr128da48-cnano-bootloader-mplabx/blob/master/avr128da48-cnano-avr-da-bootloader.X/boot.c
+
+
