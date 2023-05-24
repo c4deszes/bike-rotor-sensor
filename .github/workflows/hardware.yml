@@ -10,7 +10,7 @@ jobs:
   ERC:
     name: ERC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
     name: DRC
     needs: ERC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -76,7 +76,7 @@ jobs:
     name: Export BOM & Gerbers
     needs: DRC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     strategy:
       matrix:
         variant:
@@ -134,7 +134,7 @@ jobs:
     name: Export Panelized Gerbers
     needs: panelize
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
