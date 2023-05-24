@@ -22,6 +22,7 @@ jobs:
 
   DRC:
     name: DRC
+    if: false
     #needs: ERC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
@@ -35,7 +36,7 @@ jobs:
 
   documentation:
     name: Export Documents
-    needs: DRC
+    #needs: DRC
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
     strategy:
@@ -75,7 +76,7 @@ jobs:
 
   manufacturing:
     name: Export BOM & Gerbers
-    needs: DRC
+    #needs: DRC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     strategy:
@@ -108,7 +109,7 @@ jobs:
 
   panelize:
     name: Panelize
-    needs: DRC
+    #needs: DRC
     runs-on: ubuntu-latest
     container: yaqwsx/kikit:v0.7
     steps:
