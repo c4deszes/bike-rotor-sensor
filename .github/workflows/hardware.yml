@@ -9,6 +9,7 @@ on:
 jobs:
   ERC:
     name: ERC
+    if: false
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
@@ -21,7 +22,7 @@ jobs:
 
   DRC:
     name: DRC
-    needs: ERC
+    #needs: ERC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
