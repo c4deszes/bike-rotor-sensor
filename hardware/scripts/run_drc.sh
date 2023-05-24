@@ -1,1 +1,1 @@
-kibot -b design/rotor-sensor.kicad_pcb -c config/drc.yaml
+kibot -b design/rotor-sensor/rotor-sensor.kicad_pcb -c config/drc.yaml

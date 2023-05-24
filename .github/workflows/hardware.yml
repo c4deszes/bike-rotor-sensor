@@ -13,7 +13,7 @@ jobs:
     container: setsoft/kicad_auto:latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run ERC
       working-directory: hardware
@@ -26,7 +26,7 @@ jobs:
     container: setsoft/kicad_auto:latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run DRC
       working-directory: hardware
@@ -47,7 +47,7 @@ jobs:
       VARIANT: ${{ matrix.variant }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # - name: Install KiBot
     #   run: pip3 install git+https://github.com/INTI-CMNB/KiBot.git
@@ -61,7 +61,6 @@ jobs:
       run: ./scripts/export_layout.sh
 
     - name: Generate step file
-      if: 'false'
       working-directory: hardware
       run: ./scripts/export_step.sh
 
@@ -88,7 +87,7 @@ jobs:
       VARIANT: ${{ matrix.variant }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Generate Gerbers
         working-directory: hardware
@@ -99,7 +98,7 @@ jobs:
         run: ./scripts/export_bom.sh
 
       - name: Archive Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: manufacturing-${{ matrix.variant }}
           path: hardware/build/
@@ -113,7 +112,7 @@ jobs:
     container: yaqwsx/kikit:v0.7
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Kikit
         run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
@@ -124,7 +123,7 @@ jobs:
           kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
 
       - name: Archive Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: panelized-board
           path: hardware/rotor-sensor-panelized.kicad_pcb
@@ -138,10 +137,10 @@ jobs:
     container: setsoft/kicad_auto:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download board
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: panelized-board
           path: hardware
@@ -151,7 +150,7 @@ jobs:
         run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers drill
 
       - name: Archive Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: manufacturing-panelized
           path: hardware/build/
