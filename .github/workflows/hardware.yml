@@ -38,7 +38,7 @@ jobs:
     name: Export Documents
     #needs: DRC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -95,18 +95,18 @@ jobs:
     name: Panelize
     #needs: DRC
     runs-on: ubuntu-latest
-    container: yaqwsx/kikit:v0.7
+    container: yaqwsx/kikit
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Kikit
-        run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
+      #- name: Setup Kikit
+      #  run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
 
       - name: Panelize
         working-directory: hardware
         run: |
-          kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
+          kikit panelize -p config/panel.json design/rotor-sensor/rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
 
       - name: Archive Output
         uses: actions/upload-artifact@v3
