@@ -39,14 +39,6 @@ jobs:
     #needs: DRC
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto
-    strategy:
-      matrix:
-        variant:
-          - OPTICAL
-          - EXTERNAL
-          - HALL
-    env:
-      VARIANT: ${{ matrix.variant }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -69,7 +61,7 @@ jobs:
     - name: Archive Output
       uses: actions/upload-artifact@v2
       with:
-        name: documentation-${{ matrix.variant }}
+        name: documentation
         path: hardware/build/
         if-no-files-found: error
         retention-days: 5
@@ -79,14 +71,6 @@ jobs:
     #needs: DRC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
-    strategy:
-      matrix:
-        variant:
-          - OPTICAL
-          - EXTERNAL
-          - HALL
-    env:
-      VARIANT: ${{ matrix.variant }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -102,7 +86,7 @@ jobs:
       - name: Archive Output
         uses: actions/upload-artifact@v3
         with:
-          name: manufacturing-${{ matrix.variant }}
+          name: manufacturing
           path: hardware/build/
           if-no-files-found: error
           retention-days: 5
