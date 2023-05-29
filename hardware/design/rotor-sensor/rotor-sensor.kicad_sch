@@ -4220,7 +4220,7 @@
     (property "Reference" "U600" (at 222.25 99.06 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "~" (at 212.09 80.01 0)
+    (property "Value" "BMI088" (at 212.09 80.01 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "local_footprints:Bosch_LGA16" (at 212.09 80.01 0)
