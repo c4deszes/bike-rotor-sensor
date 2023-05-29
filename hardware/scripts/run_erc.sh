@@ -1,1 +1,1 @@
-kibot -e design/rotor-sensor/rotor-sensor.kicad_sch -c config/erc.yaml
+kibot -e design/$PRODUCT/$PRODUCT.kicad_sch -c config/erc.yaml

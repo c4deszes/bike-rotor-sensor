@@ -1,6 +1,6 @@
 kibot \
--b design/rotor-sensor/rotor-sensor.kicad_pcb \
--e design/rotor-sensor/rotor-sensor.kicad_sch \
+-b design/$PRODUCT/$PRODUCT.kicad_pcb \
+-e design/$PRODUCT/$PRODUCT.kicad_sch \
 -c config/outputs.yaml \
 -g variant=$VARIANT \
 layout-pdf

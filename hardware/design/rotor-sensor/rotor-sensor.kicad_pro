@@ -460,8 +460,8 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "rotor-sensor3.step",
-      "vrml": ""
+      "step": "rotor-sensor4.step",
+      "vrml": "rotor-sensor.wrl"
     },
     "page_layout_descr_file": ""
   },

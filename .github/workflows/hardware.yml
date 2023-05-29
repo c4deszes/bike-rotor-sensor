@@ -39,6 +39,11 @@ jobs:
     #needs: DRC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
+    strategy:
+      matrix:
+        design:
+          - "rotor-sensor"
+          - "connector-pcb"
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -59,7 +64,7 @@ jobs:
       run: ./scripts/export_step.sh
 
     - name: Archive Output
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: documentation
         path: hardware/build/
@@ -71,6 +76,11 @@ jobs:
     #needs: DRC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
+    strategy:
+      matrix:
+        product:
+          - "rotor-sensor"
+          - "connector-pcb"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -93,9 +103,10 @@ jobs:
 
   panelize:
     name: Panelize
+    if: false
     #needs: DRC
     runs-on: ubuntu-latest
-    container: yaqwsx/kikit
+    container: yaqwsx/kikit:nightly-v7
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -118,6 +129,7 @@ jobs:
 
   manufacturing-panelized:
     name: Export Panelized Gerbers
+    if: false
     needs: panelize
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
