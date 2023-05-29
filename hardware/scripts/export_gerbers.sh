@@ -3,4 +3,4 @@ kibot \
 -e design/$PRODUCT/$PRODUCT.kicad_sch \
 -c config/outputs.yaml \
 -g variant=$VARIANT \
-gerbers
+gerbers drill
