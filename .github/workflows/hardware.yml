@@ -44,6 +44,8 @@ jobs:
         design:
           - "rotor-sensor"
           - "connector-pcb"
+    env:
+      PRODUCT: ${{ matrix.product }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -66,7 +68,7 @@ jobs:
     - name: Archive Output
       uses: actions/upload-artifact@v3
       with:
-        name: documentation
+        name: documentation-${{ matrix.product }}
         path: hardware/build/
         if-no-files-found: error
         retention-days: 5
@@ -81,6 +83,8 @@ jobs:
         product:
           - "rotor-sensor"
           - "connector-pcb"
+    env:
+      PRODUCT: ${{ matrix.product }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -96,7 +100,7 @@ jobs:
       - name: Archive Output
         uses: actions/upload-artifact@v3
         with:
-          name: manufacturing
+          name: manufacturing-${{ matrix.product }}
           path: hardware/build/
           if-no-files-found: error
           retention-days: 5
