@@ -35,7 +35,31 @@ jobs:
       run: ./scripts/run_drc.sh
 
   documentation:
-    name: Export Documents
+    name: Documentation
+    runs-on: ubuntu-latest
+    container: python:3.10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install requirements
+        working-directory: hardware
+        run: pip install docs/requirements.txt
+
+      - name: Build
+        working-directory: hardware
+        run: python -m sphinx docs docs/_build
+
+      - name: Archive documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation-${{ matrix.product }}
+          path: hardware/docs/_build/
+          if-no-files-found: error
+          retention-days: 5
+
+  schematic_layout:
+    name: Export Schematic & Layout
     #needs: DRC
     runs-on: ubuntu-latest
     container: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
@@ -73,7 +97,7 @@ jobs:
         if-no-files-found: error
         retention-days: 5
 
-  manufacturing:
+  bom_gerbers:
     name: Export BOM & Gerbers
     #needs: DRC
     runs-on: ubuntu-latest

@@ -1,0 +1,30 @@
+@startuml
+!include C4_Context.puml
+title Hardware architecture
+
+LAYOUT_LANDSCAPE()
+
+System(connector, "Connector")
+System(power_conditioning, "Power conditioning", "Reverse polarity protection")
+System(communication, "Communication", "LIN Transceiver & Voltage regulator")
+System(control, "Controller", "Microcontroller")
+System(output_stage, "Output stage")
+System(sensor_connector, "Sensor connector")
+System(sensor, "IMU", "Accelerometer & Gyroscope)
+
+Rel_Right(connector, power_conditioning, "Power", "VBat")
+Rel_Right(power_conditioning, communication, "Power", "V+")
+
+Rel_Right(connector, communication, "LIN", "Digital (HV)")
+Rel_Right(communication, control, "UART", "Bus")
+Rel_Right(control, communication, "Bus control", "Sleep & Transmit Enable")
+
+Rel_Right(communication, control, "Power", "V+")
+Rel_Right(communication, output_stage, "Power", "V+")
+Rel_Right(communication, sensor, "Power", "V+")
+
+Rel_Right(control, output_stage, "Control", "Analog & Digital")
+Rel_Right(output_stage, sensor_connector, "Output", "Analog | Digital")
+Rel_Right(control, sensor, "SPI", "Bus")
+
+@enduml
