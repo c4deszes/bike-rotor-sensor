@@ -44,7 +44,7 @@ jobs:
 
       - name: Install requirements
         working-directory: hardware
-        run: pip install docs/requirements.txt
+        run: pip install -r docs/requirements.txt
 
       - name: Build
         working-directory: hardware
