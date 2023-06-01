@@ -4,7 +4,7 @@ version = '0.1'
 sys.path.append(os.path.abspath("./_ext"))
 
 extensions = [
-    "sphinxcontrib.needs",
+    "sphinx_needs",
     "sphinx_rtd_theme",
     'jupyter_sphinx',
     'sphinx.ext.mathjax',
