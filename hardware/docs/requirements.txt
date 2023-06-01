@@ -1,4 +1,5 @@
 Sphinx
+schemdraw[matplotlib,svgmath]
 sphinx-needs
 jupyter-sphinx
 matplotlib
