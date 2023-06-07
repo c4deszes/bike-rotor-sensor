@@ -10,3 +10,4 @@ sphinxcontrib-kroki
 sphinxcontrib-mermaid
 sphinxcontrib-plantuml
 sphinxcontrib-wavedrom
+linuxdoc

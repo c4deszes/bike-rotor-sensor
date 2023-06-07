@@ -24,8 +24,8 @@ A Schottky diode can be used to prevent reverse polarity from damaging component
     :status: accepted
     :satisfies: ext_CRS_LOCKOUT_ACTUATION_TIME
 
-    :download:`SS34F <../datasheets/SS34F.pdf>`  from DC Components is selected as the RPP diode. It has
-    a ``40V`` breakdown voltage and ``3A`` of maximum average forward current.
+    :download:`B140-13-F <../datasheets/B120-160B>` from Diodes Inc. is selected as the RPP diode.
+    It has a breakdown voltage of 40V and maximum continuous current of 1A.
 
 Calculation
 ~~~~~~~~~~~
@@ -34,10 +34,10 @@ Calculation
     :hide-code:
 
     v_forward = '0.55V'
-    i_max = '2.0A'
-    i_idle = '100mA'
-    t_per_watt = '55°C'
-    t_operational = '40°C'
+    i_max = '150mA'
+    i_idle = '50mA'
+    t_per_watt = '20°C'
+    t_operational = '50°C'
 
     P_max = normalize_numeric(v_forward) * normalize_numeric(i_max)
     P_idle = normalize_numeric(v_forward) * normalize_numeric(i_idle)
