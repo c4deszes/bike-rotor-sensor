@@ -3779,7 +3779,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 323.215 99.06 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom yes) (on_board yes) (dnp yes)
     (uuid 16c3ab96-e8ae-41d4-9874-b9b136eefc84)
     (property "Reference" "R2" (at 321.31 96.52 90)
       (effects (font (size 1.27 1.27)))
@@ -4616,7 +4616,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 318.135 64.77 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom yes) (on_board yes) (dnp yes)
     (uuid 40822ef9-ae49-40ba-ade3-ae310660be27)
     (property "Reference" "R18" (at 319.913 63.3105 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -5149,7 +5149,7 @@
     (property "Reference" "R7" (at 262.89 155.575 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "10k" (at 262.89 157.48 0)
+    (property "Value" "4.7k" (at 262.89 157.48 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 262.382 156.21 90)
@@ -5942,7 +5942,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 318.135 104.14 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom yes) (on_board yes) (dnp yes)
     (uuid 8b075995-97fd-44e9-be1d-18b0020bcc5d)
     (property "Reference" "R3" (at 319.913 103.4963 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -7748,7 +7748,7 @@
     (property "Reference" "R1" (at 269.875 155.575 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "10k" (at 269.875 157.48 0)
+    (property "Value" "4.7k" (at 269.875 157.48 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 269.367 156.21 90)
@@ -8062,7 +8062,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 323.215 59.69 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom yes) (on_board yes) (dnp yes)
     (uuid f307d2a1-8cfc-45a1-a7b9-c24e089a8164)
     (property "Reference" "R19" (at 320.675 57.15 90)
       (effects (font (size 1.27 1.27)))

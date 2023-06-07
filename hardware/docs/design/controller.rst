@@ -95,136 +95,173 @@ purpose ARM Cortex-M0 microcontroller.
 Pinout
 ~~~~~~
 
-.. list-table:: Pinout
-    :header-rows: 1
+.. flat-table:: Spanning table cells
+    :header-rows: 2
 
-    * - Pin Number
-      - Pin Name
-      - Peripheral
-      - Channel
-      - Purpose
+    * - :rspan:`1` Pin Number
+      - :rspan:`1` Pin Name
+      - :cspan:`2` Peripheral
+      - :cspan:`2` Channel
+      - :cspan:`2` Purpose
+
+    * - MAX9621
+      - MAX9921
+      - AP22802
+      - MAX9621
+      - MAX9921
+      - AP22802
+      - MAX9621
+      - MAX9921
+      - AP22802
 
     * - 1
       - PA00
-      - XTAL32
-      - XIN32
-      - External 32.768kHz oscillator input
+      - :cspan:`2` XTAL32
+      - :cspan:`2` XIN32
+      - :cspan:`2` External 32.768kHz oscillator input
 
     * - 2
       - PA01
-      - XTAL32
-      - XOUT32
-      - External 32.768kHz oscillator output
+      - :cspan:`2` XTAL32
+      - :cspan:`2` XOUT32
+      - :cspan:`2` External 32.768kHz oscillator output
 
     * - 3
       - PA02
-      - 
-      - 
-      - Channel 1 diagnostics (MAX9621), Output enable (MAX9921), Channel 1 overcurrent (AP22802)
+      - ADC
+      - PORT
+      - EIC
+      - AIN[0]
+      - PORTA[02] (output)
+      - EXTINT[2]
+      - Channel 1 diagnostics
+      - Output enable
+      - Channel 1 overcurrent
 
     * - 4
       - PA03
-      - 
-      - 
-      - Channel 2 diagnostics (MAX9621), Channel 1 input (MAX9921), Channel 2 overcurrent (AP22802)
+      - ADC
+      - :cspan:`1` EIC
+      - AIN[1]
+      - :cspan:`1` EXTINT[3]
+      - Channel 2 diagnostics
+      - Channel 1 input
+      - Channel 2 overcurrent
 
     * - 5
       - PA04
-      - EIC
-      - EXTINT[4]
-      - Channel 1 input (MAX9621), Error (MAX9921), Channel 1 input (AP22802)
+      - :cspan:`2` EIC
+      - :cspan:`2` EXTINT[4]
+      - Channel 1 input
+      - Error
+      - Channel 1 input
 
     * - 6
       - PA05
-      - EIC
-      - EXTINT[5]
-      - Channel 2 input (MAX9621), Channel 2 input (MAX9921), Channel 2 input (AP22802)
+      - :cspan:`2` EIC
+      - :cspan:`2` EXTINT[5]
+      - Channel 2 input
+      - Channel 2 input
+      - Channel 2 input
 
     * - 7
       - PA06
-      - 
-      - 
-      - Output stage enable (MAX9621), Output stage diagnostics (MAX9921), Channel 1 enable (AP22802)
+      - :cspan:`2` PORT
+      - :cspan:`2` PORTA_06
+      - Sleep (output inverted)
+      - Diagnostics (output)
+      - Channel 1 enable (output)
 
     * - 8
       - PA07
+      - :cspan:`1`
       - PORT
+      - :cspan:`1`
       - PORTA_07
-      - Channel 2 enable (AP22802)
+      - :cspan:`1`
+      - Channel 2 enable
 
     * - 11
       - PA08
-      - SERCOM0
-      - PAD[0]
-      - LIN Transceiver transmit
+      - :cspan:`2` UART
+      - :cspan:`2` SERCOM PAD[0]
+      - :cspan:`2` LIN Transmit (TX)
 
     * - 12
       - PA09
-      - SERCOM0
-      - PAD[1]
-      - LIN Transceiver receive
+      - :cspan:`2` UART
+      - :cspan:`2` SERCOM PAD[1]
+      - :cspan:`2` LIN Receive (RX)
 
     * - 13
       - PA10
-      - PORT
-      - PORTA_10
-      - Voltage regulator enable
+      - :cspan:`2` PORT
+      - :cspan:`2` PORTA[10]
+      - :cspan:`2` LIN Chip select
+
+    * - 14
+      - PA11
+      - :cspan:`2` PORT
+      - :cspan:`2` PORTA[11]
+      - :cspan:`2` LIN Transmit enable
 
     * - 15
       - PA14
-      - EIC
-      - EXTINT[14]
-      - Accelerometer interrupt
+      - :cspan:`2` EIC
+      - :cspan:`2` EXTINT[14]
+      - :cspan:`2` IMU Accelerometer interrupt
 
     * - 16
       - PA15
-      - EIC
-      - EXTINT[15]
-      - Gyroscope interrupt
+      - :cspan:`2` EIC
+      - :cspan:`2` EXTINT[15]
+      - :cspan:`2` IMU Gyroscope interrupt
 
     * - 17
       - PA16
-      - SERCOM1
-      - PAD[0]
-      - SPI Master In
+      - :cspan:`2` SERCOM1
+      - :cspan:`2` SERCOM PAD[0]
+      - :cspan:`2` IMU SPI Master In
 
     * - 18
       - PA17
-      - SERCOM1
-      - PAD[1]
-      - SPI Clock
+      - :cspan:`2` SERCOM1
+      - :cspan:`2` SERCOM PAD[1]
+      - :cspan:`2` IMU SPI Clock
 
     * - 19
       - PA18
-      - SERCOM1
-      - PAD[2]
-      - Accelerometer chip select
+      - :cspan:`2` SERCOM1
+      - :cspan:`2` SERCOM PAD[2]
+      - :cspan:`2` IMU Accelerometer chip select
 
     * - 20
       - PA19
-      - SERCOM1
-      - PAD[3]
-      - SPI Master out
+      - :cspan:`2` SERCOM1
+      - :cspan:`2` SERCOM PAD[3]
+      - :cspan:`2` IMU SPI Master out
 
     * - 21
       - PA22
-      - PORT
-      - PORTA_22
-      - Gyroscope chip select
+      - :cspan:`2` PORT
+      - :cspan:`2` PORTA[22]
+      - :cspan:`2` IMU Gyroscope chip select
 
     * - 31
       - PA30
-      - SWD
-      - SWCLK
-      - Serial-Wire-Debug clock
+      - :cspan:`2` SWD
+      - :cspan:`2` SWCLK
+      - :cspan:`2` Serial-Wire-Debug clock
 
     * - 32
       - PA31
-      - SWD
-      - SWDIO
-      - Serial-Wire-Debug data in/out
+      - :cspan:`2` SWD
+      - :cspan:`2` SWDIO
+      - :cspan:`2` Serial-Wire-Debug data in/out
 
 Schematic
 ~~~~~~~~~
 
-
+See schematic notes in
+:download:`ATSAMD21E18A <../datasheets/SAM-D21-DA1-Family-Data-Sheet-DS40001882H.pdf>`, section 45 -
+page 1112.

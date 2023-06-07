@@ -57,23 +57,6 @@ Transient protection
 
 A TVS diode can be used to prevent temporary overvoltage conditions on the power input.
 
-Regulator enable
-----------------
-
-Design 1
-~~~~~~~~
-
-A series P-channel MOSFET can be used to disable the power input to the
-:ref:`power stage <design/pwr_stage:Power stage>`.
-
-Design 2 (chosen)
-~~~~~~~~~~~~~~~~~
-
-A regulator that has builtin shutdown pin can be used, a direct connection from
-:ref:`communication <design/communication:Communication>` enable output can be made, or in case the
-transceiver there is able to provide power to the control portion then that can provide this enable
-signal.
-
 Schematic
 ---------
 

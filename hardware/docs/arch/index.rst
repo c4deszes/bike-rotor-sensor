@@ -4,7 +4,7 @@ Hardware architecture
 Overview
 --------
 
-... kroki:: diagrams/overview.c4puml
+.. kroki:: diagrams/overview.c4puml
 
 Detailed responsibilities
 -------------------------

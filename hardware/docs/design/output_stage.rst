@@ -19,7 +19,7 @@ Output stage
 Voltage divider
 ~~~~~~~~~~~~~~~
 
-:download:`API22802 <../datasheets/AP22802.pdf>` is a 5V device, therefore the overcurrent flag and
+:download:`AP22802 <../datasheets/AP22802.pdf>` is a 5V device, therefore the overcurrent flag and
 the input from the sensor needs to be level shifted down to 3.3V.
 
 .. jupyter-execute::
@@ -148,27 +148,6 @@ Hall-sensor selection
       - PWM (current)
       - Airgap
       - Hall
-
-    * - TLE5041PLUSCAAMA1
-      - 1 - 5000 Hz
-      - No
-      - PWM (current)
-      - Supply errors
-      - iGMR
-
-    * - TLE5041PLUSCXAMA1
-      - 1 - 5000 Hz
-      - No
-      - PWM (current)
-      - Supply errors
-      - iGMR
-
-    * - TLE5045ICIJGR050HALA1
-      - 0.03 - 3000 Hz
-      - No
-      - PWM (current)
-      - Supply errors
-      - iGMR
 
     * - TLE5045ICR050HALA1
       - 0.03 - 3000 Hz

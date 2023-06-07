@@ -15,16 +15,18 @@ extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.doctest',
     'sphinxcontrib.mermaid',
-    'sphinxcontrib.kroki'
+    'sphinxcontrib.kroki',
+    'linuxdoc.rstFlatTable',
 ]
 
 autosectionlabel_prefix_document = True
 
 # Sphinx configuration
+html_static_path = ['_static']
+html_style = 'css/custom.css'
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {
-    "collapse_navigation" : False,
-    "show_navbar_depth": 2
+    "collapse_navigation" : False
 }
 html_js_files = ["https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"]
 source_suffix = '.rst'
