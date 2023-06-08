@@ -1,24 +1,24 @@
 kibot:
   version: 1
 
-variants:
-  - name: 'OPTICAL'
-    comment: 'Onboard optical slot sensor'
-    type: kibom
-    file_id: _optical
-    variant: OPTICAL
+# variants:
+#   - name: 'OPTICAL'
+#     comment: 'Onboard optical slot sensor'
+#     type: kibom
+#     file_id: _optical
+#     variant: OPTICAL
 
-  - name: 'EXTERNAL'
-    comment: 'External sensor'
-    type: kibom
-    file_id: _external
-    variant: EXTERNAL
+#   - name: 'EXTERNAL'
+#     comment: 'External sensor'
+#     type: kibom
+#     file_id: _external
+#     variant: EXTERNAL
 
-  - name: 'HALL'
-    comment: 'Onboard hall effect sensor'
-    type: kibom
-    file_id: _hall
-    variant: HALL
+#   - name: 'HALL'
+#     comment: 'Onboard hall effect sensor'
+#     type: kibom
+#     file_id: _hall
+#     variant: HALL
 
 outputs:
   - name: 'gerbers'
