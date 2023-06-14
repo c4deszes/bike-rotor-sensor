@@ -38,4 +38,7 @@ pymcuprog -C -d attiny416 write -f .\build\user-avr-release\sensor-app\rotor-sen
 
 https://github.com/microchip-pic-avr-examples/avr128da48-cnano-bootloader-mplabx/blob/master/avr128da48-cnano-avr-da-bootloader.X/boot.c
 
-
+:02000004008278
+:090000000000010000C40500002D
+:0400000500000200F5
+:00000001FF

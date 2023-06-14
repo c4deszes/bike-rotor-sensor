@@ -1,8 +1,8 @@
-================
-Rotor Sensor
-================
+Rotor Sensor software
+=====================
 
 .. toctree::
-    :glob:
 
-    arch/*
+    reqs/index
+    arch/index
+    design/index
