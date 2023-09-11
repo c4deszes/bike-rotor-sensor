@@ -3,6 +3,9 @@
 
 #include "hal/gpio.h"
 
+#define OSH_CHANNEL_COUNT 2
+#define OSH_SENSOR_BUFFER_SIZE 64
+
 #define MAX9621_INPUT1_PORT PORT_GROUP_A
 #define MAX9621_INPUT1_PIN 4
 

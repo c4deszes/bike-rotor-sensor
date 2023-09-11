@@ -16,8 +16,8 @@ short circuits and disconnected sensors.
 OSH Sensor
 ----------
 
-Responsibilities are converting input pulse lengths into normalized speed (pulse per second) and
-determining rotational direction if possible.
+Responsibilities are converting input pulse lengths into normalized speed (pulse per second),
+determining rotational direction if possible and detecting sensor specific warnings and errors.
 
 Data processor
 --------------

@@ -34,8 +34,8 @@ void SERCOM3_Handler            ( void ) __attribute__((weak, alias("Dummy_Handl
 void TCC0_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TCC1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TCC2_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
-void TC3_CaptureInterruptHandler ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
-void TC4_CaptureInterruptHandler ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
+void TC3_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
+void TC4_tHandler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TC5_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void ADC_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void AC_Handler                 ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
@@ -73,8 +73,8 @@ const DeviceVectors exception_table=
     .pfnTCC0_Handler               = ( void * ) TCC0_Handler,
     .pfnTCC1_Handler               = ( void * ) TCC1_Handler,
     .pfnTCC2_Handler               = ( void * ) TCC2_Handler,
-    .pfnTC3_Handler                = ( void * ) TC3_CaptureInterruptHandler,
-    .pfnTC4_Handler                = ( void * ) TC4_CaptureInterruptHandler,
+    .pfnTC3_Handler                = ( void * ) TC3_Handler,
+    .pfnTC4_Handler                = ( void * ) TC4_Handler,
     .pfnTC5_Handler                = ( void * ) TC5_Handler,
     .pfnADC_Handler                = ( void * ) ADC_Handler,
     .pfnAC_Handler                 = ( void * ) AC_Handler,
@@ -83,6 +83,7 @@ const DeviceVectors exception_table=
     .pfnI2S_Handler                = ( void * ) I2S_Handler,
 };
 
-/*******************************************************************************
- End of File
-*/
+void NVIC_Initialize(void) {
+    __DMB();
+    __enable_irq();
+}

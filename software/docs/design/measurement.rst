@@ -45,6 +45,23 @@ Period range
 
     print(table)
 
+Frequency range
+---------------
+
+.. jupyter-execute::
+    :hide-code:
+
+    table = PrettyTable()
+    table.field_names = ["Speed / Poles"] + pole_count
+    for speed in speed_values:
+        frequencies = []
+        for poles in pole_count:
+            frequency = 1 / calculate(speed, poles, wheel_circumference)
+            frequencies.append(f"{frequency} Hz")
+        table.add_row([f"{speed} km/h"] + frequencies)
+
+    print(table)
+
 Resolution
 ----------
 
@@ -60,6 +77,23 @@ Resolution
             period2 = calculate(speed + 0.1, poles, wheel_circumference)
             periods.append(f"{(period1-period2) * 1000:.04f} ms")
         table.add_row([f"{speed} km/h"] + periods)
+
+    print(table)
+
+Distance
+--------
+
+.. jupyter-execute::
+    :hide-code:
+
+    table = PrettyTable()
+    table.field_names = ["Signal width / Poles"] + pole_count
+    for max_value in [2**16, 2**24, 2**32]:
+        values = []
+        for poles in pole_count:
+            max_dist = (max_value / poles) * wheel_circumference
+            values.append(f"{max_dist/1000:.03f} km")
+        table.add_row([f"{max_value} (int)"] + values)
 
     print(table)
 

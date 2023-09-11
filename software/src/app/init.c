@@ -2,8 +2,15 @@
 
 #include "bsp/board.h"
 #include "hal/rtc.h"
+#include "hal/wdt.h"
+#include "hal/nvic.h"
 
+#include "app/osh.h"
 #include "bsp/osh_phy.h"
+
+#include "app/sch.h"
+
+//#include "hal/sercom0_usart.h"
 
 // ****************************************************************************
 // ****************************************************************************
@@ -19,36 +26,28 @@
 // #pragma config BOD33_HYST = DISABLED
 // #pragma config NVMCTRL_REGION_LOCKS = 0xffff // Enter Hexadecimal value
 
-// #pragma config WDT_ENABLE = DISABLED
-// #pragma config WDT_ALWAYSON = DISABLED
-// #pragma config WDT_PER = CYC16384
-
-// #pragma config WDT_WINDOW_0 = SET
-// #pragma config WDT_WINDOW_1 = 0x4 // Enter Hexadecimal value
-// #pragma config WDT_EWOFFSET = CYC16384
-// #pragma config WDT_WEN = DISABLED
+wdt_normal_configuration wdt_config = {
+    .period = WDT_TIMEOUT_CYC16384
+};
 
 void APP_Initialize() {
     BSP_ClockInitialize();
+
+    //WDT_InitializeNormal(&wdt_config);
 
     BSP_Initialize();
 
     EIC_Initialize(&bsp_eic_config);
 
-    //EIC_EnableInterrupt(4);
-    //EIC_EnableInterrupt(5);
+    //SERCOM0_USART_Initialize();
 
-    //RTC_Initialize();
+    osh_init();
 
-    __DMB();
-    __enable_irq();
+    SCH_Init();
 
-    TC4_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
-    TC3_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
-
-    osh_phy_turn_on();
+    NVIC_Initialize();
 }
 
-void EIC_Handler(void) {
-    EIC_REGS->EIC_INTFLAG = EIC_INTFLAG_Msk;
-}
+// void EIC_Handler(void) {
+//     EIC_REGS->EIC_INTFLAG = EIC_INTFLAG_Msk;
+// }

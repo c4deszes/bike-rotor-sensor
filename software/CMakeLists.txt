@@ -36,31 +36,28 @@ add_executable(
     EXCLUDE_FROM_ALL
 
     src/app/main.c
-    src/app/startup.c
+    src/app/sch.c
     src/app/init.c
     src/app/osh.c
+    src/app/tasks.c
 
     src/bsp/osh_max9621.c
-    src/bsp/sensor_tle5045.c
     src/bsp/osh_phy.c
+    src/bsp/sensor_tle5045.c
+    src/bsp/sensor.c
     src/bsp/board.c
 
     src/hal/eic.c
+    src/hal/gclk.c
     src/hal/gpio.c
     src/hal/pm.c
     src/hal/evsys.c
     src/hal/rtc.c
     src/hal/nvic.c
-
-    # src/peripheral/plib_adc.c
-    # src/peripheral/plib_clock.c
-    # src/peripheral/plib_eic.c
-    # src/peripheral/plib_evsys.c
-    # src/peripheral/plib_nvic.c
-    # src/peripheral/plib_nvmctrl.c
-    # src/peripheral/plib_port.c
-    # src/peripheral/plib_tc3.c
-    # src/peripheral/plib_tc4.c
+    src/hal/tc.c
+    src/hal/wdt.c
+    src/hal/startup.c
+    src/hal/sysctrl.c
 )
 target_include_directories(application PRIVATE include)
 target_link_libraries(application PRIVATE cmsis atsamd21e18a-dfp)

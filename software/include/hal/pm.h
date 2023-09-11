@@ -1,10 +1,6 @@
 #ifndef RSTC_H_
 #define RSTC_H_
 
-/**
- * @brief 
- * 
- */
 typedef enum {
     PM_RCAUSE_INVALID,
     PM_RCAUSE_SYSTEM_RESET,                        /**< Cortex System reset */
@@ -17,14 +13,22 @@ typedef enum {
 } pm_rcause;
 
 /**
- * @brief Returns the reset cause
+ * @brief Returns the cause of the last reset
  * 
- * @return PM_RCAUSE Reset cause
+ * @return pm_rcause Reset type
  */
-extern pm_rcause PM_ResetCause(void);
+pm_rcause PM_ResetCause(void);
 
+/**
+ * @brief CPU enters Idle mode, in this mode only a few interrupt types
+ *        can wakeup the CPU
+ */
 void PM_IdleModeEnter(void);
 
+/**
+ * @brief CPU enters Standby mode, in this mode the peripherals that have
+ *        standby operations and interrupts enabled can wakeup the CPU
+ */
 void PM_StandbyModeEnter(void);
 
 #endif

@@ -7,11 +7,6 @@
 
 #include "atsamd21e18a.h"
 
-void GPIO_Initialize(void) {
-    /* Enable MCLK for PORT */
-    //MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_PORT_Msk;
-}
-
 void GPIO_SetupPinStandby(uint8_t group, uint8_t pin, const gpio_pin_standby_configuration* conf) {
     uint32_t pin_mask = (1 << pin);
     uint8_t pin_cfg = 0;

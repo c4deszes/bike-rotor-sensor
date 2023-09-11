@@ -83,11 +83,6 @@ typedef struct {
 } gpio_pin_output_configuration;
 
 /**
- * @brief Initializes the GPIO peripheral
- */
-void GPIO_Initialize(void);
-
-/**
  * @brief Configures the pin for standby operation, meaning that the pin is
  * not used as an input or as an output.
  * 

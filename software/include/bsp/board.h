@@ -3,7 +3,7 @@
 
 #include "hal/eic.h"
 
-extern eic_configuration bsp_eic_config;
+//extern eic_configuration bsp_eic_config;
 
 void BSP_Initialize(void);
 

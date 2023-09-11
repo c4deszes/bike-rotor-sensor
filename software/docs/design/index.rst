@@ -5,3 +5,4 @@ Design
 
     output_stage
     measurement
+    communication
