@@ -14,52 +14,23 @@ typedef enum {
  * @brief Initializes the output stage handler, including timers and initializing the specific
  * driver implementation
  */
-void osh_phy_init(void);
+void OSH_PhyInit(void);
 
 /**
  * @brief Turns on the output stage (all channels)
  */
-void osh_phy_turn_on(void);
+void OSH_PhyTurnOn(void);
 
 /**
  * @brief Turns off the output stage (all channels)
  */
-void osh_phy_turn_off(void);
-
-/**
- * @brief Initializes the output stage handler low level implementation
- * 
- * This could include setting up pins as inputs, outputs, connecting interrupts to event generators
- */
-void osh_phy_impl_init(void);
-
-/**
- * @brief Turns on the output stage (low level)
- * 
- * This could include driving pins high or low
- */
-void osh_phy_impl_turn_on(void);
-
-/**
- * @brief Turns off the output stage (low level)
- * 
- * This could include driving pins high or low
- */
-void osh_phy_impl_turn_off(void);
+void OSH_PhyTurnOff(void);
 
 /**
  * @brief Update function called by the scheduler, the driver can update the internal states for
  * example if IO needs to be polled regularly.
  */
-void osh_phy_update(void);
-
-/**
- * @brief Returns the event generator setup for the given channel
- * 
- * @param channel Output stage channel number
- * @return uint8_t Event generator ID
- */
-uint8_t osh_phy_get_evgen(uint8_t channel);
+void OSH_PhyUpdate(void);
 
 /**
  * @brief Returns the status of the given channel
@@ -67,7 +38,7 @@ uint8_t osh_phy_get_evgen(uint8_t channel);
  * @param channel Output stage channel number
  * @return osh_phy_channel_status_t Channel status (ok, shorted, open)
  */
-osh_phy_channel_status_t osh_phy_channel_status(uint8_t channel);
+osh_phy_channel_status_t OSH_PhyGetChannelStatus(uint8_t channel);
 
 // For PHYs that can control channels independently
 

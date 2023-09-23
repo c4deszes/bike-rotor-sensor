@@ -9,22 +9,39 @@ typedef enum {
     OSH_STATE_OK,
     //OSH_STATE_REVERSE,
     OSH_STATE_SENSOR_WARNING,
-    OSH_STATE_SPEED_UNRELIABLE,
+    //OSH_STATE_SPEED_UNRELIABLE,
     OSH_STATE_SENSOR_ERROR,
     OSH_STATE_PHY_SHORT,
     OSH_STATE_PHY_OPEN
 } osh_state;
 
-void osh_init(void);
+/**
+ * @brief Initializes the Output stage handler
+ * 
+ * This includes initializing the physical layer
+ */
+void OSH_Initialize(void);
 
-void osh_update(void);
+/**
+ * @brief Updates the output stage 
+ * 
+ */
+void OSH_Update(void);
 
-osh_state osh_get_state(uint8_t channel);
+osh_state OSH_GetState(uint8_t channel);
 
-// Turn on both channels (operational)
-void osh_turn_on(void);
+/**
+ * @brief Turns on all channels of the output stage
+ * 
+ * The actual operation might be deferred until the next update cycle.
+ */
+void OSH_TurnOn(void);
 
-// Turn off both channels (low current)
-void osh_turn_off(void);
+/**
+ * @brief Turns off all channels of the output stage
+ * 
+ * The actual operation might be deferred until the next update cycle.
+ */
+void OSH_TurnOff(void);
 
 #endif // APP_OUTPUT_STAGE_H_

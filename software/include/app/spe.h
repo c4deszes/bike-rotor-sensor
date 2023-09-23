@@ -5,6 +5,6 @@
 
 uint16_t SPE_GetSpeed(void);
 
-void SPE_Update(uint16_t frequency);
+void SPE_Update();
 
 #endif // APP_SPE_H_

@@ -1,4 +1,5 @@
 #include "bsp/osh_phy.h"
+#include "bsp/osh_phy_internal.h"
 #include "hal/evsys.h"
 #include "bsp/sensor.h"
 #include "bsp/config.h"
@@ -7,8 +8,8 @@
 
 static uint32_t accumulates[OSH_CHANNEL_COUNT];
 
-void osh_phy_init(void) {
-    osh_phy_impl_init();
+void OSH_PhyInit(void) {
+    OSH_PhyInit_Impl();
 
     // configure TC3 and TC4
     TC3_REGS->COUNT16.TC_CTRLA = TC_CTRLA_MODE_COUNT16 | TC_CTRLA_PRESCALER_DIV1 ;
@@ -18,7 +19,7 @@ void osh_phy_init(void) {
 
     NVIC_SetPriority(TC3_IRQn, 3);
     NVIC_EnableIRQ(TC3_IRQn);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, osh_phy_get_evgen(0));
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, OSH_PhyGetEventGenerator(0));
 
     TC4_REGS->COUNT16.TC_CTRLA = TC_CTRLA_MODE_COUNT16 | TC_CTRLA_PRESCALER_DIV1 ;
     TC4_REGS->COUNT16.TC_CTRLC = TC_CTRLC_CPTEN0_Msk | TC_CTRLC_CPTEN1_Msk;
@@ -29,7 +30,7 @@ void osh_phy_init(void) {
     NVIC_EnableIRQ(TC4_IRQn);
 
     // TC4 connected to channel 1
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, osh_phy_get_evgen(1));
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, OSH_PhyGetEventGenerator(1));
 
 
     // TC5_REGS->COUNT16.TC_CTRLA = TC_CTRLA_MODE_COUNT16 | TC_CTRLA_PRESCALER_DIV1 ;
@@ -41,23 +42,23 @@ void osh_phy_init(void) {
     // NVIC_EnableIRQ(TC5_IRQn);
 
     // // TC4 connected to channel 1
-    // EVSYS_ConfigureUser(0x14, osh_phy_get_evgen(2));
+    // EVSYS_ConfigureUser(0x14, OSH_PhyGetEventGenerator(2));
 }
 
-void osh_phy_turn_on(void) {
-    osh_phy_impl_turn_on();
+void OSH_PhyTurnOn(void) {
+    OSH_PhyTurnOn_Impl();
 
     TC3_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
     TC4_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
 }
 
-void osh_phy_turn_off(void) {
+void OSH_PhyTurnOff(void) {
     TC3_REGS->COUNT16.TC_CTRLA &= ~(TC_CTRLA_ENABLE_Msk);
     TC4_REGS->COUNT16.TC_CTRLA &= ~(TC_CTRLA_ENABLE_Msk);
 
     // TODO: wait for stop
 
-    osh_phy_impl_turn_off();
+    OSH_PhyTurnOff_Impl();
 }
 
 void TC3_Handler(void) {
@@ -70,7 +71,7 @@ void TC3_Handler(void) {
     else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
         uint16_t cc0 = TC3_REGS->COUNT16.TC_CC[0];
         uint16_t cc1 = TC3_REGS->COUNT16.TC_CC[1];
-        osh_sensor_process(0, cc0, cc1);
+        SENSOR_Process(0, cc0, cc1);
     }
 
     TC3_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;
@@ -86,7 +87,7 @@ void TC4_Handler(void) {
     else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
         uint16_t cc0 = TC4_REGS->COUNT16.TC_CC[0];
         uint16_t cc1 = TC4_REGS->COUNT16.TC_CC[1];
-        osh_sensor_process(1, cc0, cc1);
+        SENSOR_Process(1, cc0, cc1);
     }
 
     TC4_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;
@@ -102,7 +103,7 @@ void TC5_Handler(void) {
     else if ((TC5_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
         uint16_t cc0 = TC5_REGS->COUNT16.TC_CC[0];
         uint16_t cc1 = TC5_REGS->COUNT16.TC_CC[1];
-        osh_sensor_process(1, cc0, cc1);
+        SENSOR_Process(1, cc0, cc1);
     }
 
     TC5_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;

@@ -1,7 +1,4 @@
 #if !defined(APP_CONFIG_H_)
 #define APP_CONFIG_H_
 
-#define APP_CONFIG_SPEED_UNRELIABLE_MIN 1000 // 1.000Hz
-#define APP_CONFIG_SPEED_ACCELERATION_MAX 3000  // 3.000Hz / s
-
 #endif // APP_CONFIG_H_

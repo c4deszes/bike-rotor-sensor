@@ -43,7 +43,7 @@ add_executable(
 
     src/bsp/osh_max9621.c
     src/bsp/osh_phy.c
-    src/bsp/sensor_tle5045.c
+    src/bsp/sensor_generic.c
     src/bsp/sensor.c
     src/bsp/board.c
 

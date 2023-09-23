@@ -12,7 +12,7 @@ void SCH_Init(void);
 void SCH_Enter(void) __attribute__ ((noreturn));
 
 /**
- * @brief Triggers the scheduler, should be called every 100us
+ * @brief Triggers the scheduler, should be called every 1000us
  */
 void SCH_Trigger(void);
 

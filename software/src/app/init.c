@@ -9,6 +9,7 @@
 #include "bsp/osh_phy.h"
 
 #include "app/sch.h"
+#include <stddef.h>
 
 //#include "hal/sercom0_usart.h"
 
@@ -37,15 +38,39 @@ void APP_Initialize() {
 
     BSP_Initialize();
 
-    EIC_Initialize(&bsp_eic_config);
+    EIC_Initialize(NULL);
 
     //SERCOM0_USART_Initialize();
 
-    osh_init();
+    OSH_Initialize();
 
     SCH_Init();
 
+    OSH_TurnOn();
+    OSH_Update();
+
+    TCC0_REGS->TCC_CTRLA |= TCC_CTRLA_SWRST_Msk;
+    while((TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_SWRST_Msk) != 0);
+
+    TCC0_REGS->TCC_CTRLA = TCC_CTRLA_PRESCALER_DIV1;
+    TCC0_REGS->TCC_INTENSET = TCC_INTENSET_OVF_Msk;
+    TCC0_REGS->TCC_INTFLAG = TCC_INTFLAG_Msk;
+    TCC0_REGS->TCC_PER = 1000;
+
+    NVIC_SetPriority(TCC0_IRQn, 3);
+    NVIC_EnableIRQ(TCC0_IRQn);
+
+    TCC0_REGS->TCC_CTRLA |= TCC_CTRLA_ENABLE_Msk;
+
+    while((TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_ENABLE_Msk) != 0);
+
     NVIC_Initialize();
+}
+
+void TCC0_Handler(void) {
+    SCH_Trigger();
+
+    TCC0_REGS->TCC_INTFLAG = TCC_INTFLAG_Msk;
 }
 
 // void EIC_Handler(void) {

@@ -7,41 +7,34 @@ static bool _status = false;
 
 osh_state _channels[4];
 
-void _osh_set_all_channels(osh_state state) {
-
-}
-
-void osh_init(void) {
-    osh_phy_init();
+void OSH_Initialize(void) {
+    OSH_PhyInit();
 
     _enabled = false;
     _status = false;
-    _osh_set_all_channels(OSH_STATE_OFF);
+    //_osh_set_all_channels(OSH_STATE_OFF);
 }
 
-void osh_update(void) {
+void OSH_Update(void) {
     if(_enabled && !_status) {
         // Turn on PHY
-        _osh_set_all_channels(OSH_STATE_OK);
+        OSH_PhyTurnOn();
+        //_osh_set_all_channels(OSH_STATE_OK);
         _status = true;
     }
     if(!_enabled && _status) {
         // Turn off PHY
-        _osh_set_all_channels(OSH_STATE_OFF);
+        OSH_PhyTurnOff();
+        //_osh_set_all_channels(OSH_STATE_OFF);
         _status = false;
     }
-
-    if (_status) {
-        osh_phy_update();
-
-        
-    }
+    OSH_PhyUpdate();
 }
 
-void osh_turn_on(void) {
+void OSH_TurnOn(void) {
     _enabled = true;
 }
 
-void osh_turn_off(void) {
+void OSH_TurnOff(void) {
     _enabled = false;
 }

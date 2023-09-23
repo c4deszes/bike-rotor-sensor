@@ -3,9 +3,11 @@
 #include <stdint.h>
 
 static volatile uint8_t task1ms_flag = 0;
+static volatile uint8_t task10ms_flag = 0;
 
 void SCH_Init(void) {
     task1ms_flag = 0;
+    task10ms_flag = 0;
 }
 
 void SCH_Enter(void) {
@@ -13,6 +15,11 @@ void SCH_Enter(void) {
         if (task1ms_flag) {
             SCH_Task1ms();
             task1ms_flag = 0;
+            task10ms_flag++;
+        }
+        if (task10ms_flag >= 10) {
+            SCH_Task10ms_A();
+            task10ms_flag = 0;
         }
     }
 }

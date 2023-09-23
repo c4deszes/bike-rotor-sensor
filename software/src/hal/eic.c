@@ -24,25 +24,25 @@ void EIC_Initialize(const eic_configuration* conf) {
         /* Wait for sync */
     }
 
-    uint32_t evctrl = 0;
-    uint32_t config0 = 0;
-    uint32_t config1 = 0;
-    for (uint8_t i = 0; i < 16; i++) {
-        if (conf->config[i].event) {
-            evctrl |= (1 << i);
-        }
-        uint8_t setting = 0;
-        if (conf->config[i].filter) {
-            setting |= 0b1000;
-        }
-        setting |= conf->config[i].sense;
-        if (i <= 7) {
-            config0 |= (setting) << (i * 4);
-        }
-        else if (i >= 8 && i <= 15) {
-            config1 |= (setting) << (i * 4);
-        }
-    }
+    // uint32_t evctrl = 0;
+    // uint32_t config0 = 0;
+    // uint32_t config1 = 0;
+    // for (uint8_t i = 0; i < 16; i++) {
+    //     if (conf->config[i].event) {
+    //         evctrl |= (1 << i);
+    //     }
+    //     uint8_t setting = 0;
+    //     if (conf->config[i].filter) {
+    //         setting |= 0b1000;
+    //     }
+    //     setting |= conf->config[i].sense;
+    //     if (i <= 7) {
+    //         config0 |= (setting) << (i * 4);
+    //     }
+    //     else if (i >= 8 && i <= 15) {
+    //         config1 |= (setting) << (i * 4);
+    //     }
+    // }
 
     //EIC_REGS->EIC_EVCTRL = evctrl;
     //EIC_REGS->EIC_CONFIG[0] = config0;
