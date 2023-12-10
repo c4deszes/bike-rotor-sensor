@@ -29,6 +29,7 @@
  */
 #define PORT_GROUP_D 3
 
+// TODO: potential naming conflict
 typedef enum {
     LOW,
     HIGH
@@ -37,6 +38,7 @@ typedef enum {
 /**
  * Input pullup mode
  */
+// TODO: potential naming conflict
 typedef enum {
     FLOATING,   /**< No pull-up or pull-down is configured, pin is floating */
     PULLUP,     /**< Pull-up resistor is enabled*/
@@ -46,6 +48,7 @@ typedef enum {
 /**
  * Output drive strength
  */
+// TODO: potential naming conflict
 typedef enum {
     NORMAL,     /**< Normal output drive */
     STRONG      /**< Strong output drive */
@@ -54,6 +57,7 @@ typedef enum {
 /**
  * Input sampling mode
  */
+// TODO: potential naming conflict
 typedef enum {
     ONDEMAND,   /**< Input bit is only updated when requested */
     CONTINUOUS  /**< Input bit is updated continuously */

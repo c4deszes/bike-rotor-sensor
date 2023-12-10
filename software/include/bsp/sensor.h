@@ -9,21 +9,22 @@ typedef enum {
     osh_sensor_direction_forward,
     osh_sensor_direction_reverse,
     osh_sensor_direction_error
-} osh_sensor_direction;
+} osh_sensor_direction_t;
 
 typedef enum {
     osh_sensor_state_ok,        // No issues with the sensor
     osh_sensor_state_warning,   // Sensor experiencing minor problems (e.g.: airgap, brown out)
     osh_sensor_state_error      // Sensor experiencing major problems, data is unreliable
-} osh_sensor_state;
+} osh_sensor_state_t;
 
 typedef struct {
-    uint32_t pos;
+    uint32_t pos;   // TODO: is 16 bit enough?
     uint32_t neg;
-} osh_sensor_sample;
+} osh_sensor_sample_t;
 
 /**
- * @brief Funtion is called by the timer interrupt
+ * @brief Funtion is called by the timer interrupt to process a capture pulse, the function should
+ *        return as soon as possible
  * 
  * @param channel Channel number
  * @param width pulse width in microseconds
@@ -31,16 +32,18 @@ typedef struct {
  */
 void SENSOR_Process(uint8_t channel, uint32_t width, uint32_t period);
 
+osh_sensor_state_t SENSOR_GetState(uint8_t channel);
+
 /**
  * @brief Returns speed information in milli-hertz
  * 
- * @param channel 
- * @return uint16_t 
+ * @param channel Channel number
+ * @return osh_sensor_sample_t 
  */
-osh_sensor_sample SENSOR_GetData(uint8_t channel);
+osh_sensor_sample_t SENSOR_GetSample(uint8_t channel);
 
 /**
- * @brief Returns the amount of data available 
+ * @brief Returns the amount of samples available 
  * 
  * @param channel Channel number
  * @return uint8_t number of speed captures

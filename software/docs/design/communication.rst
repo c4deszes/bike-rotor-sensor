@@ -1,15 +1,6 @@
 Communication
 =============
 
-LIN stuff
-
-https://github.com/Microchip-MPLAB-Harmony/csp_apps_sam_c20_c21/blob/master/apps/sercom/usart/usart_lin/slave/firmware/src/main.c
-
-https://github.com/Microchip-MPLAB-Harmony/csp_apps_sam_c20_c21/tree/master/apps/sercom/usart
-
-https://asf.microchip.com/docs/latest/sam0.applications.samba_bootloader.saml21_xplained_pro/html/asfdoc_sam0_sercom_usart_lin_use_case.html
-
-
 Baudrate calculation
 --------------------
 
@@ -28,6 +19,15 @@ Baudrate calculation
 
     Latex("\\begin{gathered}"
           f"BAUD = {baud_register_int}\\\\"
-          f"f_{{BAUD}} = {actual_baudrate} bps\\\\"
-          f"E_{{BAUD}} = {baudrate_error * 100}\\\\"
+          f"f_{{BAUD}} = {actual_baudrate:.02f} bps\\\\"
+          f"E_{{BAUD}} = {baudrate_error * 100:.04f}%\\\\"
           "\end{gathered}")
+
+References
+----------
+
+<https://github.com/Microchip-MPLAB-Harmony/csp_apps_sam_c20_c21/blob/master/apps/sercom/usart/usart_lin/slave/firmware/src/main.c>
+
+<https://github.com/Microchip-MPLAB-Harmony/csp_apps_sam_c20_c21/tree/master/apps/sercom/usart>
+
+<https://asf.microchip.com/docs/latest/sam0.applications.samba_bootloader.saml21_xplained_pro/html/asfdoc_sam0_sercom_usart_lin_use_case.html>

@@ -5,10 +5,11 @@
 #include <stdint.h>
 
 typedef enum {
-    osh_channel_status_ok,
-    osh_channel_status_short,
-    osh_channel_status_open
-} osh_phy_channel_status_t;
+    osh_phy_channel_state_ok,
+    osh_phy_channel_state_open,
+    osh_phy_channel_state_short,
+    osh_phy_channel_state_off
+} osh_phy_channel_state_t;
 
 /**
  * @brief Initializes the output stage handler, including timers and initializing the specific
@@ -36,18 +37,8 @@ void OSH_PhyUpdate(void);
  * @brief Returns the status of the given channel
  * 
  * @param channel Output stage channel number
- * @return osh_phy_channel_status_t Channel status (ok, shorted, open)
+ * @return osh_phy_channel_state_t Channel status (ok, shorted, open)
  */
-osh_phy_channel_status_t OSH_PhyGetChannelStatus(uint8_t channel);
-
-// For PHYs that can control channels independently
-
-// bool osh_phy_has_separate_channel_control(void);
-
-// void osh_phy_turn_on_channel(uint8_t channel);
-
-// void osh_phy_turn_off_channel(uint8_t channel);
-
-// void osh_phy_restart_channel(uint8_t channel);
+osh_phy_channel_state_t OSH_PhyGetChannelState(uint8_t channel);
 
 #endif

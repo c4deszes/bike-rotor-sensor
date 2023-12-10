@@ -6,6 +6,11 @@ project(
     LANGUAGES C CXX ASM)
 set(PROJECT_VERSION "0.2.0")
 
+find_package(Python REQUIRED)
+
+include(tools/cmake/CPM.cmake)
+CPMAddPackage("gh:c4deszes/bike-line-protocol#feature/first-version")
+
 # Test configuration
 enable_testing()
 include(CTest)
@@ -31,15 +36,27 @@ target_include_directories(cmsis INTERFACE lib/CMSIS/CMSIS/Core/Include)
 add_library(atsamd21e18a-dfp INTERFACE)
 target_include_directories(atsamd21e18a-dfp INTERFACE lib/ATSAMD21E18A_DFP)
 
+line_codegen(
+    TARGET protocol-stack-api
+    NETWORK config/network.json
+    NODE RotorSensor
+    ADAPTER
+)
+
 add_executable(
     application
     EXCLUDE_FROM_ALL
 
+    src/app/comm.c
+    src/app/iet.c
+    src/app/init.c
+    src/app/itpms.c
     src/app/main.c
     src/app/sch.c
-    src/app/init.c
-    src/app/osh.c
+    src/app/sec.c
+    src/app/spm.c
     src/app/tasks.c
+    src/app/user_conf.c
 
     src/bsp/osh_max9621.c
     src/bsp/osh_phy.c
@@ -47,6 +64,8 @@ add_executable(
     src/bsp/sensor.c
     src/bsp/board.c
 
+    src/hal/ac.c
+    src/hal/adc.c
     src/hal/eic.c
     src/hal/gclk.c
     src/hal/gpio.c
@@ -55,12 +74,16 @@ add_executable(
     src/hal/rtc.c
     src/hal/nvic.c
     src/hal/tc.c
+    src/hal/tcc.c
     src/hal/wdt.c
     src/hal/startup.c
     src/hal/sysctrl.c
+
+    src/common/ringbuffer.c
+    src/common/swtimer.c
 )
 target_include_directories(application PRIVATE include)
-target_link_libraries(application PRIVATE cmsis atsamd21e18a-dfp)
+target_link_libraries(application PRIVATE cmsis atsamd21e18a-dfp protocol-stack-api)
 target_compile_options(application PRIVATE "-mcpu=cortex-m0" "-gdwarf-2" "-mthumb")
 set_target_properties(application PROPERTIES SUFFIX ".elf")
 target_link_options(application PRIVATE "-mcpu=cortex-m0" "-mthumb")

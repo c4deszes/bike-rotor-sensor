@@ -1,9 +1,11 @@
 #if !defined(HAL_TC_H_)
 #define HAL_TC_H_
 
-#include "atsamd21e18a.h"
+#include <stdint.h>
 
-#define TC4 TC4_REGS
+#define TC3 3
+#define TC4 4
+#define TC5 5
 
 typedef enum {
     tc_prescaler_div1 = 0x0,
@@ -16,19 +18,10 @@ typedef enum {
     tc_prescaler_div1024 = 0x7
 } tc_prescaler;
 
-typedef struct {
-    // mode
-    // no wavegen
-    // enable
-    // presync??
-    // prescaler
-    tc_prescaler prescaler;
-} tc_capture_config;
+void TC_SetupCapture(uint8_t timer, tc_prescaler prescaler);
 
-void TC_InitializeCapture(tc_registers_t* peripheral, tc_capture_config* config);
+void TC_Start(uint8_t timer);
 
-void TC_Start();
-
-void TC_Stop();
+void TC_Stop(uint8_t timer);
 
 #endif // HAL_TC_H_

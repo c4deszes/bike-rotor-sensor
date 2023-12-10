@@ -4,7 +4,7 @@ set(SPHINX_BUILD ${CMAKE_CURRENT_BINARY_DIR}/docs)
 
 add_custom_target(Sphinx
                   COMMAND
-                  sphinx-build -b html
+                  sphinx-build -E -b html
                   #-Dbreathe_projects.atsame54=${DOXYGEN_OUTPUT_DIR}/xml
                   ${SPHINX_SOURCE} ${SPHINX_BUILD}
                   #DEPENDS Doxygen

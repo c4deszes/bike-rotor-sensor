@@ -8,9 +8,9 @@
 typedef struct {
     uint8_t tail;
     uint8_t head;
-    osh_sensor_sample samples[64];  // TODO: move size to macro value
-    osh_sensor_direction direction;
-    osh_sensor_state state;
+    osh_sensor_sample_t samples[64];  // TODO: move size to macro value
+    osh_sensor_direction_t direction;
+    osh_sensor_state_t state;
 } osh_sensor_data;
 
 /**
@@ -21,7 +21,7 @@ typedef struct {
  * @return true 
  * @return false 
  */
-bool SENSOR_PutData(uint8_t channel, osh_sensor_sample sample);
+bool SENSOR_PutData(uint8_t channel, osh_sensor_sample_t sample);
 
 /**
  * @brief Sets the direction sensed by the sensor
@@ -29,7 +29,7 @@ bool SENSOR_PutData(uint8_t channel, osh_sensor_sample sample);
  * @param channel Channel number
  * @param direction Rotational direction
  */
-void SENSOR_SetDirection(uint8_t channel, osh_sensor_direction direction);
+void SENSOR_SetDirection(uint8_t channel, osh_sensor_direction_t direction);
 
 /**
  * @brief Sets the sensor state
@@ -37,8 +37,8 @@ void SENSOR_SetDirection(uint8_t channel, osh_sensor_direction direction);
  * @param channel Channel number
  * @param state Sensor state
  */
-void SENSOR_SetState(uint8_t channel, osh_sensor_state state);
+void SENSOR_SetState(uint8_t channel, osh_sensor_state_t state);
 
-void GENERIC_SENSOR_Process(uint8_t channel, osh_sensor_sample sample);
+void GENERIC_SENSOR_Process(uint8_t channel, osh_sensor_sample_t sample);
 
 #endif // BSP_SENSOR_INTERNAL_H_

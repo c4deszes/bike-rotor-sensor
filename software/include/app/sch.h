@@ -16,6 +16,8 @@ void SCH_Enter(void) __attribute__ ((noreturn));
  */
 void SCH_Trigger(void);
 
+void SCH_Task100us(void);
+
 void SCH_Task1ms(void);
 
 void SCH_Task10ms_A(void);

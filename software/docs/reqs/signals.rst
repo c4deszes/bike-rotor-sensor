@@ -13,18 +13,30 @@ Speed measurement
     - 1-65535: speed in pulse per seconds
 
 .. req-sw:: Speed state
-    :id: REQ_SW_SIGNAL_SPEED_STATE
+    :id: REQ_SW_SIGNAL_GLOBAL_SPEED_STATE
+    
+    - Ok (0)
+    - Slow response
+    - Unreliable 1
+    - Error
+
+.. req-sw:: Channel speed state
+    :id: REQ_SW_SIGNAL_CHANNEL_SPEED_STATE
 
     The speed state shall have the following values:
 
-    - Off (0) - when the corresponding output stage is off
-    - Ok/Forward (1) - when the output channel is fine and a valid speed signal is available
+    - Ok (0) - when the output channel is fine and a valid speed signal is available
     - 
-    - Sensor warning (3) - when the speed sensor reports back a measurement warning (airgap)
-    - Speed unreliable (4) - when the speed signal is inconsistent
-    - Sensor error (5) - when the speed sensor reports back a measurement error or no data is available
+    - Sensor warning (2) - when the speed sensor reports back a measurement warning (airgap)
+    - Speed unreliable (3) - when the speed signal is inconsistent
+    - Sensor error (4) - when the speed sensor reports back a measurement error or no data is available
+    - Output open (5) - when the output channel has no sensor connected
     - Output shorted/error (6) - when the output channel is shorted or generally has a physical error
-    - Output open (7) - when the output channel has no sensor connected
+    - Off (7) - when the corresponding output stage is off
+
+    The values here also denote priority, the highest being the output turned off, the idea being
+    that lower values correspond to a usable speed signal while high ones above sensor error mean
+    that the speed is incorrect.
 
 .. req-sw:: Wheel slip signal
     :id: REQ_SW_SIGNAL_WHEEL_SLIP
@@ -40,7 +52,7 @@ Speed measurement
     The wheel slip signal shall have the following values:
     
     - Not active (0) - when the wheel isn't spinning
-    - Slip (1) - when the wheel is detected to be locked up
+    - Lockup (1) - when the wheel is detected to be locked up
 
 .. req-sw:: Brake signal
     :id: REQ_SW_SIGNAL_BRAKE
@@ -56,14 +68,14 @@ iTPMS
 .. req-sw:: iTPMS signal
     :id: REQ_SW_SIGNAL_ITPMS_STATE
 
-    The TPMS signal shall have the following values:
+    The iTPMS signal shall have the following values:
 
-    - Stopped (0): 
-    - Running = 1:
-    - Front pressure low = 2:
-    - Rear pressure low = 3:
-    - Ok (4): 
-    - Invalid (5-7): 
+    - Stopped (0): when the measurement has been stopped with no definite result
+    - Running (1): when a measurement is in progress
+    - Front pressure low (2): measurement has concluded, front tire is underinflated
+    - Rear pressure low (3): measurement has concluded, rear tire is underinflated
+    - Ok (4): measurement has concluded, tire pressures are good
+    - Invalid (5-7): unused signal value range
 
 Distance
 --------
@@ -74,15 +86,6 @@ Distance
     The distance signal shall be in the following range:
 
     - 0-2^32: number pulses recorded
-
-.. req-sw:: Distance mode
-    :id: REQ_SW_SIGNAL_DISTANCE_MODE
-
-    The distance mode signal shall have the following values:
-
-    - Absolute (0)
-    - Estimated (1)
-
 
 Road quality
 ------------

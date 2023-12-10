@@ -1,17 +1,16 @@
-#include "atsamd21e18a.h"
-
 #include "bsp/board.h"
 #include "hal/rtc.h"
 #include "hal/wdt.h"
 #include "hal/nvic.h"
-
-#include "app/osh.h"
+#include "hal/tcc.h"
+#include "app/sec.h"
+#include "app/spm.h"
 #include "bsp/osh_phy.h"
-
 #include "app/sch.h"
-#include <stddef.h>
 
-//#include "hal/sercom0_usart.h"
+#include "hal/gpio.h"
+
+#include <stddef.h>
 
 // ****************************************************************************
 // ****************************************************************************
@@ -31,48 +30,37 @@ wdt_normal_configuration wdt_config = {
     .period = WDT_TIMEOUT_CYC16384
 };
 
+const gpio_pin_output_configuration output = {
+    .drive = NORMAL,
+    .input = false
+};
+
 void APP_Initialize() {
+    // Low level init
     BSP_ClockInitialize();
-
     //WDT_InitializeNormal(&wdt_config);
-
-    BSP_Initialize();
-
     EIC_Initialize(NULL);
-
+    OSH_PhyInit();
     //SERCOM0_USART_Initialize();
+    GPIO_SetupPinOutput(PORT_GROUP_A, 18, &output);
 
-    OSH_Initialize();
+    // Initializing application services
+    SEC_Initialize();
+    //SPM_Initialize();
+    //IET_Initialize();
 
+    // Initializing communication
+    //COMM_Initialize();
+
+    // Setting up scheduler
     SCH_Init();
-
-    OSH_TurnOn();
-    OSH_Update();
-
-    TCC0_REGS->TCC_CTRLA |= TCC_CTRLA_SWRST_Msk;
-    while((TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_SWRST_Msk) != 0);
-
-    TCC0_REGS->TCC_CTRLA = TCC_CTRLA_PRESCALER_DIV1;
-    TCC0_REGS->TCC_INTENSET = TCC_INTENSET_OVF_Msk;
-    TCC0_REGS->TCC_INTFLAG = TCC_INTFLAG_Msk;
-    TCC0_REGS->TCC_PER = 1000;
-
-    NVIC_SetPriority(TCC0_IRQn, 3);
-    NVIC_EnableIRQ(TCC0_IRQn);
-
-    TCC0_REGS->TCC_CTRLA |= TCC_CTRLA_ENABLE_Msk;
-
-    while((TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_ENABLE_Msk) != 0);
+    TCC_Reset(TCC0);
+    TCC_SetupTrigger(TCC0, 1000);   // 1000us period
+    TCC_Enable(TCC0);
 
     NVIC_Initialize();
 }
 
-void TCC0_Handler(void) {
+void TCC0_Interrupt(void) {
     SCH_Trigger();
-
-    TCC0_REGS->TCC_INTFLAG = TCC_INTFLAG_Msk;
 }
-
-// void EIC_Handler(void) {
-//     EIC_REGS->EIC_INTFLAG = EIC_INTFLAG_Msk;
-// }

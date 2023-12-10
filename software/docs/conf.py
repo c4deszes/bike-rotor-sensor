@@ -43,9 +43,10 @@ needs_id_required = True
 needs_id_regex = "^[a-zA-Z0-9_]{3,}"
 needs_template_folder = "_templates"
 needs_types = [
-    dict(directive="req-sw", title="Hardware Requirement", prefix="HW_REQ_", color="#BFD8D2", style="node"),
-    dict(directive="fmea", title="Failure mode", prefix="DRS_", color="#DF744A", style="node"),
-    dict(directive="test", title="Hardware Test Case", prefix="TC_HW_", color="#DCB239", style="node"),
+    dict(directive="req-sw", title="Software Requirement", prefix="REQ_SW_", color="#BFD8D2", style="node"),
+    dict(directive="drs-sw", title="Design Requirement", prefix="DRS_SW_", color="#BFD8D2", style="node"),
+    dict(directive="fmea", title="Failure mode", prefix="FMEA_SW_", color="#DF744A", style="node"),
+    dict(directive="test", title="Hardware Test Case", prefix="TC_SW_", color="#DCB239", style="node"),
 ]
 # needs_statuses = [
 #     dict(name="draft", description="Still under work or waiting for review"),

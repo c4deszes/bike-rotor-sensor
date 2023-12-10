@@ -33,6 +33,6 @@ void OSH_PhyTurnOff_Impl(void);
  */
 uint8_t OSH_PhyGetEventGenerator(uint8_t channel);
 
-void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_status_t status);
+void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_state_t status);
 
 #endif // BSP_OSH_PHY_INTERNAL_H_

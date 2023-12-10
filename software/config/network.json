@@ -1,0 +1,121 @@
+{
+    "name": "test-network",
+    "baudrate": 19200,
+    "nodes": {
+        "BodyComputer": {
+            "address": "0x0",
+            "subscribes": [],
+            "publishes": []
+        },
+        "RotorSensor": {
+            "address": "0x1",
+            "subscribes": [
+                "SpeedSensorStateReset",
+                "RideStatusReset"
+
+            ],
+            "publishes": [
+                "SpeedStatus",
+                "RideStatus"
+            ]
+        }
+    },
+    "requests": {
+        "SpeedStatus": {
+            "id": "0x1000",
+            "size": 5,
+            "layout": {
+                "Speed": {
+                    "offset": 0,
+                    "width": 16
+                },
+                "SpeedState": {
+                    "offset": 16,
+                    "width": 2
+                },
+                "FrontSpeedState": {
+                    "offset": 32,
+                    "width": 3
+                },
+                "RearSpeedState": {
+                    "offset": 36,
+                    "width": 3
+                },
+                "FrontWheelBraking": {
+                    "offset": 40,
+                    "width": 1
+                },
+                "RearWheelBraking": {
+                    "offset": 41,
+                    "width": 1
+                },
+                "FrontWheelLockup": {
+                    "offset": 42,
+                    "width": 1
+                },
+                "RearWheelLockup": {
+                    "offset": 43,
+                    "width": 1
+                },
+                "FrontWheelSlip": {
+                    "offset": 44,
+                    "width": 1
+                },
+                "RearWheelSlip": {
+                    "offset": 45,
+                    "width": 1
+                },
+                "FrontWheelStatusReserved1": {
+                    "offset": 46,
+                    "width": 1
+                },
+                "RearWheelStatusReserved1": {
+                    "offset": 47,
+                    "width": 1
+                }
+            }
+        },
+        "SpeedSensorStateReset": {
+            "id": "0x1001",
+            "size": 0,
+            "layout": {}
+        },
+        "RideStatus": {
+            "id": "0x1002",
+            "size": 5,
+            "layout": {
+                "Distance": {
+                    "offset": 0,
+                    "width": 32
+                },
+                "RoadQuality": {
+                    "offset": 32,
+                    "width": 2
+                },
+                "iTPMS_State": {
+                    "offset": 0,
+                    "width": 4
+                }
+            }
+        },
+        "RideStatusReset": {
+            "id": "0x1003",
+            "size": 0,
+            "layout": {}
+        }
+    },
+    "encoders": {
+
+    },
+    "schedules": {
+        "Normal": {
+            "rate": "30 ms",
+            "strategy": "randomize|balance|order",
+            "messages": {
+                "DigitalRead": 1,
+                "DigitalWrite": 1,
+                "AnalogRead": 1
+            }
+        }
+    }
+}

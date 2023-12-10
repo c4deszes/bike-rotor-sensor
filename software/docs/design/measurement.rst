@@ -32,7 +32,7 @@ Period range
     :hide-code:
 
     speed_values = [1, 3, 8, 15, 20, 30, 40, 50, 60, 70]
-    pole_count = [1, 2, 4, 6, 16, 30]
+    pole_count = [1]
 
     table = PrettyTable()
     table.field_names = ["Speed / Poles"] + pole_count

@@ -1,5 +1,7 @@
-#ifndef RSTC_H_
-#define RSTC_H_
+#ifndef PM_H_
+#define PM_H_
+
+#include <stdint.h>
 
 typedef enum {
     PM_RCAUSE_INVALID,
@@ -18,6 +20,10 @@ typedef enum {
  * @return pm_rcause Reset type
  */
 pm_rcause PM_ResetCause(void);
+
+void PM_SelectCpuDiv(uint8_t div);
+
+void PM_SelectBusDiv(uint8_t apba_sel, uint8_t apbb_sel, uint8_t apbc_sel);
 
 /**
  * @brief CPU enters Idle mode, in this mode only a few interrupt types

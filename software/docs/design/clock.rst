@@ -1,6 +1,2 @@
 Clock configuration
 ===================
-
-Targets
--------
-
