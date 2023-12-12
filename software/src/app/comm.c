@@ -3,6 +3,8 @@
 #include "line_protocol.h"
 #include "line_api.h"
 
+RINGBUFFER_8(COMM_UsartBuffer, 128);
+
 static LINE_Diag_PowerStatus_t power_status = {
     .U_status = LINE_DIAG_POWER_STATUS_VOLTAGE_OK,
     .BOD_status = LINE_DIAG_POWER_STATUS_BOD_NONE,

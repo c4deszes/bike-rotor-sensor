@@ -63,6 +63,7 @@ add_executable(
     src/bsp/sensor_generic.c
     src/bsp/sensor.c
     src/bsp/board.c
+    src/bsp/uart.c
 
     src/hal/ac.c
     src/hal/adc.c
@@ -78,6 +79,7 @@ add_executable(
     src/hal/wdt.c
     src/hal/startup.c
     src/hal/sysctrl.c
+    src/hal/sercom_usart.c
 
     src/common/ringbuffer.c
     src/common/swtimer.c

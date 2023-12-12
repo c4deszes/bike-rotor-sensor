@@ -4,6 +4,7 @@
 #include "hal/gpio.h"
 #include "hal/sercom_usart.h"
 
+// TODO: isn't that great that we include it, since it could transitively end up in the app
 #include "atsamd21e18a.h"
 
 /** 2-wire hall effect sensor driver pins */

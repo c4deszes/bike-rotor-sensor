@@ -44,6 +44,9 @@ uint8_t ringbuffer8_read(ringbuffer8_t* self);
 uint16_t ringbuffer16_read(ringbuffer16_t* self);
 uint32_t ringbuffer32_read(ringbuffer32_t* self);
 
+#define DECLARE_RINGBUFFER_8(bufferName) \
+    extern ringbuffer8_t bufferName;
+
 #define RINGBUFFER_8(bufferName, bufferSize) \
     uint8_t bufferName##_data[bufferSize]; \
     ringbuffer8_t bufferName = { \
