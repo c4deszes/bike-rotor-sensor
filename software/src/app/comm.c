@@ -1,9 +1,12 @@
 #include "app/comm.h"
 
+#include "bsp/usart.h"
+
 #include "line_protocol.h"
 #include "line_api.h"
 
-RINGBUFFER_8(COMM_UsartBuffer, 128);
+RINGBUFFER_8(COMM_UsartBufferTx, 128);
+RINGBUFFER_8(COMM_UsartBufferRx, 128);
 
 static LINE_Diag_PowerStatus_t power_status = {
     .U_status = LINE_DIAG_POWER_STATUS_VOLTAGE_OK,
@@ -35,10 +38,12 @@ LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
 
 void COMM_Initialize(void) {
     // TODO: setup UART
+    USART_Initialize(19200, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
+    USART_Enable();
 
-    LINE_Transport_Init(true);
-    LINE_App_Init();
-    LINE_Diag_Init(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+    //LINE_Transport_Init(true);
+    //LINE_App_Init();
+    //LINE_Diag_Init(LINE_NODE_RotorSensor_DIAG_ADDRESS);
 }
 
 void COMM_UpdatePhy(void) {
@@ -64,5 +69,4 @@ void COMM_UpdateSignals(void) {
     // if channel off then -> off (phy)
     // if channel shorted -> shorted (phy)
     // if channel open -> open (phy)
-    
 }

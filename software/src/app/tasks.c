@@ -12,7 +12,7 @@
 #include "hal/gpio.h"
 #include "common/swtimer.h"
 
-#include "bsp/uart.h"
+#include "bsp/usart.h"
 
 void SCH_Task100us(void) {
     //COMM_UpdatePhy();
@@ -26,13 +26,13 @@ void SCH_Task1ms(void) {
     //SPM_Update();
 }
 
-const char* text = "Hello world!\n";
+const char* text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!\r\n";
 uint16_t counter = 0;
 
 void SCH_Task10ms_A(void) {
     counter++;
     if (counter >= 100) {
-        USART_WriteData(text, 14);
+        USART_WriteData(text, 30);
         counter = 0;
     }
     //WDT_Acknowledge();

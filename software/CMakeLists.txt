@@ -63,7 +63,7 @@ add_executable(
     src/bsp/sensor_generic.c
     src/bsp/sensor.c
     src/bsp/board.c
-    src/bsp/uart.c
+    src/bsp/usart.c
 
     src/hal/ac.c
     src/hal/adc.c

@@ -7,7 +7,6 @@
 #include "app/spm.h"
 #include "bsp/osh_phy.h"
 #include "app/sch.h"
-#include "bsp/uart.h"
 #include "app/comm.h"
 
 #include "hal/gpio.h"
@@ -44,9 +43,6 @@ void APP_Initialize() {
     EIC_Initialize(NULL);
     OSH_PhyInit();
 
-    USART_Initialize(19200, &COMM_UsartBuffer);
-    USART_Enable();
-
     //SERCOM0_USART_Initialize();
     GPIO_SetupPinOutput(PORT_GROUP_A, 18, &output);
 
@@ -56,7 +52,7 @@ void APP_Initialize() {
     //IET_Initialize();
 
     // Initializing communication
-    //COMM_Initialize();
+    COMM_Initialize();
 
     // Setting up scheduler
     SCH_Init();

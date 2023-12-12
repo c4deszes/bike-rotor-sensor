@@ -1,9 +1,9 @@
 #include "hal/sercom_usart.h"
 #include "bsp/pinout.h"
 
-#include "bsp/uart.h"
+#include "bsp/usart.h"
 
-void USART_Initialize(uint32_t baudrate, ringbuffer8_t* buffer) {
+void USART_Initialize(uint32_t baudrate, ringbuffer8_t* tx_buffer, ringbuffer8_t* rx_buffer) {
     GPIO_EnableFunction(UART_TX_PORT, UART_TX_PIN, UART_TX_PINMUX);
     GPIO_EnableFunction(UART_RX_PORT, UART_RX_PIN, UART_RX_PINMUX);
     SERCOM_USART_SetupAsync(
@@ -12,7 +12,8 @@ void USART_Initialize(uint32_t baudrate, ringbuffer8_t* buffer) {
         baudrate,
         UART_TX_PAD,
         UART_RX_PAD,
-        buffer
+        tx_buffer,
+        rx_buffer
     );
 }
 

@@ -5,7 +5,7 @@
 #include "common/ringbuffer.h"
 
 // known internally: clock, pads, pins
-void USART_Initialize(uint32_t baudrate, ringbuffer8_t* buffer);
+void USART_Initialize(uint32_t baudrate, ringbuffer8_t* tx_buffer, ringbuffer8_t* rx_buffer);
 
 void USART_Enable(void);
 

@@ -20,12 +20,14 @@
 
 // params: clock in, baudrate
 void SERCOM_USART_SetupAsync(uint8_t sercom, uint32_t clock,
-                             uint32_t baudrate, uint8_t tx_pad,
-                             uint8_t rx_pad, ringbuffer8_t* buffer);
+                             uint32_t baudrate, uint8_t tx_pad, uint8_t rx_pad,
+                             ringbuffer8_t* tx_buffer, ringbuffer8_t* rx_buffer);
 
 void SERCOM_USART_Enable(uint8_t sercom);
 
 void SERCOM_USART_WriteData(uint8_t sercom, uint8_t* data, uint8_t size);
+
+void SERCOM_USART_FlushOutput(uint8_t sercom);
 
 //uint8_t SERCOM_USART_Read(uint8_t sercom);
 
