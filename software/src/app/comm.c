@@ -41,19 +41,29 @@ void COMM_Initialize(void) {
     USART_Initialize(19200, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
     USART_Enable();
 
-    //LINE_Transport_Init(true);
-    //LINE_App_Init();
-    //LINE_Diag_Init(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+    LINE_Transport_Init(true);
+    LINE_App_Init();
+    LINE_Diag_Init(LINE_NODE_RotorSensor_DIAG_ADDRESS);
 }
 
 void COMM_UpdatePhy(void) {
     // TODO: uart read
     // pass to
-    //LINE_Transport_Receive(x);
+    
+    // uint8_t length = USART_Available();
+    // while (length > 0) {
+    //     uint8_t data = USART_Read();
+    //     LINE_Transport_Receive(data);
+    //     length--;
+    // }
 }
 
 void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checksum) {
     // TODO: uart write
+    USART_WriteData(&size, sizeof(uint8_t));
+    USART_WriteData(payload, size);
+    USART_WriteData(&checksum, sizeof(uint8_t));
+    USART_FlushOutput();
 }
 
 void COMM_UpdateSignals(void) {

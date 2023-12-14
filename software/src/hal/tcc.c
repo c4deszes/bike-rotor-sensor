@@ -26,7 +26,7 @@ void TCC_SetupTrigger(uint8_t timer, uint32_t period) {
     peripheral->TCC_INTFLAG = TCC_INTFLAG_Msk;
     peripheral->TCC_PER = period;
 
-    NVIC_SetPriority(get_interrupt(timer), 3);
+    NVIC_SetPriority(get_interrupt(timer), 10);
     NVIC_EnableIRQ(get_interrupt(timer));
 }
 

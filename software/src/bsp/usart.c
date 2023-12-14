@@ -24,3 +24,15 @@ void USART_Enable(void) {
 void USART_WriteData(uint8_t* data, const uint8_t size) {
     SERCOM_USART_WriteData(SERCOM0, data, size);
 }
+
+uint16_t USART_Available(void) {
+    return SERCOM_USART_Available(SERCOM0);
+}
+
+uint8_t USART_Read(void) {
+    return SERCOM_USART_Read(SERCOM0);
+}
+
+void USART_FlushOutput(void) {
+    SERCOM_USART_FlushOutput(SERCOM0);
+}

@@ -9,12 +9,12 @@ void USART_Initialize(uint32_t baudrate, ringbuffer8_t* tx_buffer, ringbuffer8_t
 
 void USART_Enable(void);
 
-//uint16_t USART_Available(void);
+uint16_t USART_Available(void);
 
-//uint8_t USART_Read(void);
-
-//void USART_Write(uint8_t data);
+uint8_t USART_Read(void);
 
 void USART_WriteData(uint8_t* data, const uint8_t size);
+
+void USART_FlushOutput(void);
 
 #endif // BSP_UART_H_

@@ -19,20 +19,23 @@ void SCH_Task100us(void) {
 }
 
 void SCH_Task1ms(void) {
-    SWTIMER_Update1ms();
+    //SWTIMER_Update1ms();
 
-    SEC_Update();
+    //SEC_Update();
+
+    //COMM_UpdatePhy();
 
     //SPM_Update();
 }
 
-const char* text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!\r\n";
+const char* text = "A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R89T0U1V2W3X4Y5Z6!78901234\r\n";
 uint16_t counter = 0;
 
 void SCH_Task10ms_A(void) {
     counter++;
     if (counter >= 100) {
-        USART_WriteData(text, 30);
+        USART_WriteData(text, 63);
+        USART_FlushOutput();
         counter = 0;
     }
     //WDT_Acknowledge();
@@ -42,5 +45,5 @@ void SCH_Task10ms_A(void) {
     //ITPMS_Update();
 
     //COMM_UpdateSignals();
-    GPIO_PinToggle(PORT_GROUP_A, 18);
+    //GPIO_PinToggle(PORT_GROUP_A, 18);
 }

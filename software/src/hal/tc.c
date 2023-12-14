@@ -31,7 +31,7 @@ void TC_SetupCapture(uint8_t timer, tc_prescaler prescaler) {
     peripheral->COUNT16.TC_EVCTRL = TC_EVCTRL_EVACT_PPW | TC_EVCTRL_TCEI_Msk;
     peripheral->COUNT16.TC_INTENSET = TC_INTENSET_OVF_Msk | TC_INTENSET_ERR_Msk | TC_INTENSET_MC0_Msk;  // it was MC0 but that was not handled??
 
-    NVIC_SetPriority(get_interrupt(timer), 3);
+    NVIC_SetPriority(get_interrupt(timer), 7);
     NVIC_EnableIRQ(get_interrupt(timer));
 }
 
