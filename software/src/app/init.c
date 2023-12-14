@@ -40,10 +40,9 @@ void APP_Initialize() {
     // Low level init
     BSP_ClockInitialize();
     //WDT_InitializeNormal(&wdt_config);
-    //EIC_Initialize(NULL);
-    //OSH_PhyInit();
+    EIC_Initialize(NULL);
+    OSH_PhyInit();
 
-    //SERCOM0_USART_Initialize();
     GPIO_SetupPinOutput(PORT_GROUP_A, 18, &output);
 
     // Initializing application services

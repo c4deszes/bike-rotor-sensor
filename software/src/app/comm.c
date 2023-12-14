@@ -37,7 +37,6 @@ LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
 }
 
 void COMM_Initialize(void) {
-    // TODO: setup UART
     USART_Initialize(19200, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
     USART_Enable();
 
@@ -50,18 +49,21 @@ void COMM_UpdatePhy(void) {
     // TODO: uart read
     // pass to
     
-    // uint8_t length = USART_Available();
-    // while (length > 0) {
-    //     uint8_t data = USART_Read();
-    //     LINE_Transport_Receive(data);
-    //     length--;
-    // }
+    uint8_t length = USART_Available();
+    while (length > 0) {
+        uint8_t data = USART_Read();
+        LINE_Transport_Receive(data);
+        length--;
+    }
 }
 
 void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checksum) {
-    // TODO: uart write
+    const uint8_t fix = 69;
     USART_WriteData(&size, sizeof(uint8_t));
-    USART_WriteData(payload, size);
+    // TODO: fix for skipped 3rd byte
+    USART_WriteData(payload, 1);
+    USART_WriteData(&fix, 1);
+    USART_WriteData(payload+1, size-1);
     USART_WriteData(&checksum, sizeof(uint8_t));
     USART_FlushOutput();
 }
