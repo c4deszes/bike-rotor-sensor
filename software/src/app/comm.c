@@ -1,9 +1,11 @@
 #include "app/comm.h"
-
 #include "bsp/usart.h"
 
 #include "line_protocol.h"
 #include "line_api.h"
+
+#include "app/spm.h"
+#include "app/sec.h"
 
 RINGBUFFER_8(COMM_UsartBufferTx, 128);
 RINGBUFFER_8(COMM_UsartBufferRx, 128);
@@ -46,9 +48,6 @@ void COMM_Initialize(void) {
 }
 
 void COMM_UpdatePhy(void) {
-    // TODO: uart read
-    // pass to
-    
     uint8_t length = USART_Available();
     while (length > 0) {
         uint8_t data = USART_Read();
@@ -68,14 +67,47 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_FlushOutput();
 }
 
-void COMM_UpdateSignals(void) {
-    // copy signal values to the frame objs
+uint8_t COMM_EncodeGlobalSpeedState(spm_speed_state_t state) {
+    switch (state) {
+        case spm_speed_state_ok: return LINE_ENCODER_GlobalSpeedStateEncoder_Ok;
+        case spm_speed_slow_response: return LINE_ENCODER_GlobalSpeedStateEncoder_SlowResponse;
+        case spm_speed_state_unreliable: return LINE_ENCODER_GlobalSpeedStateEncoder_Unreliable;
+        case spm_speed_state_error: return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+    }
+    return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+}
 
-    // Global Speed state logic:
-    // if spm global state is ok & iet state is ok -> ok
-    // if spm global state is ok & iet state is fail -> slow response
-    // if spm global state is unreliable -> unreliable
-    // if spm global state is error and iet is fail -> error
+uint8_t COMM_EncodeChannelSpeedState(sec_state_t sensor, spm_speed_t speed) {
+    if (sensor == sec_state_off) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_Off;
+    }
+    else if (sensor == sec_state_short) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_OutputShorted;
+    }
+    else if (sensor == sec_state_open) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_OutputOpen;
+    }
+    else if (sensor == sec_state_error) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_SensorError;
+    }
+    else if (speed == spm_speed_state_unreliable) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_SpeedUnreliable;
+    }
+    else if (speed == sec_state_warning) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_SensorWarning;
+    }
+    else if (speed == spm_speed_state_ok) {
+        return LINE_ENCODER_ChannelSpeedStateEncoder_Ok;
+    }
+
+    return LINE_ENCODER_ChannelSpeedStateEncoder_OutputShorted;
+}
+
+void COMM_UpdateSignals(void) {
+    LINE_Request_SpeedStatus_data.fields.Speed = spm_global_speed;
+    LINE_Request_SpeedStatus_data.fields.SpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
+
+    //LINE_Request_SpeedStatus_data.fields.FrontSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0))
 
     // Channel state logic
     // if channel off then -> off (phy)

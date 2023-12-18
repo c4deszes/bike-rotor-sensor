@@ -19,8 +19,10 @@ typedef enum {
 
 typedef struct {
     uint32_t pos;   // TODO: is 16 bit enough?
-    uint32_t neg;
+    uint32_t period;
 } osh_sensor_sample_t;
+
+void SENSOR_Initialize(void);
 
 /**
  * @brief Funtion is called by the timer interrupt to process a capture pulse, the function should

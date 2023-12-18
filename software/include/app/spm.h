@@ -14,14 +14,15 @@ typedef enum {
 } spm_speed_state_t;
 
 typedef struct {
-    //spm_speed_state_t state;
+    spm_speed_state_t state;
     spm_speed_t speed;
     bool brake;
     bool lockup;
     bool slip;
 } spm_channel_status_t;
 
-extern spm_channel_status_t spm_channels[2];
+extern spm_channel_status_t spm_front_wheel;
+extern spm_channel_status_t spm_rear_wheel;
 
 extern spm_speed_t spm_global_speed;
 extern spm_speed_state_t spm_global_state;

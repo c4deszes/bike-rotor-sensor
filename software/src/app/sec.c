@@ -78,3 +78,7 @@ void SEC_Update(void) {
         channel_states[i] = SEC_MapChannelState(phy_state, sensor_state);
     }
 }
+
+sec_state_t SEC_GetChannelState(uint8_t channel) {
+    return channel_states[channel];
+}

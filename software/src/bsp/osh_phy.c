@@ -58,13 +58,16 @@ void TC3_Handler(void) {
     }
     else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
         // TODO: accumulate the impulses up to the sensor limits
-        accumulates[0] += TC3_REGS->COUNT16.TC_COUNT; // or 0xFFFF
+        accumulates[0] += 0xFFFF; // or 0xFFFF
+        if (accumulates[0] >= 1000000ul) { // 10s
+            SENSOR_Process(0, 0, accumulates[0]);
+            accumulates[0] = 0;
+        }
     }
     else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
         uint16_t cc0 = TC3_REGS->COUNT16.TC_CC[0];
         uint16_t cc1 = TC3_REGS->COUNT16.TC_CC[1];
-        // TODO: question, to which te rm do we add the accumulate? was is stuck in high or low?
-        SENSOR_Process(0, cc0, cc1);
+        SENSOR_Process(0, cc0, cc1 + accumulates[0]);
         accumulates[0] = 0;
     }
 
@@ -79,14 +82,18 @@ void TC4_Handler(void) {
     }
     else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
         // TODO: accumulate the impulses up to the sensor limits
-        accumulates[1] += TC4_REGS->COUNT16.TC_COUNT; // or 0xFFFF
+        accumulates[1] += 0xFFFF; // or 0xFFFF
+        if (accumulates[1] >= 1200000ul) { // 10s
+            SENSOR_Process(1, 0, accumulates[1]);
+            accumulates[1] = 0;
+        }
     }
     else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
         uint16_t cc0 = TC4_REGS->COUNT16.TC_CC[0];
         uint16_t cc1 = TC4_REGS->COUNT16.TC_CC[1];
+        // TODO: question, to which term do we add the accumulate? was stuck in high or low?
+        SENSOR_Process(1, cc0, cc1 + accumulates[1]);
         accumulates[1] = 0;
-        // TODO: question, to which term do we add the accumulate? was is stuck in high or low?
-        SENSOR_Process(1, cc0, cc1);
     }
 
     TC4_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;

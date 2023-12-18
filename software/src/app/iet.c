@@ -5,7 +5,7 @@ static iet_estimate_state_t state;
 
 void IET_Initialize(void) {
     speed = 0;
-    state = iet_estimate_state_ok;
+    state = iet_estimate_state_error;
 }
 
 void IET_Update(void) {

@@ -6,8 +6,11 @@
 #include "app/sec.h"
 #include "app/spm.h"
 #include "bsp/osh_phy.h"
+#include "bsp/sensor.h"
 #include "app/sch.h"
 #include "app/comm.h"
+#include "app/iet.h"
+#include "app/itpms.h"
 
 #include "hal/gpio.h"
 
@@ -42,13 +45,13 @@ void APP_Initialize() {
     //WDT_InitializeNormal(&wdt_config);
     EIC_Initialize(NULL);
     OSH_PhyInit();
-
-    GPIO_SetupPinOutput(PORT_GROUP_A, 18, &output);
+    SENSOR_Initialize();
 
     // Initializing application services
-    //SEC_Initialize();
-    //SPM_Initialize();
-    //IET_Initialize();
+    SEC_Initialize();
+    SPM_Initialize();
+    IET_Initialize();
+    ITPMS_Initialize();
 
     // Initializing communication
     COMM_Initialize();
