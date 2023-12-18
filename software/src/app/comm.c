@@ -107,10 +107,7 @@ void COMM_UpdateSignals(void) {
     LINE_Request_SpeedStatus_data.fields.Speed = spm_global_speed;
     LINE_Request_SpeedStatus_data.fields.SpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
 
-    //LINE_Request_SpeedStatus_data.fields.FrontSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0))
-
-    // Channel state logic
-    // if channel off then -> off (phy)
-    // if channel shorted -> shorted (phy)
-    // if channel open -> open (phy)
+    // TODO: Retrieve SEC state using proper channel numbers
+    LINE_Request_SpeedStatus_data.fields.FrontSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0), spm_front_wheel.state);
+    LINE_Request_SpeedStatus_data.fields.RearSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(1), spm_rear_wheel.state);
 }

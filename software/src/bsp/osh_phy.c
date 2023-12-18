@@ -14,10 +14,10 @@ void OSH_PhyInit(void) {
     OSH_PhyInit_Impl();
 
     TC_SetupCapture(TC3, tc_prescaler_div1);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, OSH_PhyGetEventGenerator(0));
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, OSH_PhyGetEventGenerator(1));    // TODO: for some reason the pins are swapped?
 
     TC_SetupCapture(TC4, tc_prescaler_div1);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, OSH_PhyGetEventGenerator(1));
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, OSH_PhyGetEventGenerator(0));    // TODO: for some reason the pins are swapped?
 }
 
 void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_state_t status) {

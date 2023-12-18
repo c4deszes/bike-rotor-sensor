@@ -1,6 +1,7 @@
 {
     "name": "test-network",
     "baudrate": 19200,
+    "master": "BodyComputer",
     "nodes": {
         "BodyComputer": {
             "address": "0x0",
@@ -10,13 +11,9 @@
         "RotorSensor": {
             "address": "0x1",
             "subscribes": [
-                "SpeedSensorStateReset",
-                "RideStatusReset"
-
             ],
             "publishes": [
-                "SpeedStatus",
-                "RideStatus"
+                "SpeedStatus"
             ]
         }
     },
@@ -27,85 +24,60 @@
             "layout": {
                 "Speed": {
                     "offset": 0,
-                    "width": 16
+                    "width": 16,
+                    "initial": 0.0,
+                    "encoder": "GlobalSpeedEncoder"
                 },
                 "SpeedState": {
                     "offset": 16,
-                    "width": 2
+                    "width": 2,
+                    "initial": "Error",
+                    "encoder": "GlobalSpeedStateEncoder"
                 },
                 "FrontSpeedState": {
-                    "offset": 32,
-                    "width": 3
+                    "offset": 18,
+                    "width": 3,
+                    "initial": "Off",
+                    "encoder": "ChannelSpeedStateEncoder"
                 },
                 "RearSpeedState": {
-                    "offset": 36,
-                    "width": 3
-                },
-                "FrontWheelBraking": {
-                    "offset": 40,
-                    "width": 1
-                },
-                "RearWheelBraking": {
-                    "offset": 41,
-                    "width": 1
-                },
-                "FrontWheelLockup": {
-                    "offset": 42,
-                    "width": 1
-                },
-                "RearWheelLockup": {
-                    "offset": 43,
-                    "width": 1
-                },
-                "FrontWheelSlip": {
-                    "offset": 44,
-                    "width": 1
-                },
-                "RearWheelSlip": {
-                    "offset": 45,
-                    "width": 1
-                },
-                "FrontWheelStatusReserved1": {
-                    "offset": 46,
-                    "width": 1
-                },
-                "RearWheelStatusReserved1": {
-                    "offset": 47,
-                    "width": 1
+                    "offset": 21,
+                    "width": 3,
+                    "initial": "Off",
+                    "encoder": "ChannelSpeedStateEncoder"
                 }
             }
-        },
-        "SpeedSensorStateReset": {
-            "id": "0x1001",
-            "size": 0,
-            "layout": {}
-        },
-        "RideStatus": {
-            "id": "0x1002",
-            "size": 5,
-            "layout": {
-                "Distance": {
-                    "offset": 0,
-                    "width": 32
-                },
-                "RoadQuality": {
-                    "offset": 32,
-                    "width": 2
-                },
-                "iTPMS_State": {
-                    "offset": 0,
-                    "width": 4
-                }
-            }
-        },
-        "RideStatusReset": {
-            "id": "0x1003",
-            "size": 0,
-            "layout": {}
         }
     },
     "encoders": {
-
+        "GlobalSpeedEncoder": {
+            "type": "formula",
+            "scale": 0.1,
+            "offset": 0.0,
+            "unit": "km/h"
+        },
+        "GlobalSpeedStateEncoder": {
+            "type": "mapping",
+            "mapping": {
+                "0": "Ok",
+                "1": "SlowResponse",
+                "2": "Unreliable",
+                "3": "Error"
+            }
+        },
+        "ChannelSpeedStateEncoder": {
+            "type": "mapping",
+            "mapping": {
+                "0": "Ok",
+                "1": "UNUSED",
+                "2": "SensorWarning",
+                "3": "SpeedUnreliable",
+                "4": "SensorError",
+                "5": "OutputOpen",
+                "6": "OutputShorted",
+                "7": "Off"
+            }
+        }
     },
     "schedules": {
         "Normal": {
