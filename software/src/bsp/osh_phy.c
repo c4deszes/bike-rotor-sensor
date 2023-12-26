@@ -59,7 +59,7 @@ void TC3_Handler(void) {
     else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
         // TODO: accumulate the impulses up to the sensor limits
         accumulates[0] += 0xFFFF; // or 0xFFFF
-        if (accumulates[0] >= 1000000ul) { // 10s
+        if (accumulates[0] >= 10000000ul) { // 10s
             SENSOR_Process(0, 0, accumulates[0]);
             accumulates[0] = 0;
         }
@@ -83,7 +83,7 @@ void TC4_Handler(void) {
     else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
         // TODO: accumulate the impulses up to the sensor limits
         accumulates[1] += 0xFFFF; // or 0xFFFF
-        if (accumulates[1] >= 1200000ul) { // 10s
+        if (accumulates[1] >= 10000000ul) { // 10s
             SENSOR_Process(1, 0, accumulates[1]);
             accumulates[1] = 0;
         }
