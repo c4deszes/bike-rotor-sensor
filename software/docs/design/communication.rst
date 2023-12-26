@@ -1,27 +1,11 @@
 Communication
 =============
 
-Baudrate calculation
---------------------
+Responsibilities are:
 
-.. jupyter-execute::
-    :hide-code:
-
-    from IPython.display import Latex
-
-    sercom0_clk = 8000000
-    target_baudrate = 19200
-    samples_per_bit = 16
-    baud_register = 65536 * (1 - samples_per_bit * (target_baudrate / sercom0_clk))
-    baud_register_int = round(baud_register)
-    actual_baudrate = (sercom0_clk / 16) * (1 - (baud_register_int / 65536))
-    baudrate_error = 1 - (target_baudrate / actual_baudrate)
-
-    Latex("\\begin{gathered}"
-          f"BAUD = {baud_register_int}\\\\"
-          f"f_{{BAUD}} = {actual_baudrate:.02f} bps\\\\"
-          f"E_{{BAUD}} = {baudrate_error * 100:.04f}%\\\\"
-          "\end{gathered}")
+* Sending and receiving messages
+* Updating signals
+* Detecting loss of communication and errors
 
 References
 ----------

@@ -77,7 +77,7 @@ Estimation algorithm
 When both absolute and inertial measurements are available then estimate the speed using the
 following process:
 
-When the speed sensor fails (e.g.: output channel error or measurement error) then use the inertial
+When the speed sensors fails (e.g.: output channel error or measurement error) then use the inertial
 estimate and set the given channel's speed status to unreliable.
 
 When the inertial measurement unit fails then the absolute measurement should use rolling decrements,

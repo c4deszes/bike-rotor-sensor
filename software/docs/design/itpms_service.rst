@@ -26,4 +26,4 @@ Questions
 
 * The current concept doesn't tell the user if both tires are low pressure. Is there any reference
   we could use that's accurate enough for such a measurement? E.g.: total GPS distance over 10km was
-  less than what they should have been given the wheel rotations.
+  less than what they should have been given the wheel rotations, or monitor vibrations?

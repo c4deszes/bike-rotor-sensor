@@ -1,26 +1,22 @@
 Output stage design
 ===================
 
-The output stage comprises of 3 parts:
+The output stage consists of 3 parts:
 
 * Physical driver (Integrated Circuit)
 * Sensor driver (Optical, Hall, etc.)
-* Data processor
+* Sensor control (described in :ref:`design/sensor_control`)
 
-OSH PHY
--------
-
-Responsibilities are turning on and off the two channels, checking for errors on channels, like
-short circuits and disconnected sensors.
-
-OSH Sensor
-----------
-
-Responsibilities are converting input pulse lengths into normalized speed (pulse per second),
-determining rotational direction if possible and detecting sensor specific warnings and errors.
-
-Data processor
+Physical layer
 --------------
 
-Responsible for converting the pulse per second data into rotational speed, it forwards this data
-to the communication module. It also handles output stage failures, restarting the channels.
+Responsibilities are turning on and off the two channels, checking for errors on channels, like
+short circuits and disconnected sensors. The common part of this component configures the tiemrs
+for each channel and connects their event input to the generators.
+
+Sensor layer
+------------
+
+Responsibilities are handling the input pulses, determining rotational direction if possible and
+detecting sensor specific warnings and errors. The regular speed pulses are forwarded to speed
+monitoring.
