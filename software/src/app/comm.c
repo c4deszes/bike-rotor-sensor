@@ -104,10 +104,12 @@ uint8_t COMM_EncodeChannelSpeedState(sec_state_t sensor, spm_speed_t speed) {
 }
 
 void COMM_UpdateSignals(void) {
-    LINE_Request_SpeedStatus_data.fields.Speed = spm_global_speed;
-    LINE_Request_SpeedStatus_data.fields.SpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
+    LINE_Request_SpeedStatus_data.fields.GlobalSpeed = spm_global_speed;
+    LINE_Request_SpeedStatus_data.fields.GlobalSpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
 
     // TODO: Retrieve SEC state using proper channel numbers
-    LINE_Request_SpeedStatus_data.fields.FrontSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0), spm_front_wheel.state);
-    LINE_Request_SpeedStatus_data.fields.RearSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(1), spm_rear_wheel.state);
+    LINE_Request_SpeedSensorMonitoring_data.fields.FrontSpeed = spm_front_wheel.speed;
+    LINE_Request_SpeedSensorMonitoring_data.fields.RearSpeed = spm_rear_wheel.speed;
+    LINE_Request_SpeedSensorMonitoring_data.fields.FrontWheelSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0), spm_front_wheel.state);
+    LINE_Request_SpeedSensorMonitoring_data.fields.RearWheelSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(1), spm_rear_wheel.state);
 }

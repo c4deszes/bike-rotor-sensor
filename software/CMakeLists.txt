@@ -38,7 +38,7 @@ target_include_directories(atsamd21e18a-dfp INTERFACE lib/ATSAMD21E18A_DFP)
 
 line_codegen(
     TARGET protocol-stack-api
-    NETWORK config/network.json
+    NETWORK ../customer/network.json
     NODE RotorSensor
     ADAPTER
 )
