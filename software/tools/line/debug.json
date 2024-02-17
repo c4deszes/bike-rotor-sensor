@@ -11,11 +11,9 @@
             ]
         },
         "RotorSensorSchedule": {
-            "delay": 0.25,
+            "delay": 0.5,
             "entries": [
-                {"type": "request", "request": "SpeedStatus"},
-                {"type": "request", "request": "RideStatus"},
-                {"type": "request", "request": "SpeedSensorMonitoring"}
+                {"type": "request", "request": "SpeedStatus"}
             ]
         }
     },
@@ -26,9 +24,7 @@
     "plots": {
         "SpeedPlot": {
             "signals": [
-                "SpeedStatus.GlobalSpeed",
-                "SpeedSensorMonitoring.FrontSpeed",
-                "SpeedSensorMonitoring.RearSpeed"
+                "SpeedStatus.GlobalSpeed"
             ]
         }
     }

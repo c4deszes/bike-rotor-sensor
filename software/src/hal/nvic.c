@@ -35,7 +35,7 @@ void TCC0_Handler               ( void ) __attribute__((weak, alias("Dummy_Handl
 void TCC1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TCC2_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TC3_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
-void TC4_tHandler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
+void TC4_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void TC5_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void ADC_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
 void AC_Handler                 ( void ) __attribute__((weak, alias("Dummy_Handler"),long_call,noreturn));
