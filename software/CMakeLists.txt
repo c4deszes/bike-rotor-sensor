@@ -9,7 +9,7 @@ set(PROJECT_VERSION "0.2.0")
 find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
-CPMAddPackage("gh:c4deszes/bike-line-protocol#feature/first-version")
+CPMAddPackage("gh:c4deszes/bike-line-protocol#master")
 
 # Test configuration
 enable_testing()
