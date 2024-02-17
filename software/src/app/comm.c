@@ -44,7 +44,7 @@ void COMM_Initialize(void) {
 
     LINE_Transport_Init(true);
     LINE_App_Init();
-    LINE_Diag_Init(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+    LINE_Diag_SetAddress(LINE_NODE_RotorSensor_DIAG_ADDRESS);
 }
 
 void COMM_UpdatePhy(void) {
