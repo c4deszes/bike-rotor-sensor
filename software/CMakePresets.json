@@ -87,17 +87,13 @@
         },
         {
             "name": "build-docs",
-            "targets": [ "Sphinx" ]
+            "targets": [ "Sphinx" ],
+            "hidden": true
         },
         {
             "name": "build-app-unix",
             "inherits": "build-app",
             "configurePreset": "armgcc-release-unix"
-        },
-        {
-            "name": "build-app-mingw",
-            "inherits": "build-app",
-            "configurePreset": "armgcc-release-mingw"
         }
     ],
     "testPresets": [
