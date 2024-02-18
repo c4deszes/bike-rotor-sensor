@@ -1,0 +1,31 @@
+{
+    "network": "../../../customer/network.json",
+    "customSchedules": {
+        "DumpRotorSensorInfoSchedule": {
+            "delay": 0.25,
+            "entries": [
+                {"type": "opstatus", "node": "RotorSensor"},
+                {"type": "pwrstatus", "node": "RotorSensor"},
+                {"type": "serial", "node": "RotorSensor"},
+                {"type": "swversion", "node": "RotorSensor"}
+            ]
+        },
+        "RotorSensorSchedule": {
+            "delay": 0.5,
+            "entries": [
+                {"type": "request", "request": "SpeedStatus"}
+            ]
+        }
+    },
+    "prestartSchedules": [
+        "DumpRotorSensorInfoSchedule"
+    ],
+    "mainSchedule": "RotorSensorSchedule",
+    "plots": {
+        "SpeedPlot": {
+            "signals": [
+                "SpeedStatus.GlobalSpeed"
+            ]
+        }
+    }
+}

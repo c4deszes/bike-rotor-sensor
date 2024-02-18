@@ -11,28 +11,32 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/c4deszes/avr-gcc-docker:v1.3.0
-    strategy:
-      matrix:
-        build_type: [release]
-        sensor_profile:
-          - 'internal-optical-digital'
-          - 'development-digital'
+      image: ghcr.io/c4deszes/arm-gcc-docker:v1.3.0
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
+      - name: Checkout (line-protocol)
+        uses: actions/checkout@v4
+        with:
+          repository: c4deszes/bike-line-protocol
+          path: line-protocol
+
+      - name: Setup line-protocol
+        working-directory: line-protocol/python-lib
+        run: python -m pip install -e .[dev]
+
       - name: GCC Problem Matcher
-        uses: ammaraskar/gcc-problem-matcher@0.1
+        uses: ammaraskar/gcc-problem-matcher@0.3.0
 
       - name: Configure build
         working-directory: software
         run: |
-          cmake -DROTOR_SENSOR_PROFILE=${{ matrix.sensor_profile }} --preset=avr-${{ matrix.build_type }} .
+          cmake --preset=armgcc-release-unix .
 
       - name: Build application
         working-directory: software
         run: |
-          cmake --build --preset=build-${{ matrix.build_type }}
+          cmake --build --preset=build-app-unix

@@ -7,39 +7,49 @@
     },
     "configurePresets": [
         {
-            "name": "avr-default",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "Unix Makefiles",
+            "name": "armgcc-default",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/armgcc-toolchain.cmake"
             },
             "hidden": true
         },
         {
-            "name": "avr-release",
-            "inherits": "avr-default",
+            "name": "armgcc-release-unix",
+            "inherits": "armgcc-default",
+            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "avr-minsizerel",
-            "inherits": "avr-default",
+            "name": "armgcc-release-mingw",
+            "inherits": "armgcc-default",
+            "generator": "MinGW Makefiles",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "MinSizeRel"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "avr-debug",
-            "inherits": "avr-default",
+            "name": "armgcc-debug-unix",
+            "inherits": "armgcc-default",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "armgcc-debug-mingw",
+            "inherits": "armgcc-default",
+            "generator": "MinGW Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "name": "mingw-default",
-            "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
             },
@@ -47,7 +57,23 @@
         },
         {
             "name": "mingw-debug",
-            "inherits": "mingw-default",
+            "inherits": [ "mingw-default" ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "gcc-default",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/gcc-toolchain.cmake"
+            },
+            "hidden": true
+        },
+        {
+            "name": "gcc-debug",
+            "inherits": [ "gcc-default" ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
@@ -55,39 +81,21 @@
     ],
     "buildPresets": [
         {
-            "name": "build-default",
-            "targets": ["rotor-sensor-standalone-full"],
+            "name": "build-app",
+            "targets": [ "application-full"],
             "hidden": true
         },
         {
-            "name": "build-bootloader",
-            "targets": ["uart-bootloader-full"],
+            "name": "build-docs",
+            "targets": [ "Sphinx" ],
             "hidden": true
         },
         {
-            "name": "build-release",
-            "inherits": "build-default",
-            "configurePreset": "avr-release"
-        },
-        {
-            "name": "build-debug",
-            "inherits": "build-default",
-            "configurePreset": "avr-debug"
-        },
-        {
-            "name": "build-bootloader-release",
-            "inherits": "build-bootloader",
-            "configurePreset": "avr-release"
-        },
-        {
-            "name": "build-tests",
-            "targets": ["rotor-sensor-unittest"],
-            "hidden": true
-        },
-        {
-            "name": "build-tests-mingw-debug",
-            "inherits": "build-tests",
-            "configurePreset": "mingw-debug"
+            "name": "build-app-unix",
+            "inherits": "build-app",
+            "configurePreset": "armgcc-release-unix"
         }
+    ],
+    "testPresets": [
     ]
 }
