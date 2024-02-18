@@ -1,7 +1,11 @@
-Rotor sensor system
+Rotor Sensor System
 ===================
 
 .. toctree::
     :maxdepth: 4
 
-    tests/index.rst
+    reqs/index
+    fmea/index
+    arch/index
+    design/index
+    tests/index
