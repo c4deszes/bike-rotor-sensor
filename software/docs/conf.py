@@ -19,6 +19,7 @@ extensions = [
     'linuxdoc.rstFlatTable',
     #'sphinx.ext.graphviz',
     #'sphinxcontrib.wavedrom'
+    'sphinxcontrib.drawio',
 ]
 
 autosectionlabel_prefix_document = True

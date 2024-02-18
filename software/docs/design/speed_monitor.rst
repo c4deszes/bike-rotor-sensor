@@ -28,29 +28,6 @@ The speed is zero'd when:
 States
 ------
 
-.. drs-sw:: Channel speed state
-    :id: DRS_SW_CHANNEL_SPEED_STATE
-    :implements: REQ_SW_SIGNAL_CHANNEL_SPEED_STATE
-
-    Each channel has it's own state which indicates in detail how a channel is operating,
-    this state is directly calculated from the sensor and output stage states given the priority.
-
-.. drs-sw:: Global speed state
-    :id: DRS_SW_GLOBAL_SPEED_STATE
-    :implements: REQ_SW_SIGNAL_GLOBAL_SPEED_STATE
-
-    The global speed state is determined by the channel states and the IMU state.
-
-    When the IMU reports error then the global state is ``Slow response``.
-
-    When any of the speed sensors report unreliable or worse the global state can remain ``ok`` as
-    long as the other sensor is okay or only has sensor warning.
-
-    When both sensors report unreliable state or worse the global state shall be ``unreliable`` as
-    long as one of the sensors reports unreliable and the IMU status is unreliable or below.
-
-    When both sensors report sensor error or worse the global state shall be ``error``??
-
 Questions
 ~~~~~~~~~
 

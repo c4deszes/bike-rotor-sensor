@@ -1,7 +1,7 @@
 Software architecture
 =====================
 
-Overview
---------
+Block diagrams
+--------------
 
-.. kroki:: diagrams/overview.c4puml
+.. drawio-image:: diagrams/block-view.drawio
