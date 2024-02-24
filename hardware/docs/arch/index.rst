@@ -4,7 +4,8 @@ Hardware architecture
 Overview
 --------
 
-.. kroki:: diagrams/overview.c4puml
+The hardware architecture is almost the same as the system architecture with the added detail of
+some filtering in between blocks.
 
 Detailed responsibilities
 -------------------------
@@ -38,7 +39,6 @@ IMU
 
 Measures acceleration and angular changes which is processed by the controller.
 
-
 Variation points
 ----------------
 
@@ -52,4 +52,4 @@ Output stage
 
 * Option 1: MAX9621, Transceiver is 3.3V
 * Option 2: MAX9921, Transceiver is 3.3V
-* Option 3: AP22804AW5, Transceiver is 5.0V
+* Option 3: AP22804AW5, Transceiver is 5.0V, 3.3V regulator is populated

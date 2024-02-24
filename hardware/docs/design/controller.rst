@@ -95,7 +95,7 @@ purpose ARM Cortex-M0 microcontroller.
 Pinout
 ~~~~~~
 
-.. flat-table:: Spanning table cells
+.. flat-table:: Pin assignment
     :header-rows: 2
 
     * - :rspan:`1` Pin Number
@@ -203,7 +203,7 @@ Pinout
       - PA11
       - :cspan:`2` PORT
       - :cspan:`2` PORTA[11]
-      - :cspan:`2` LIN Transmit enable
+      - :cspan:`2` LIN Transmit enable/Fault detected
 
     * - 15
       - PA14
