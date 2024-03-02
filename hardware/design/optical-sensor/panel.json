@@ -44,6 +44,6 @@
         "opening": "1mm"
     },
     "post": {
-        "millradius": "0.3mm"
+        "millradius": "1mm"
     }
 }
