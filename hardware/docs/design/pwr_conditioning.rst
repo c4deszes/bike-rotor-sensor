@@ -22,10 +22,9 @@ A Schottky diode can be used to prevent reverse polarity from damaging component
 .. hw-drs:: RPP Schotkky diode component list
     :id: HW_DRS_RPP_SCHOTTKY_DIODE
     :status: accepted
-    :satisfies: ext_CRS_LOCKOUT_ACTUATION_TIME
 
-    :download:`B140-13-F <../datasheets/B120-160B>` from Diodes Inc. is selected as the RPP diode.
-    It has a breakdown voltage of 40V and maximum continuous current of 1A.
+    :download:`B140-13-F <../datasheets/B120-160B.pdf>` from Diodes Inc. is selected as the RPP diode.
+    It has a breakdown voltage of 40V and a maximum continuous current of 1A.
 
 Calculation
 ~~~~~~~~~~~
@@ -45,7 +44,7 @@ Calculation
     T_max = normalize_numeric(t_per_watt) * P_max + normalize_numeric(t_operational)
 
 The maximum power dissipated in the diode can be calculated and based on this worst case load the
-diode temperature can be estimated at ambient temperature
+diode temperature can be estimated at the maximum operating temperature.
 
 .. jupyter-execute::
     :hide-code:
