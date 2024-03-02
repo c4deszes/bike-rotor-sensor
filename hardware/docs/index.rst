@@ -1,5 +1,5 @@
-Suspension Lockout Actuator PCBA
-================================
+Rotor Sensor PCBA
+=================
 
 .. toctree::
     :maxdepth: 4

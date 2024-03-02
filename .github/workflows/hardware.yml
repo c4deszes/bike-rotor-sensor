@@ -51,7 +51,7 @@ jobs:
         run: python -m sphinx docs docs/_build
 
       - name: Archive documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: documentation
           path: hardware/docs/_build/
@@ -90,7 +90,7 @@ jobs:
       run: ./scripts/export_gerbers.sh
 
     - name: Archive Output
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: hardware-${{ matrix.product }}
         path: hardware/build/
