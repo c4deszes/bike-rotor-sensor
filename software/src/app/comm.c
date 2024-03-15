@@ -54,6 +54,8 @@ void COMM_UpdatePhy(void) {
         LINE_Transport_Receive(data);
         length--;
     }
+
+    LINE_Transport_Update(1);
 }
 
 void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checksum) {

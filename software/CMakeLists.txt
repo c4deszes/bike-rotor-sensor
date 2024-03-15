@@ -4,12 +4,15 @@ project(
     rotor-sensor
     DESCRIPTION "Rotor Sensor"
     LANGUAGES C CXX ASM)
-set(PROJECT_VERSION "0.2.0")
+set(PROJECT_VERSION "0.3.0")
 
 find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
+
+CPMAddPackage("gh:c4deszes/samd21-hal#master")
 CPMAddPackage("gh:c4deszes/bike-line-protocol#master")
+CPMAddPackage("gh:c4deszes/bike-flash-tool#master")
 
 # Test configuration
 enable_testing()
@@ -18,23 +21,9 @@ set(CTEST_OUTPUT_ON_FAILURE ON)
 
 include(CTest)
 include(GoogleTest)
-add_subdirectory("ext/googletest")
-
-# Linting configuration
-#set(CMAKE_C_CPPLINT "cpplint")
-
-# Tools
-include(tools/cmake/application.cmake)
-include(tools/cmake/gcc-lto.cmake)
 
 # Project
 add_subdirectory(docs)
-
-add_library(cmsis INTERFACE)
-target_include_directories(cmsis INTERFACE lib/CMSIS/CMSIS/Core/Include)
-
-add_library(atsamd21e18a-dfp INTERFACE)
-target_include_directories(atsamd21e18a-dfp INTERFACE lib/ATSAMD21E18A_DFP)
 
 line_codegen(
     TARGET protocol-stack-api
@@ -52,7 +41,6 @@ add_executable(
     src/app/init.c
     src/app/itpms.c
     src/app/main.c
-    src/app/sch.c
     src/app/sec.c
     src/app/spm.c
     src/app/tasks.c
@@ -64,35 +52,23 @@ add_executable(
     src/bsp/sensor.c
     src/bsp/board.c
     src/bsp/usart.c
-
-    src/hal/ac.c
-    src/hal/adc.c
-    src/hal/eic.c
-    src/hal/gclk.c
-    src/hal/gpio.c
-    src/hal/pm.c
-    src/hal/evsys.c
-    src/hal/rtc.c
-    src/hal/nvic.c
-    src/hal/tc.c
-    src/hal/tcc.c
-    src/hal/wdt.c
-    src/hal/startup.c
-    src/hal/sysctrl.c
-    src/hal/sercom_usart.c
-
-    src/common/ringbuffer.c
-    src/common/swtimer.c
 )
 target_include_directories(application PRIVATE include)
-target_link_libraries(application PRIVATE cmsis atsamd21e18a-dfp protocol-stack-api)
+target_link_libraries(application PRIVATE   cmsis
+                                            atsamd21e18a-dfp
+                                            samd21-hal-api
+                                            samd21-hal-sources
+                                            samd21-hal-options
+                                            flash-line-api flash-line-sources
+                                            protocol-stack-api)
+
 target_compile_options(application PRIVATE "-mcpu=cortex-m0" "-gdwarf-2" "-mthumb")
 set_target_properties(application PROPERTIES SUFFIX ".elf")
 target_link_options(application PRIVATE "-mcpu=cortex-m0" "-mthumb")
 target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/ATSAMD21E18A.ld)
 target_link_options(application PRIVATE -Wl,-Map=application.map -Wl,--gc-sections)
 
-hexify(application ${CMAKE_CURRENT_BINARY_DIR}/application.hex)
+hexify(TARGET application HEX ${CMAKE_CURRENT_BINARY_DIR}/application.hex)
 dump_symbols(application ${CMAKE_CURRENT_BINARY_DIR}/application.lss)
 dump_size(application)
 
