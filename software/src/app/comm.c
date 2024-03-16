@@ -3,6 +3,10 @@
 
 #include "line_protocol.h"
 #include "line_api.h"
+#include "flash_line_api.h"
+#include "flash_line_diag.h"
+#include "bl/api.h"
+#include "hal/dsu.h"
 
 #include "app/spm.h"
 #include "app/sec.h"
@@ -31,7 +35,7 @@ LINE_Diag_PowerStatus_t* LINE_Diag_GetPowerStatus(void) {
 }
 
 uint32_t LINE_Diag_GetSerialNumber(void) {
-    return 0xABCDEF01;
+    return DSU_GetSerialNumber32();
 }
 
 LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
@@ -39,12 +43,13 @@ LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
 }
 
 void COMM_Initialize(void) {
-    USART_Initialize(19200, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
+    USART_Initialize(LINE_NETWORK_BicycleNetwork1_BAUDRATE, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
     USART_Enable();
 
     LINE_Transport_Init(true);
     LINE_App_Init();
     LINE_Diag_SetAddress(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+    FLASH_LINE_Init(FLASH_LINE_APPLICATION_MODE);
 }
 
 void COMM_UpdatePhy(void) {
@@ -67,6 +72,19 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_WriteData(payload+1, size-1);
     USART_WriteData(&checksum, sizeof(uint8_t));
     USART_FlushOutput();
+}
+
+uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
+static bool bootResetFlag = false;
+
+uint8_t FLASH_BL_EnterBoot(void) {
+    boot_entry_key = BOOT_ENTRY_MAGIC;
+
+    // TODO: only allow boot entry when idle
+
+    bootResetFlag = true;
+
+    return FLASH_LINE_BOOT_ENTRY_SUCCESS;
 }
 
 uint8_t COMM_EncodeGlobalSpeedState(spm_speed_state_t state) {

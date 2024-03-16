@@ -13,6 +13,7 @@ include(tools/cmake/CPM.cmake)
 CPMAddPackage("gh:c4deszes/samd21-hal#master")
 CPMAddPackage("gh:c4deszes/bike-line-protocol#master")
 CPMAddPackage("gh:c4deszes/bike-flash-tool#master")
+CPMAddPackage("gh:c4deszes/samd21-line-bootloader#master")
 
 # Test configuration
 enable_testing()
@@ -60,18 +61,39 @@ target_link_libraries(application PRIVATE   cmsis
                                             samd21-hal-sources
                                             samd21-hal-options
                                             flash-line-api flash-line-sources
-                                            protocol-stack-api)
+                                            protocol-stack-api
+                                            bootloader-api)
 
-target_compile_options(application PRIVATE "-mcpu=cortex-m0" "-gdwarf-2" "-mthumb")
 set_target_properties(application PROPERTIES SUFFIX ".elf")
-target_link_options(application PRIVATE "-mcpu=cortex-m0" "-mthumb")
-target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/ATSAMD21E18A.ld)
+target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/application.ld)
 target_link_options(application PRIVATE -Wl,-Map=application.map -Wl,--gc-sections)
 
-hexify(TARGET application HEX ${CMAKE_CURRENT_BINARY_DIR}/application.hex)
+hexify(TARGET application HEX ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex)
 dump_symbols(application ${CMAKE_CURRENT_BINARY_DIR}/application.lss)
 dump_size(application)
 
+bootloader_header(
+    TARGET factory_header
+    CONFIG ${CMAKE_CURRENT_SOURCE_DIR}/tools/bootloader/boot_config.json
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tools/openocd/factory_header.hex
+)
+
+bootloader_header(
+    TARGET app_header
+    CONFIG ${CMAKE_CURRENT_SOURCE_DIR}/tools/bootloader/boot_config.json
+    APPLICATION ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/app_header.hex
+)
+
+add_custom_target(application-merge
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/app_header.hex ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/application.hex
+    COMMAND srec_cat
+            ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex -intel
+            ${CMAKE_CURRENT_BINARY_DIR}/app_header.hex -intel
+            -o ${CMAKE_CURRENT_BINARY_DIR}/application.hex -intel
+)
+
 add_custom_target(application-full
-    DEPENDS application-hex application-lss application-memory
+    DEPENDS application-hex application-lss application-memory application-merge factory_header
 )
