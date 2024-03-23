@@ -6,6 +6,10 @@ project(
     LANGUAGES C CXX ASM)
 set(PROJECT_VERSION "0.3.0")
 
+message("-- Rotor Sensor profile: ${PROJECT_PROFILE}")
+include(profiles/${PROJECT_PROFILE}.cmake)
+message("\tBoard sensor driver: ${BOARD_SENSOR_DRIVER}")
+
 find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
@@ -46,8 +50,10 @@ add_executable(
     src/app/spm.c
     src/app/tasks.c
     src/app/user_conf.c
+    src/app/sys_state.c
 
-    src/bsp/osh_max9621.c
+    $<$<STREQUAL:${BOARD_SENSOR_DRIVER},MAX9621>:src/bsp/osh_max9621.c>
+    $<$<STREQUAL:${BOARD_SENSOR_DRIVER},AP22802>:src/bsp/osh_ap22802.c>
     src/bsp/osh_phy.c
     src/bsp/sensor_generic.c
     src/bsp/sensor.c

@@ -74,12 +74,17 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_FlushOutput();
 }
 
-uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
 static bool bootResetFlag = false;
 
-uint8_t FLASH_BL_EnterBoot(void) {
-    boot_entry_key = BOOT_ENTRY_MAGIC;
+bool COMM_ResetRequest(void) {
+    return false;
+}
 
+bool COMM_BootRequest(void) {
+    return bootResetFlag;
+}
+
+uint8_t FLASH_BL_EnterBoot(void) {
     // TODO: only allow boot entry when idle
 
     bootResetFlag = true;

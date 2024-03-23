@@ -11,6 +11,7 @@
 #include "app/comm.h"
 #include "app/iet.h"
 #include "app/itpms.h"
+#include "app/sys_state.h"
 
 #include "hal/gpio.h"
 
@@ -52,6 +53,7 @@ void APP_Initialize() {
     SPM_Initialize();
     IET_Initialize();
     ITPMS_Initialize();
+    SYSSTATE_Initialize();
 
     // Initializing communication
     COMM_Initialize();
