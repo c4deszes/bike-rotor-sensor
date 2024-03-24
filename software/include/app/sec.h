@@ -49,4 +49,8 @@ void SEC_Update(void);
  */
 sec_state_t SEC_GetChannelState(uint8_t channel);
 
+void SEC_TurnOn(void);
+
+void SEC_TurnOff(void);
+
 #endif // APP_SENSOR_CONTROL_H_
