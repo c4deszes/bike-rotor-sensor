@@ -30,6 +30,10 @@ void USART_Initialize(uint32_t baudrate, ringbuffer8_t* tx_buffer, ringbuffer8_t
     );
 }
 
+void SERCOM0_Interrupt(void) {
+    SERCOM_USART_InterruptHandler(SERCOM0);
+}
+
 void USART_Enable(void) {
     SERCOM_USART_Enable(SERCOM0);
 }

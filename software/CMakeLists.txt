@@ -14,10 +14,10 @@ find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
 
-CPMAddPackage("gh:c4deszes/samd21-hal#master")
+CPMAddPackage("gh:c4deszes/samd21-hal@0.2.0")
 CPMAddPackage("gh:c4deszes/bike-line-protocol#master")
-CPMAddPackage("gh:c4deszes/bike-flash-tool#master")
-CPMAddPackage("gh:c4deszes/samd21-line-bootloader#master")
+CPMAddPackage("gh:c4deszes/bike-flash-tool@0.1.0")
+CPMAddPackage("gh:c4deszes/samd21-line-bootloader@0.2.0")
 
 # Test configuration
 enable_testing()
