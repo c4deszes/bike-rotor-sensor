@@ -1,2 +1,2 @@
 intelhex
-git+https://github.com/c4deszes/bike-line-protocol.git[dev]
+line-protocol[dev]@git+https://github.com/c4deszes/bike-line-protocol.git#subdirectory=python-lib
