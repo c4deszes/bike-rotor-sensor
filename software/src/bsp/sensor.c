@@ -3,10 +3,6 @@
 
 #include "bsp/sensor_internal.h"
 
-// uint16_t osh_sensor_data[OSH_CHANNEL_COUNT][OSH_SENSOR_BUFFER_SIZE];
-// uint8_t tail[OSH_CHANNEL_COUNT];
-// uint8_t head[OSH_CHANNEL_COUNT];
-
 osh_sensor_data sensors[OSH_CHANNEL_COUNT];
 
 const osh_sensor_sample_t error_sample = {.pos = 0, .period = 0};

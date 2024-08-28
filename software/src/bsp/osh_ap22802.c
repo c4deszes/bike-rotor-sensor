@@ -51,7 +51,8 @@ uint8_t OSH_PhyGetEventGenerator(uint8_t channel) {
 }
 
 void OSH_PhyUpdate(void) {
-    // TODO: could we detect open status?
+    // TODO: could we detect open status? e.g.: if INPUT is low by default?
+    //       most sensors will be pulled up, high by default
 
     if (GPIO_PinRead(AP22802_CH1_OC_PORT, AP22802_CH1_OC_PIN) == HIGH) {
         OSH_PhySetChannelStatus(0, osh_phy_channel_state_ok);

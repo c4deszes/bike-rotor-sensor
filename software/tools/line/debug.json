@@ -11,7 +11,7 @@
             ]
         },
         "RotorSensorSchedule": {
-            "delay": 0.5,
+            "delay": 0.1,
             "entries": [
                 {"type": "request", "request": "SpeedStatus"}
             ]
