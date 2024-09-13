@@ -420,7 +420,9 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [],
+    "pinned_footprint_libs": [
+      "local_footprints"
+    ],
     "pinned_symbol_libs": []
   },
   "meta": {
@@ -440,7 +442,92 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgb(0, 0, 194)",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Analog",
+        "pcb_color": "rgb(255, 159, 55)",
+        "schematic_color": "rgb(255, 153, 0)",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Ground",
+        "pcb_color": "rgb(116, 116, 116)",
+        "schematic_color": "rgb(132, 132, 132)",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "HVIO",
+        "pcb_color": "rgb(237, 255, 46)",
+        "schematic_color": "rgb(255, 255, 0)",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "LVIO",
+        "pcb_color": "rgb(98, 255, 87)",
+        "schematic_color": "rgb(0, 194, 0)",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Power",
+        "pcb_color": "rgb(255, 12, 12)",
+        "schematic_color": "rgb(194, 0, 0)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -452,7 +539,148 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "HVIO",
+        "pattern": "/M03_LINE"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "+BATT"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "VS"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M03_RXD"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M03_TXD"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M03_EN"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "+3.3V"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M05_RESET"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M05_SWCLK"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M05_SWDIO"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "/M03_VMON"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_~{SLEEP1}{slash}DIAG1"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_~{SLEEP2}{slash}DIAG2"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/VDDANA"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/VDDCORE"
+      },
+      {
+        "netclass": "Ground",
+        "pattern": "GND"
+      },
+      {
+        "netclass": "HVIO",
+        "pattern": "/M04_IN3_IN"
+      },
+      {
+        "netclass": "HVIO",
+        "pattern": "/M04_IN2_IN"
+      },
+      {
+        "netclass": "HVIO",
+        "pattern": "/M04_IN1_IN"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT1_DIAG{slash}OE"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT1{slash}~{ERR}"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT2_DIAG{slash}INPUT1"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT2{slash}INPUT2"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT3_DIAG{slash}OE"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_INPUT3{slash}~{ERR}"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M04_NC{slash}INPUT3"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMP581_SCK"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMP581_MOSI"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMP581_MISO"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMP581_CS"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMI088_CSG"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMI088_CSA"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M06_BMI088_MISO"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M05_BMI088_MOSI"
+      },
+      {
+        "netclass": "LVIO",
+        "pattern": "/M05_BMI088_SCK"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
