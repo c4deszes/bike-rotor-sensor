@@ -176,6 +176,7 @@
         0.127,
         0.1524,
         0.2032,
+        0.254,
         0.3048,
         0.4064,
         0.6096,
@@ -442,7 +443,7 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgb(0, 0, 194)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -459,7 +460,7 @@
         "microvia_drill": 0.1,
         "name": "Analog",
         "pcb_color": "rgb(255, 159, 55)",
-        "schematic_color": "rgb(255, 153, 0)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -476,7 +477,7 @@
         "microvia_drill": 0.1,
         "name": "Ground",
         "pcb_color": "rgb(116, 116, 116)",
-        "schematic_color": "rgb(132, 132, 132)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -493,7 +494,7 @@
         "microvia_drill": 0.1,
         "name": "HVIO",
         "pcb_color": "rgb(237, 255, 46)",
-        "schematic_color": "rgb(255, 255, 0)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -510,7 +511,7 @@
         "microvia_drill": 0.1,
         "name": "LVIO",
         "pcb_color": "rgb(98, 255, 87)",
-        "schematic_color": "rgb(0, 194, 0)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -527,7 +528,7 @@
         "microvia_drill": 0.1,
         "name": "Power",
         "pcb_color": "rgb(255, 12, 12)",
-        "schematic_color": "rgb(194, 0, 0)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -679,6 +680,22 @@
       {
         "netclass": "LVIO",
         "pattern": "/M05_BMI088_SCK"
+      },
+      {
+        "netclass": "HVIO",
+        "pattern": "/M03_REGEN"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/TPS629210_SW"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "/TPS629210_FB"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "/TPS629210_MODE"
       }
     ]
   },
