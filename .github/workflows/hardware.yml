@@ -9,11 +9,12 @@ on:
 jobs:
   ERC:
     name: ERC
+    if: false
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.4
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Run ERC
       working-directory: hardware
@@ -21,36 +22,56 @@ jobs:
 
   DRC:
     name: DRC
-    needs: ERC
+    if: false
+    #needs: ERC
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.4
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Run DRC
       working-directory: hardware
       run: ./scripts/run_drc.sh
 
   documentation:
-    name: Export Documents
-    needs: DRC
+    name: Documentation
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto
+    container: python:3.10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install requirements
+        working-directory: hardware
+        run: pip install -r docs/requirements.txt
+
+      - name: Build
+        working-directory: hardware
+        run: python -m sphinx docs docs/_build
+
+      - name: Archive documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: hardware/docs/_build/
+          if-no-files-found: error
+          retention-days: 5
+
+  schematic_layout:
+    name: Export documentation
+    runs-on: ubuntu-latest
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.4
     strategy:
       matrix:
-        variant:
-          - OPTICAL
-          - EXTERNAL
-          - HALL
+        product:
+          - "rotor-sensor"
+          - "connector-pcb"
     env:
-      VARIANT: ${{ matrix.variant }}
+      PRODUCT: ${{ matrix.product }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
-
-    # - name: Install KiBot
-    #   run: pip3 install git+https://github.com/INTI-CMNB/KiBot.git
+      uses: actions/checkout@v4
 
     - name: Generate schematic document
       working-directory: hardware
@@ -60,100 +81,45 @@ jobs:
       working-directory: hardware
       run: ./scripts/export_layout.sh
 
-    - name: Generate step file
-      if: 'false'
+    - name: Generate STEP file
       working-directory: hardware
       run: ./scripts/export_step.sh
 
+    - name: Generate Gerbers
+      working-directory: hardware
+      run: ./scripts/export_gerbers.sh
+
     - name: Archive Output
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: documentation-${{ matrix.variant }}
+        name: hardware-${{ matrix.product }}
         path: hardware/build/
         if-no-files-found: error
         retention-days: 5
 
-  manufacturing:
-    name: Export BOM & Gerbers
-    needs: DRC
+  panelize-optical-sensor:
+    name: Panelize (Optical Sensor)
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
-    strategy:
-      matrix:
-        variant:
-          - OPTICAL
-          - EXTERNAL
-          - HALL
-    env:
-      VARIANT: ${{ matrix.variant }}
+    container: ghcr.io/inti-cmnb/kicad7_auto:1.6.4
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Generate Gerbers
-        working-directory: hardware
-        run: ./scripts/export_gerbers.sh
-
-      - name: Generate BOM
-        working-directory: hardware
-        run: ./scripts/export_bom.sh
-
-      - name: Archive Output
-        uses: actions/upload-artifact@v2
-        with:
-          name: manufacturing-${{ matrix.variant }}
-          path: hardware/build/
-          if-no-files-found: error
-          retention-days: 5
-
-  panelize:
-    name: Panelize
-    needs: DRC
-    runs-on: ubuntu-latest
-    container: yaqwsx/kikit:v0.7
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Kikit
-        run: pip3 install git+https://github.com/yaqwsx/KiKit@d1f7633e1ed87c2ce46e09679d1a1a6a7fb852f5
+        uses: actions/checkout@v4
 
       - name: Panelize
         working-directory: hardware
         run: |
-          kikit panelize -p config/panel.json rotor-sensor.kicad_pcb rotor-sensor-panelized.kicad_pcb
-
-      - name: Archive Output
-        uses: actions/upload-artifact@v2
-        with:
-          name: panelized-board
-          path: hardware/rotor-sensor-panelized.kicad_pcb
-          if-no-files-found: error
-          retention-days: 5
-
-  manufacturing-panelized:
-    name: Export Panelized Gerbers
-    needs: panelize
-    runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download board
-        uses: actions/download-artifact@v2
-        with:
-          name: panelized-board
-          path: hardware
+          kikit panelize -p design/optical-sensor/panel.json design/optical-sensor/optical-sensor.kicad_pcb optical-sensor-panelized.kicad_pcb
 
       - name: Generate Gerbers
         working-directory: hardware
-        run: kibot -b rotor-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers drill
+        run: kibot -b optical-sensor-panelized.kicad_pcb -c config/outputs.yaml gerbers drill
 
       - name: Archive Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: manufacturing-panelized
-          path: hardware/build/
+          name: panelized-optical-sensor
+          path: |
+            hardware/build
+            hardware/optical-sensor-panelized.kicad_pcb
           if-no-files-found: error
           retention-days: 5

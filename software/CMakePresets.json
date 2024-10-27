@@ -7,47 +7,53 @@
     },
     "configurePresets": [
         {
-            "name": "avr-default",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "Unix Makefiles",
+            "name": "armgcc-default",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/avr-toolchain.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/armgcc-toolchain.cmake"
             },
             "hidden": true
         },
         {
-            "name": "avr-release",
-            "inherits": "avr-default",
+            "name": "release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "hidden": true
+        },
+        {
+            "name": "debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "hidden": true
+        },
+        {
+            "name": "max9621",
+            "cacheVariables": {
+                "PROJECT_PROFILE": "max9621"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ap22802",
+            "cacheVariables": {
+                "PROJECT_PROFILE": "ap22802"
+            },
+            "hidden": true
+        },
+        {
+            "name": "armgcc-release-unix",
+            "inherits": ["armgcc-default", "max9621"],
+            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "avr-minsizerel",
-            "inherits": "avr-default",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "MinSizeRel"
-            }
-        },
-        {
-            "name": "avr-debug",
-            "inherits": "avr-default",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "mingw-default",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "MinGW Makefiles",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
-            },
-            "hidden": true
-        },
-        {
-            "name": "mingw-debug",
-            "inherits": "mingw-default",
+            "name": "armgcc-debug-unix",
+            "inherits": ["armgcc-default", "max9621"],
+            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
@@ -55,39 +61,21 @@
     ],
     "buildPresets": [
         {
-            "name": "build-default",
-            "targets": ["rotor-sensor-standalone-full"],
+            "name": "build-app",
+            "targets": [ "application-full"],
             "hidden": true
         },
         {
-            "name": "build-bootloader",
-            "targets": ["uart-bootloader-full"],
+            "name": "build-docs",
+            "targets": [ "Sphinx" ],
             "hidden": true
         },
         {
-            "name": "build-release",
-            "inherits": "build-default",
-            "configurePreset": "avr-release"
-        },
-        {
-            "name": "build-debug",
-            "inherits": "build-default",
-            "configurePreset": "avr-debug"
-        },
-        {
-            "name": "build-bootloader-release",
-            "inherits": "build-bootloader",
-            "configurePreset": "avr-release"
-        },
-        {
-            "name": "build-tests",
-            "targets": ["rotor-sensor-unittest"],
-            "hidden": true
-        },
-        {
-            "name": "build-tests-mingw-debug",
-            "inherits": "build-tests",
-            "configurePreset": "mingw-debug"
+            "name": "build-app-unix",
+            "inherits": "build-app",
+            "configurePreset": "armgcc-release-unix"
         }
+    ],
+    "testPresets": [
     ]
 }

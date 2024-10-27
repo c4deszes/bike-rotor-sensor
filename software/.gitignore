@@ -1,3 +1,6 @@
 .vscode/
-build/
+_build/
 CMakeUserPresets.json
+_archive/
+.pytest_cache/
+.benchmarks

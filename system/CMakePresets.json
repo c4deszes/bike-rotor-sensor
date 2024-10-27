@@ -2,9 +2,7 @@
 	"version": 2,
 	"configurePresets": [
 		{
-			"name": "default",
-			"displayName": "Default",
-			"description": "Default preset",
+			"name": "mingw-default",
 			"generator": "MinGW Makefiles",
 			"binaryDir": "${sourceDir}/build/${presetName}",
 			"cacheVariables": {

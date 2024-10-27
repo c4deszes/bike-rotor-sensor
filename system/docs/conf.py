@@ -1,13 +1,26 @@
+import sys, os
+
+version = '2.0'
+sys.path.append(os.path.abspath("./_ext"))
+
 extensions = [
-    "sphinxcontrib.needs",
+    "sphinx_needs",
     "sphinx_rtd_theme",
+    'jupyter_sphinx',
     'sphinx.ext.mathjax',
     'matplotlib.sphinxext.mathmpl',
     'matplotlib.sphinxext.plot_directive',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.doctest',
-    'sphinxcontrib.mermaid'
+    'sphinxcontrib.mermaid',
+    'sphinxcontrib.kroki',
+    'linuxdoc.rstFlatTable',
+    'sphinxcontrib.drawio',
 ]
+
+autosectionlabel_prefix_document = True
 
 # Sphinx configuration
 html_theme = "sphinx_rtd_theme"
