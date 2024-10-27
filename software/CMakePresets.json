@@ -15,65 +15,45 @@
             "hidden": true
         },
         {
-            "name": "armgcc-release-unix",
-            "inherits": "armgcc-default",
-            "generator": "Unix Makefiles",
+            "name": "release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
-            }
+            },
+            "hidden": true
         },
         {
-            "name": "armgcc-release-mingw",
-            "inherits": "armgcc-default",
-            "generator": "MinGW Makefiles",
+            "name": "debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "hidden": true
+        },
+        {
+            "name": "max9621",
+            "cacheVariables": {
+                "PROJECT_PROFILE": "max9621"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ap22802",
+            "cacheVariables": {
+                "PROJECT_PROFILE": "ap22802"
+            },
+            "hidden": true
+        },
+        {
+            "name": "armgcc-release-unix",
+            "inherits": ["armgcc-default", "max9621"],
+            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
             "name": "armgcc-debug-unix",
-            "inherits": "armgcc-default",
+            "inherits": ["armgcc-default", "max9621"],
             "generator": "Unix Makefiles",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "armgcc-debug-mingw",
-            "inherits": "armgcc-default",
-            "generator": "MinGW Makefiles",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "mingw-default",
-            "generator": "MinGW Makefiles",
-            "binaryDir": "${sourceDir}/_build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
-            },
-            "hidden": true
-        },
-        {
-            "name": "mingw-debug",
-            "inherits": [ "mingw-default" ],
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "gcc-default",
-            "generator": "Unix Makefiles",
-            "binaryDir": "${sourceDir}/_build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/gcc-toolchain.cmake"
-            },
-            "hidden": true
-        },
-        {
-            "name": "gcc-debug",
-            "inherits": [ "gcc-default" ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
