@@ -29,22 +29,8 @@
             "hidden": true
         },
         {
-            "name": "max9621",
-            "cacheVariables": {
-                "PROJECT_PROFILE": "max9621"
-            },
-            "hidden": true
-        },
-        {
-            "name": "ap22802",
-            "cacheVariables": {
-                "PROJECT_PROFILE": "ap22802"
-            },
-            "hidden": true
-        },
-        {
             "name": "armgcc-release-unix",
-            "inherits": ["armgcc-default", "max9621"],
+            "inherits": ["armgcc-default"],
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
@@ -52,7 +38,7 @@
         },
         {
             "name": "armgcc-debug-unix",
-            "inherits": ["armgcc-default", "max9621"],
+            "inherits": ["armgcc-default"],
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"

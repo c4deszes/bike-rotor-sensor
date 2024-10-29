@@ -14,6 +14,7 @@
 #include "app/sys_state.h"
 
 #include "hal/gpio.h"
+#include "app/alt.h"
 
 #include <stddef.h>
 
@@ -44,15 +45,16 @@ void APP_Initialize() {
     // Low level init
     BSP_ClockInitialize();
     //WDT_InitializeNormal(&wdt_config);
-    EIC_Initialize(NULL);
-    OSH_PhyInit();
-    SENSOR_Initialize();
+    //EIC_Initialize(NULL);
+    //OSH_PhyInit();
+    //SENSOR_Initialize();
 
     // Initializing application services
-    SEC_Initialize();
-    SPM_Initialize();
+    //SEC_Initialize();
+    //SPM_Initialize();
     IET_Initialize();
-    ITPMS_Initialize();
+    ALT_Initialize();
+    //ITPMS_Initialize();
     SYSSTATE_Initialize();
 
     // Initializing communication

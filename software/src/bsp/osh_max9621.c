@@ -27,8 +27,8 @@ void OSH_PhyInit_Impl(void) {
     GPIO_SetupPinInput(MAX9621_INPUT2_PORT, MAX9621_INPUT2_PIN, &input);
     GPIO_EnableFunction(MAX9621_INPUT2_PORT, MAX9621_INPUT2_PIN, MAX9621_INPUT2_PINMUX);
 
-    GPIO_SetupPinInput(MAX9621_DIAG1_PORT, MAX9621_DIAG1_PIN, &input);
-    GPIO_SetupPinInput(MAX9621_DIAG2_PORT, MAX9621_DIAG2_PIN, &input);
+    GPIO_SetupPinInput(MAX9621_INPUT1_DIAG_PORT, MAX9621_INPUT1_DIAG_PIN, &input);
+    GPIO_SetupPinInput(MAX9621_INPUT2_DIAG_PORT, MAX9621_INPUT2_DIAG_PIN, &input);
 
     GPIO_SetupPinOutput(MAX9621_SLEEP_PORT, MAX9621_SLEEP_PIN, &output);
 
@@ -58,7 +58,7 @@ void OSH_PhyUpdate(void) {
     // if DIAG1 is High (above 1V) then Input1 is connected
     // if DIAG2 is High (above 1V) then Input2 is connected
     // TODO: this may not work as the diag1 high level is a little bit below the Vhol
-    if (GPIO_PinRead(MAX9621_DIAG1_PORT, MAX9621_DIAG1_PIN) == HIGH) {
+    if (GPIO_PinRead(MAX9621_INPUT1_DIAG_PORT, MAX9621_INPUT1_DIAG_PIN) == HIGH) {
         OSH_PhySetChannelStatus(0, osh_phy_channel_state_ok);
     }
     else {
@@ -71,7 +71,7 @@ void OSH_PhyUpdate(void) {
     }
 
     // TODO: this may not work as the diag1 high level is a little bit below the Vhol
-    if (GPIO_PinRead(MAX9621_DIAG2_PORT, MAX9621_DIAG2_PIN) == HIGH) {
+    if (GPIO_PinRead(MAX9621_INPUT2_DIAG_PORT, MAX9621_INPUT2_DIAG_PIN) == HIGH) {
         OSH_PhySetChannelStatus(1, osh_phy_channel_state_ok);
     }
     else {

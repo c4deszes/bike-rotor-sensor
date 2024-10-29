@@ -13,6 +13,8 @@
 
 #include "bsp/usart.h"
 
+#include "app/alt.h"
+
 // void SCH_Task100us(void) {
 //     //COMM_UpdatePhy();
 // }
@@ -20,11 +22,11 @@
 void SCH_Task1ms(void) {
     SWTIMER_Update1ms();
 
-    SEC_Update();
+    //SEC_Update();
 
     COMM_UpdatePhy();
 
-    SPM_Update();
+    //SPM_Update();
 
     SYSSTATE_Update();
 }
@@ -34,7 +36,9 @@ void SCH_Task10ms_A(void) {
 
     IET_Update();
 
-    ITPMS_Update();
+    //ITPMS_Update();
+
+    ALT_Update();
 
     COMM_UpdateSignals();
 }

@@ -74,6 +74,10 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_FlushOutput();
 }
 
+void LINE_Transport_WriteRequest(uint16_t request) {
+    return;
+}
+
 static bool bootResetFlag = false;
 
 bool COMM_ResetRequest(void) {
@@ -89,7 +93,8 @@ uint8_t FLASH_BL_EnterBoot(void) {
 
     bootResetFlag = true;
 
-    return FLASH_LINE_BOOT_ENTRY_SUCCESS;
+    // TODO: change once bl is implemented
+    return FLASH_LINE_BOOT_ENTRY_NO_BL_PRESENT;
 }
 
 uint8_t COMM_EncodeGlobalSpeedState(spm_speed_state_t state) {
