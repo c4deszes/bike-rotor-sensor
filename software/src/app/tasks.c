@@ -36,9 +36,11 @@ void SCH_Task10ms_A(void) {
 
     IET_Update();
 
-    //ITPMS_Update();
+    ITPMS_Update();
 
     ALT_Update();
 
     COMM_UpdateSignals();
+
+    COMM_UpdateDebugSignals();
 }

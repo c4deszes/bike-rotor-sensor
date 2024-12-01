@@ -5,7 +5,7 @@
 #include "hal/sercom_usart.h"
 
 // TODO: isn't that great that we include it, since it could transitively end up in the app
-#include "atsamd21e18a.h"
+#include "sam.h"
 
 /** 2-wire hall effect sensor driver pins */
 #define MAX9621_INPUT1_PORT PORT_GROUP_A
@@ -30,8 +30,8 @@
 #define MAX9621_SLEEP_PIN 0
 
 /** Crankset sensor input */
-#define MAX9921_SLEEP_PORT PORT_GROUP_A
-#define MAX9921_SLEEP_PIN 1
+#define MAX9921_DIAG_PORT PORT_GROUP_A
+#define MAX9921_DIAG_PIN 1
 
 #define MAX9921_INPUT3_PORT PORT_GROUP_A
 #define MAX9921_INPUT3_PIN 15

@@ -1,7 +1,7 @@
 #include "app/sec.h"
 
 #include "app/config.h"
-#include "bsp/config.h"
+#include "app/config.h"
 #include "bsp/osh_phy.h"
 #include "bsp/sensor.h"
 
@@ -13,7 +13,7 @@ static bool _status = false;
 static bool _startup = false;
 static swtimer_t* startup_timer;
 
-static sec_state_t channel_states[OSH_CHANNEL_COUNT];
+static sec_state_t channel_states[3];
 
 void SEC_Initialize(void) {
     _enabled = false;
@@ -72,7 +72,7 @@ void SEC_Update(void) {
 
     OSH_PhyUpdate();
 
-    for (uint8_t i = 0; i < OSH_CHANNEL_COUNT; i++) {
+    for (uint8_t i = 0; i < 3; i++) {
         osh_phy_channel_state_t phy_state = OSH_PhyGetChannelState(i);
         osh_sensor_state_t sensor_state = SENSOR_GetState(i);
         channel_states[i] = SEC_MapChannelState(phy_state, sensor_state);

@@ -4,8 +4,8 @@
 #include "common/swtimer.h"
 
 itpms_state_t itpms_state;
-static bool _startup;
-static swtimer_t* startup_timer;
+static bool itpms_startup;
+static swtimer_t* itpms_startup_timer;
 
 // external config:
 //  - channel mapping
@@ -13,17 +13,19 @@ static swtimer_t* startup_timer;
 //  - threshold
 
 void ITPMS_Initialize(void) {
-    _startup = false;
+    itpms_startup = false;
     itpms_state = itpms_state_stopped;
-    SWTIMER_Setup(startup_timer, ITPMS_STARTUP_TIME);
+    SWTIMER_Setup(itpms_startup_timer, ITPMS_STARTUP_TIME);
 }
 
 void ITPMS_Update(void) {
-    // Automatic startup
-    if (!_startup && SWTIMER_Elapsed(startup_timer)) {
-        _startup = true;
+
+#if ITPMS_AUTO_STARTUP == 1
+    if (!itpms_startup && SWTIMER_Elapsed(itpms_startup_timer)) {
+        itpms_startup = true;
         itpms_state = itpms_state_running;
     }
+#endif
 
     if (itpms_state == itpms_state_running) {
         // TODO: implement

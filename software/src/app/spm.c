@@ -66,43 +66,11 @@ static void SPM_UpdateChannel(uint8_t channel, spm_channel_status_t* status) {
     }
 }
 
-static spm_speed_t SPM_InertialCompensation(spm_speed_t absoluteSpeed, iet_speed_delta_t inertial) {
-    if (inertial > 0) {
-        return absoluteSpeed + inertial;
-    }
-    else if (inertial < 0) {
-        if(-inertial > absoluteSpeed) {
-            return 0;
-        }
-        else {
-            return absoluteSpeed + inertial;
-        }
-    }
-    return absoluteSpeed;
-}
-
 static void SPM_UpdateGlobalState() {
     spm_speed_t global_sensor_speed = 0;
     spm_speed_state_t global_speed_state = spm_speed_state_error;
-    iet_estimate_state_t iet_state = IET_GetEstimateState();
-    iet_speed_delta_t iet_compensation = IET_GetEstimatedSpeed();
     
-    if ((spm_front_wheel.state == spm_speed_state_ok || spm_rear_wheel.state == spm_speed_state_ok) && iet_state == iet_estimate_state_ok) {
-        // at least one absolute + inertial compensation
-        if (spm_front_wheel.state == spm_speed_state_ok && spm_rear_wheel.state == spm_speed_state_ok) {
-            global_sensor_speed = SPM_InertialCompensation((spm_front_wheel.speed + spm_rear_wheel.speed) / 2, iet_compensation);
-            global_speed_state = spm_speed_state_ok;
-        }
-        else if (spm_rear_wheel.state == spm_speed_state_ok) {
-            global_sensor_speed = SPM_InertialCompensation(spm_rear_wheel.speed, iet_compensation);
-            global_speed_state = spm_speed_state_ok;
-        }
-        else if (spm_front_wheel.state == spm_speed_state_ok) {
-            global_sensor_speed = SPM_InertialCompensation(spm_front_wheel.speed, iet_compensation);
-            global_speed_state = spm_speed_state_ok;
-        }
-    }
-    else if (spm_front_wheel.state == spm_speed_state_ok || spm_rear_wheel.state == spm_speed_state_ok) {
+    if (spm_front_wheel.state == spm_speed_state_ok || spm_rear_wheel.state == spm_speed_state_ok) {
         // at least one absolute
         if (spm_front_wheel.state == spm_speed_state_ok && spm_rear_wheel.state == spm_speed_state_ok) {
             global_sensor_speed = (spm_front_wheel.speed + spm_rear_wheel.speed) / 2;
@@ -117,12 +85,6 @@ static void SPM_UpdateGlobalState() {
             global_speed_state = spm_speed_slow_response;
         }
     }
-    else if (iet_state == iet_estimate_state_ok) {
-        // inertial only, use last ok global speed
-        // TODO: use latest valid absolute speed + estimate
-        global_speed_state = spm_speed_state_unreliable;
-        global_sensor_speed = 0;
-    }
     else {
         // multiple failures
         // TODO: if either channels report unreliable then return with that
@@ -136,8 +98,8 @@ static void SPM_UpdateGlobalState() {
 }
 
 void SPM_Update(void) {
-    SPM_UpdateChannel(SPM_FRONT_CHANNEL, &spm_front_wheel);
-    SPM_UpdateChannel(SPM_REAR_CHANNEL, &spm_rear_wheel);
+    SPM_UpdateChannel(0, &spm_front_wheel);
+    SPM_UpdateChannel(1, &spm_rear_wheel);
 
     SPM_UpdateGlobalState();
 }

@@ -54,7 +54,7 @@ void APP_Initialize() {
     //SPM_Initialize();
     IET_Initialize();
     ALT_Initialize();
-    //ITPMS_Initialize();
+    ITPMS_Initialize();
     SYSSTATE_Initialize();
 
     // Initializing communication

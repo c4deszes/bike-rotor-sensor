@@ -5,7 +5,7 @@
 #include "hal/gclk.h"
 #include "hal/pm.h"
 
-#include "atsamd21e18a.h"
+#include "sam.h"
 
 eic_configuration bsp_eic_config;
 

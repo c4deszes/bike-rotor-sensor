@@ -112,7 +112,8 @@ void BMI088_SetupSensor() {
     bmi08dev.intf_ptr_accel = &bmi088_csa_pin;
     bmi08dev.intf_ptr_gyro = &bmi088_csg_pin;
     bmi08dev.intf = BMI08_SPI_INTF;
-    //bmi08dev.variant = BMI088_VARIANT;
+    bmi08dev.variant = BMI088_VARIANT;
+    bmi08dev.read_write_len = 32;
 
     bmi08_sensor_code = bmi08xa_init(&bmi08dev);
 
@@ -171,7 +172,7 @@ void IET_Update(void) {
         bmi08_initialized = true;
     }
 
-    if (bmi08_sensor_code == BMI08_OK) {
+    if (bmi08_initialized && bmi08_sensor_code == BMI08_OK) {
         bmi08_read_status = bmi08a_get_data(&bmi08_accel, &bmi08dev);
 
         bmi08_read_status = bmi08g_get_data(&bmi08_gyro, &bmi08dev);

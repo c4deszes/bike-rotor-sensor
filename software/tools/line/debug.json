@@ -11,9 +11,11 @@
             ]
         },
         "RotorSensorSchedule": {
-            "delay": 0.1,
+            "delay": 1,
             "entries": [
-                {"type": "request", "request": "SpeedStatus"}
+                {"type": "request", "request": "RotorSensorPressureDebug"},
+                {"type": "request", "request": "RotorSensorMotionDebug"},
+                {"type": "request", "request": "RoadStatus"}
             ]
         }
     },

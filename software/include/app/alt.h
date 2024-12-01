@@ -2,6 +2,7 @@
 #define APP_ALT_H_
 
 extern float ALT_Pressure;
+extern float ALT_Altitude;
 
 void ALT_Initialize(void);
 

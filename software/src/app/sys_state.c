@@ -5,7 +5,7 @@
 
 #include "bl/api.h"
 
-#include "atsamd21e18a.h"
+#include "sam.h"
 
 typedef enum {
     sys_state_normal,
@@ -22,12 +22,12 @@ void SYSSTATE_Initialize(void) {
     transition_timer = SWTIMER_Create();
 }
 
-// uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
-// static void SYSSTATE_BootEntry(void) {
-//     boot_entry_key = BOOT_ENTRY_MAGIC;
+uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
+static void SYSSTATE_BootEntry(void) {
+    boot_entry_key = BOOT_ENTRY_MAGIC;
 
-//     NVIC_SystemReset();
-// }
+    NVIC_SystemReset();
+}
 
 static void SYSSTATE_Reset(void) {
     NVIC_SystemReset();
@@ -37,18 +37,16 @@ void SYSSTATE_Update(void) {
     if (sys_state == sys_state_normal) {
         if (COMM_ResetRequest()) {
             sys_state = sys_state_goto_reset;
-            //SEC_TurnOff();
             SWTIMER_Setup(transition_timer, SYS_STATE_RESET_DELAY);
         }
         else if(COMM_BootRequest()) {
             sys_state = sys_state_goto_boot;
-            //SEC_TurnOff();
             SWTIMER_Setup(transition_timer, SYS_STATE_BOOT_ENTRY_DELAY);
         }
     }
     else if (sys_state == sys_state_goto_boot) {
         if (SWTIMER_Elapsed(transition_timer)) {
-            //SYSSTATE_BootEntry();
+            SYSSTATE_BootEntry();
         }
     }
     else if (sys_state == sys_state_goto_reset) {

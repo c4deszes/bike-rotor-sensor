@@ -18,6 +18,8 @@ void COMM_Initialize(void);
  */
 void COMM_UpdateSignals(void);
 
+void COMM_UpdateDebugSignals(void);
+
 /**
  * @brief Passes the bytes received from the physical layer to the transport layer
  */

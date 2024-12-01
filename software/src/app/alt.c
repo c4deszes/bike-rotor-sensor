@@ -7,8 +7,12 @@
 
 #include "bmp5.h"
 #include "bmp5_defs.h"
+#include <math.h>
 
 float ALT_Pressure;
+float ALT_Altitude;
+
+static float ALT_QNH = 1013.25f;
 
 static const gpio_pin_output_configuration output = {
     .drive = NORMAL,
@@ -84,7 +88,7 @@ void ALT_Initialize() {
 }
 
 static bool bmp5_initialized = false;
-static int8_t bmp5_sensor_code;
+int8_t bmp5_sensor_code;
 static struct bmp5_dev bmp_dev = {
     .chip_id = BMP5_CHIP_ID_PRIM,
     .read = BMP581_ReadAdapter,
@@ -145,6 +149,35 @@ static void BMP5_SetupSensor() {
     }
 }
 
+void ALT_SetQNH(float qnh) {
+    ALT_QNH = qnh;
+}
+
+float CalculateAltitude(float pressure, float qnh) {
+    // Constants based on the ISA model
+    const float seaLevelPressure = 1013.25; // hPa (standard sea level pressure)
+    const float temperatureLapseRate = 0.0065; // K/m (standard lapse rate)
+    const float standardTemperature = 288.15; // K (standard temperature at sea level)
+    const float gravitationalAcceleration = 9.80665; // m/s²
+    const float gasConstant = 287.05; // J/(kg·K) (specific gas constant for air)
+
+    // Adjusted pressure based on QNH
+    float adjustedPressure = pressure / qnh * seaLevelPressure;
+
+    // Calculate altitude using the barometric formula (rearranged to avoid log functions)
+    float altitude = 0.0;
+    float currentPressure = adjustedPressure;
+
+    // Iterative approximation (linearized for small pressure changes)
+    while (currentPressure < seaLevelPressure) {
+        altitude += 1.0; // Increment altitude in meters
+        currentPressure *= (1.0 + (temperatureLapseRate / standardTemperature));
+    }
+
+    return altitude;
+}
+
+
 void ALT_Update(void) {
     if (!bmp5_initialized) {
         BMP5_SetupSensor();
@@ -154,5 +187,6 @@ void ALT_Update(void) {
     if (bmp5_sensor_code == BMP5_OK) {
         bmp5_get_sensor_data(&sensor_data, &bmp_press_cfg, &bmp_dev);
         ALT_Pressure = sensor_data.pressure;
+        ALT_Altitude = CalculateAltitude(ALT_Pressure / 100, ALT_QNH);
     }
 }
