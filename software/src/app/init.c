@@ -7,6 +7,7 @@
 #include "app/spm.h"
 #include "bsp/osh_phy.h"
 #include "bsp/sensor.h"
+#include "bsp/bmp581.h"
 #include "app/sch.h"
 #include "app/comm.h"
 #include "app/iet.h"
@@ -48,6 +49,7 @@ void APP_Initialize() {
     //EIC_Initialize(NULL);
     //OSH_PhyInit();
     //SENSOR_Initialize();
+    BMP581_Initialize();
 
     // Initializing application services
     //SEC_Initialize();

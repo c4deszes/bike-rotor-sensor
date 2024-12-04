@@ -43,6 +43,14 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
+        },
+        {
+            "name": "mingw-default",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
+            },
+            "hidden": true
         }
     ],
     "buildPresets": [
@@ -54,6 +62,11 @@
         {
             "name": "build-docs",
             "targets": [ "Sphinx" ],
+            "hidden": true
+        },
+        {
+            "name": "build-tests",
+            "targets": [ "test_Altitude" ],
             "hidden": true
         },
         {

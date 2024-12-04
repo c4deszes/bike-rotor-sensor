@@ -11,6 +11,9 @@
 #define SPM_LOW_SPEED_CUTOFF_PERIOD_US 9000000      /* Maximum time to measure in a single pole configuration */
 #define SPM_HIGH_SPEED_CUTOFF_PERIOD_US 2000        /* Minimum time to measure in a 30-pole configuration */
 
+/* Pressure sensor configuration */
+#define ALT_SENSOR_STARTUP_TIME 150
+
 /* ITPMS Service configuration */
 
 /* ITPMS Automatic startup enable/disable */

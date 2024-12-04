@@ -23,6 +23,7 @@ set(CTEST_OUTPUT_ON_FAILURE ON)
 
 include(CTest)
 include(GoogleTest)
+include(FetchContent)
 
 # Project
 add_subdirectory(docs)
@@ -77,6 +78,7 @@ add_executable(
     src/app/tasks.c
     src/app/sys_state.c
 
+    src/bsp/bmp581.c
     src/bsp/osh_phy.c
     src/bsp/sensor_generic.c
     src/bsp/sensor.c
@@ -95,6 +97,9 @@ target_link_libraries(application PRIVATE   samd21e18a
 set_target_properties(application PROPERTIES SUFFIX ".elf")
 target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/application.ld)
 target_link_options(application PRIVATE -Wl,-Map=application.map -Wl,--gc-sections)
+
+add_library(test-lib INTERFACE)
+target_include_directories(test-lib INTERFACE include lib/bmp5x)
 
 hexify(TARGET application HEX ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex)
 dump_symbols(application ${CMAKE_CURRENT_BINARY_DIR}/application.lss)
@@ -125,3 +130,5 @@ add_custom_target(application-merge
 add_custom_target(application-full
     DEPENDS application-hex application-lss application-memory application-merge factory_header
 )
+
+add_subdirectory(tests/unit)
