@@ -12,7 +12,17 @@
 #define SPM_HIGH_SPEED_CUTOFF_PERIOD_US 2000        /* Minimum time to measure in a 30-pole configuration */
 
 /* Pressure sensor configuration */
+#define ALT_SENSOR_ENABLED 1
+
 #define ALT_SENSOR_STARTUP_TIME 150
+#define ALT_SENSOR_STARTUP_ATTEMPTS 1
+#define ALT_SENSOR_STARTUP_ATTEMPT_DELAY 1000
+
+#define ALT_SENSOR_POLL_INTERVAL 100
+#define ALT_SENSOR_POLL_MAX_ERRORS 5
+#define ALT_SENSOR_POLL_HEALING_TIME 5000
+
+#define ALT_SENSOR_DEFAULT_QNH 101325
 
 /* ITPMS Service configuration */
 

@@ -49,7 +49,9 @@ add_library(
 target_sources(bmp5 INTERFACE
     lib/bmp5x/bmp5.c
 )
-#target_compile_definitions(bmp5 INTERFACE BMP5_USE_FIXED_POINT)
+target_compile_definitions(bmp5 INTERFACE
+    BMP5_USE_FIXED_POINT
+    BMP5_FIXED_POINT_DIGIT_PRECISION=2)
 target_include_directories(bmp5 INTERFACE lib/bmp5x)
 
 # BMI088 IMU library

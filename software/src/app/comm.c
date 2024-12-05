@@ -125,7 +125,7 @@ void COMM_UpdateSignals(void) {
     LINE_Request_RideStatus_data.fields.Elevation = 0;
     LINE_Request_RideStatus_data.fields.Descent = 0;
 
-    LINE_Request_RoadStatus_data.fields.Altitude = LINE_ENCODER_AltitudeEncoder_Encode(ALT_Altitude);
+    LINE_Request_RoadStatus_data.fields.Altitude = LINE_ENCODER_AltitudeEncoder_Encode(ALT_GetAltitude());
     LINE_Request_RoadStatus_data.fields.Gradient = 0;
     LINE_Request_RoadStatus_data.fields.RoadQuality = LINE_ENCODER_RoadQualityEncoder_NotMeasured;
 }
@@ -139,5 +139,5 @@ void COMM_UpdateDebugSignals() {
     LINE_Request_RotorSensorMotionDebug_data.fields.gY = bmi08_gyro.y;
     LINE_Request_RotorSensorMotionDebug_data.fields.gZ = bmi08_gyro.z;
 
-    LINE_Request_RotorSensorPressureDebug_data.fields.Pressure = (uint32_t)(ALT_Pressure * 10);
+    LINE_Request_RotorSensorPressureDebug_data.fields.Pressure = ALT_GetPressure();
 }
