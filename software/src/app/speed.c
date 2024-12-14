@@ -82,13 +82,14 @@ static uint16_t SPEED_CalculateSpeed(uint32_t period, uint8_t poles, uint16_t ci
     if (period == 0 || poles == 0 || circumference == 0) {
         return 0;
     }
-    return (uint16_t)((36000UL * circumference) / (period * poles));
+    return (uint16_t)((360UL * circumference) / (period * poles));
 }
 
 void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
     if (channel == SPM_FRONT_SENSOR_CHANNEL) {
         SPEED_FrontWheel.last_period = sample.period;
         SPEED_FrontWheel.speed_cnt = sample.period;
+        SPEED_FrontWheel.last_positive = sample.pos;
         //SPEED_FrontWheel.state = sample.state;
         // TODO: for 0.1 km/h resolution, we need to measure the period in 0.1ms resolution
         SPEED_FrontWheel.speed = SPEED_CalculateSpeed(SPEED_FrontWheel.last_period,
@@ -98,6 +99,7 @@ void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
     else if (channel == SPM_REAR_SENSOR_CHANNEL) {
         SPEED_RearWheel.last_period = sample.period;
         SPEED_RearWheel.speed_cnt = sample.period;
+        SPEED_RearWheel.last_positive = sample.pos;
         //SPEED_RearWheel.state = sample.state;
         // TODO: for 0.1 km/h resolution, we need to measure the period in 0.1ms resolution
         SPEED_RearWheel.speed = SPEED_CalculateSpeed(SPEED_RearWheel.last_period,

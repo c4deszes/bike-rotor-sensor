@@ -17,6 +17,7 @@ typedef struct {
     speed_status_t state;
     uint16_t speed;
     uint32_t last_period;
+    uint32_t last_positive;
     uint32_t speed_cnt;
     bool brake;
     bool lockup;

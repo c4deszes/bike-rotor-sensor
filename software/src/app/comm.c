@@ -159,6 +159,9 @@ void COMM_UpdateDebugSignals() {
     LINE_Request_RotorSensorSpeedDebug_data.fields.FrontSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL));
     LINE_Request_RotorSensorSpeedDebug_data.fields.RearSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_REAR_SENSOR_CHANNEL));
 
+    LINE_Request_RotorSensorPeriodDebug_data.fields.Per = SPEED_FrontWheel.last_period;
+    LINE_Request_RotorSensorPeriodDebug_data.fields.Pos = SPEED_RearWheel.last_positive;
+
     LINE_Request_RotorSensorSpeedDebug_data.fields.CrankSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_CRANK_SENSOR_CHANNEL));
     LINE_Request_RotorSensorSpeedDebug_data.fields.CrankPosition = 0;
 

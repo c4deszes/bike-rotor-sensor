@@ -77,13 +77,13 @@ void OSH_PhyInit(void) {
     EVSYS_ConfigureGenerator(evgens[2], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_15);       // Input 3 - Crankset
 
     /* Timer configuration */
-    TC_SetupCapture(TC3, tc_prescaler_div1);
+    TC_SetupCapture(TC3, tc_prescaler_div2);
     EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0] + 1);
 
-    TC_SetupCapture(TC4, tc_prescaler_div1);
+    TC_SetupCapture(TC4, tc_prescaler_div2);
     EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1] + 1);
 
-    TC_SetupCapture(TC5, tc_prescaler_div1);
+    TC_SetupCapture(TC5, tc_prescaler_div2);
     EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2] + 1);
 }
 
@@ -157,75 +157,26 @@ void OSH_PhyUpdate(void) {
     OSH_PhySetChannelStatus(2, osh_phy_channel_state_ok);
 }
 
-// TODO: move interrupt handlers to HAL
-void TC3_Handler(void) {
-    if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_ERR_Msk) == TC_INTFLAG_ERR_Msk) {
-        // TODO: notify the sensor about the error
-        accumulates[0] = 0;
-    }
-    else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
-        // TODO: accumulate the impulses up to the sensor limits
-        accumulates[0] += 0xFFFF; // or 0xFFFF
-        if (accumulates[0] >= 10000000ul) { // 10s
-            SENSOR_Process(0, 0, accumulates[0]);
-            accumulates[0] = 0;
-        }
-    }
-    else if ((TC3_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
-        uint16_t cc0 = TC3_REGS->COUNT16.TC_CC[0];
-        uint16_t cc1 = TC3_REGS->COUNT16.TC_CC[1];
-        SENSOR_Process(0, cc0, cc1 + accumulates[0]);
-        accumulates[0] = 0;
-    }
-
-    TC3_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;
+#define TIMER_HANDLER(handler, regs, id) void handler(void) { \
+    if ((regs->COUNT16.TC_INTFLAG & TC_INTFLAG_ERR_Msk) == TC_INTFLAG_ERR_Msk) { \
+        \
+    } \
+    else if ((regs->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) { \
+        SENSOR_Process(id, 0, 0xFFFFul); \
+    } \
+    else if ((regs->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) { \
+        uint32_t cc0 = regs->COUNT16.TC_CC[0]; \
+        uint32_t cc1 = regs->COUNT16.TC_CC[1]; \
+        if (cc0 > cc1) { \
+            SENSOR_Process(id, cc1, cc0); \
+        } \
+        else { \
+            SENSOR_Process(id, cc0, cc1); \
+        } \
+    } \
+    regs->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk; \
 }
 
-// TODO: move interrupt handlers to HAL
-void TC4_Handler(void) {
-    if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_ERR_Msk) == TC_INTFLAG_ERR_Msk) {
-        // TODO: notify the sensor about the error, reset accumulates
-        accumulates[1] = 0;
-    }
-    else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
-        // TODO: accumulate the impulses up to the sensor limits
-        accumulates[1] += 0xFFFF; // or 0xFFFF
-        if (accumulates[1] >= 10000000ul) { // 10s
-            SENSOR_Process(1, 0, accumulates[1]);
-            accumulates[1] = 0;
-        }
-    }
-    else if ((TC4_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
-        uint16_t cc0 = TC4_REGS->COUNT16.TC_CC[0];
-        uint16_t cc1 = TC4_REGS->COUNT16.TC_CC[1];
-        // TODO: question, to which term do we add the accumulate? was stuck in high or low?
-        SENSOR_Process(1, cc0, cc1 + accumulates[1]);
-        accumulates[1] = 0;
-    }
-
-    TC4_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;
-}
-
-void TC5_Handler(void) {
-    if ((TC5_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_ERR_Msk) == TC_INTFLAG_ERR_Msk) {
-        // TODO: notify the sensor about the error, reset accumulates
-        accumulates[2] = 0;
-    }
-    else if ((TC5_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) == TC_INTFLAG_OVF_Msk) {
-        // TODO: accumulate the impulses up to the sensor limits
-        accumulates[2] += 0xFFFF; // or 0xFFFF
-        if (accumulates[2] >= 10000000ul) { // 10s
-            SENSOR_Process(2, 0, accumulates[2]);
-            accumulates[2] = 0;
-        }
-    }
-    else if ((TC5_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_MC1_Msk) == TC_INTFLAG_MC1_Msk) {
-        uint16_t cc0 = TC5_REGS->COUNT16.TC_CC[0];
-        uint16_t cc1 = TC5_REGS->COUNT16.TC_CC[1];
-        // TODO: question, to which term do we add the accumulate? was stuck in high or low?
-        SENSOR_Process(2, cc0, cc1 + accumulates[2]);
-        accumulates[2] = 0;
-    }
-
-    TC5_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_Msk;
-}
+TIMER_HANDLER(TC3_Handler, TC3_REGS, 0)
+TIMER_HANDLER(TC4_Handler, TC4_REGS, 1)
+TIMER_HANDLER(TC5_Handler, TC5_REGS, 2)

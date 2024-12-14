@@ -36,6 +36,7 @@ void BSP_ClockInitialize (void) {
     GCLK_ConfigureGenerator(GCLK_GEN2, GCLK_GENCTRL_SRC_OSCULP32K_Val, 0u); // GCLK2 -> 32kHz (low power)
     GCLK_ConfigureGenerator(GCLK_GEN3, GCLK_GENCTRL_SRC_OSC8M_Val, 0u);     // GCLK3 -> 8MHz
     GCLK_ConfigureGenerator(GCLK_GEN4, GCLK_GENCTRL_SRC_OSC8M_Val, 8u);     // GCLK4 -> 1MHz
+    GCLK_ConfigureGenerator(GCLK_GEN5, GCLK_GENCTRL_SRC_OSC8M_Val, 400u);    // GCLK5 -> 20kHz
 
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EIC_Val, GCLK_GEN3);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_WDT_Val, GCLK_GEN3);
@@ -52,8 +53,8 @@ void BSP_ClockInitialize (void) {
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_10_Val, GCLK_GEN3);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_11_Val, GCLK_GEN3);
 
-    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC2_TC3_Val, GCLK_GEN4);
-    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TC4_TC5_Val, GCLK_GEN4);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC2_TC3_Val, GCLK_GEN5);      // Speed sensor
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TC4_TC5_Val, GCLK_GEN5);       // Speed sensor
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC0_TCC1_Val, GCLK_GEN4);     // Scheduler
 
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_SERCOM0_CORE_Val, GCLK_GEN3);  // LINE
