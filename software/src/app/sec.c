@@ -19,7 +19,7 @@ void SEC_Initialize(void) {
     _enabled = false;
     _status = false;
     startup_timer = SWTIMER_Create();
-    SWTIMER_Setup(startup_timer, SENSOR_STARTUP_TIME);
+    SWTIMER_Setup(startup_timer, SPM_SENSOR_STARTUP_TIME);
 }
 
 void SEC_TurnOn(void) {

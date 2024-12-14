@@ -20,7 +20,7 @@ endfunction()
 
 add_executable(test_Altitude EXCLUDE_FROM_ALL)
 target_sources(test_Altitude PRIVATE
-    ../../src/app/alt.c
+    ../../src/app/altitude.c
     test_Altitude.cpp
 )
 target_link_libraries(test_Altitude PRIVATE test-lib samx21-api)

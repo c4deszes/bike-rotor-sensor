@@ -60,8 +60,6 @@
 #define BMP581_SPI_CS_PIN 18
 
 /** BMI088 6-axis IMU pins */
-// TODO: PINMUX setup and pad assignment
-
 #define BMI088_SPI_MISO_PORT PORT_GROUP_A
 #define BMI088_SPI_MISO_PIN 25
 #define BMI088_SPI_MISO_PINMUX MUX_PA25C_SERCOM3_PAD3

@@ -69,17 +69,21 @@ add_executable(
     application
     EXCLUDE_FROM_ALL
 
-    src/app/alt.c
+    src/app/altitude.c
     src/app/comm.c
-    src/app/iet.c
+    src/app/cadence.c
+    src/app/distance.c
+    src/app/gear.c
+    src/app/imu.c
     src/app/init.c
     src/app/itpms.c
     src/app/main.c
     src/app/sec.c
-    src/app/spm.c
+    src/app/speed.c
     src/app/tasks.c
     src/app/sys_state.c
 
+    src/bsp/bmi088.c
     src/bsp/bmp581.c
     src/bsp/osh_phy.c
     src/bsp/sensor_generic.c

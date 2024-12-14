@@ -24,7 +24,7 @@
         {
             "name": "debug",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Debug"
             },
             "hidden": true
         },

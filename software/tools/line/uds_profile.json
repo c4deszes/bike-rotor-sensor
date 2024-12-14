@@ -4,37 +4,37 @@
     "properties": {
         "FrontWheel_Circumference": {
             "id": "0x4000",
-            "type": "uint16_t",
+            "type": "uint16",
             "description": "Front wheel circumference in mm",
-            "default": 2200
+            "default": 2275
         },
         "RearWheel_Circumference": {
             "id": "0x4001",
-            "type": "uint16_t",
+            "type": "uint16",
             "description": "Rear wheel circumference in mm",
-            "default": 2200
+            "default": 2275
         },
         "CrankArm_Circumference": {
             "id": "0x4002",
-            "type": "uint16_t",
+            "type": "uint16",
             "description": "Crank arm circumference in mm",
-            "default": 170
+            "default": 175
         },
         "FrontWheel_PoleCount": {
             "id": "0x4010",
-            "type": "uint8_t",
+            "type": "uint8",
             "description": "Number of pulses per wheel rotation",
             "default": 1
         },
         "RearWheel_PoleCount": {
             "id": "0x4011",
-            "type": "uint8_t",
+            "type": "uint8",
             "description": "Number of pulses per wheel rotation",
             "default": 1
         },
         "CrankArm_PoleCount": {
             "id": "0x4012",
-            "type": "uint8_t",
+            "type": "uint8",
             "description": "Number of pulses per crank rotation",
             "default": 1
         },

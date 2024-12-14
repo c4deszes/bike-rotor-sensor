@@ -42,25 +42,49 @@ void OSH_PhyInit(void) {
     GPIO_SetupPinInput(MAX9921_ERROR_PORT, MAX9921_ERROR_PIN, &input_pullup);
     // because OUT2 is not connected we can only determine short circuits, or imply open circuit
 
+    EVSYS_REGS->EVSYS_CTRL = EVSYS_CTRL_SWRST_Msk;
+    while((EVSYS_REGS->EVSYS_CTRL & EVSYS_CTRL_SWRST_Msk) == EVSYS_CTRL_SWRST_Msk)
+    {
+        /* Wait for sync */
+    }
+
+    EIC_REGS->EIC_CTRL |= EIC_CTRL_SWRST_Msk;
+
+    while((EIC_REGS->EIC_STATUS & EIC_STATUS_SYNCBUSY_Msk) == EIC_STATUS_SYNCBUSY_Msk)
+    {
+        /* Wait for sync */
+    }
+
+    EIC_REGS->EIC_EVCTRL = EIC_EVCTRL_EXTINTEO7_Msk | EIC_EVCTRL_EXTINTEO10_Msk | EIC_EVCTRL_EXTINTEO15_Msk;
+    EIC_REGS->EIC_CONFIG[0] = EIC_CONFIG_SENSE7_HIGH;
+    EIC_REGS->EIC_CONFIG[1] = EIC_CONFIG_SENSE2_HIGH | EIC_CONFIG_SENSE7_HIGH;
+
+    /* Enable External Interrupt Controller */
+    EIC_REGS->EIC_CTRL |= EIC_CTRL_ENABLE_Msk;
+
+    while ((EIC_REGS->EIC_STATUS & EIC_STATUS_SYNCBUSY_Msk) == EIC_STATUS_SYNCBUSY_Msk) {
+        /* Wait for sync */
+    }
+
     /* Event system configuration */
     evgens[0] = EVSYS_AcquireGeneratorChannel();
-    EVSYS_ConfigureGenerator(evgens[0], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_7);
+    EVSYS_ConfigureGenerator(evgens[0], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_7);        // Input 1 - Front wheel
 
     evgens[1] = EVSYS_AcquireGeneratorChannel();
-    EVSYS_ConfigureGenerator(evgens[1], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_10);
+    EVSYS_ConfigureGenerator(evgens[1], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_10);       // Input 2 - Rear wheel
 
     evgens[2] = EVSYS_AcquireGeneratorChannel();
-    EVSYS_ConfigureGenerator(evgens[1], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_15);
+    EVSYS_ConfigureGenerator(evgens[2], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_15);       // Input 3 - Crankset
 
     /* Timer configuration */
     TC_SetupCapture(TC3, tc_prescaler_div1);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0]);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0] + 1);
 
     TC_SetupCapture(TC4, tc_prescaler_div1);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1]);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1] + 1);
 
     TC_SetupCapture(TC5, tc_prescaler_div1);
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2]);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2] + 1);
 }
 
 void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_state_t status) {

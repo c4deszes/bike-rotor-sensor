@@ -5,12 +5,15 @@
 #include "line_api.h"
 #include "flash_line_api.h"
 #include "flash_line_diag.h"
+#include "uds_api.h"
 #include "bl/api.h"
 #include "hal/dsu.h"
 
-#include "app/spm.h"
+#include "app/speed.h"
 #include "app/sec.h"
-#include "app/alt.h"
+#include "app/altitude.h"
+#include "app/distance.h"
+#include "app/config.h"
 
 #include "bmi08.h"
 #include "bmi08_defs.h"
@@ -54,7 +57,11 @@ void COMM_Initialize(void) {
     LINE_Transport_Init(true);
     LINE_App_Init();
     LINE_Diag_SetAddress(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+
     FLASH_LINE_Init(FLASH_LINE_APPLICATION_MODE);
+
+    UDS_Init();
+    UDS_LINE_Init();
 }
 
 void COMM_UpdatePhy(void) {
@@ -101,25 +108,33 @@ uint8_t FLASH_BL_EnterBoot(void) {
     return FLASH_LINE_BOOT_ENTRY_SUCCESS;
 }
 
-uint8_t COMM_EncodeGlobalSpeedState(spm_speed_state_t state) {
+static uint8_t COMM_EncodeSpeedState(speed_status_t state) {
     switch (state) {
-        case spm_speed_state_ok: return LINE_ENCODER_GlobalSpeedStateEncoder_Ok;
-        case spm_speed_slow_response: return LINE_ENCODER_GlobalSpeedStateEncoder_SlowResponse;
-        case spm_speed_state_unreliable: return LINE_ENCODER_GlobalSpeedStateEncoder_Unreliable;
-        case spm_speed_state_error: return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+        case speed_status_ok: return LINE_ENCODER_SpeedStateEncoder_Ok;
+        case speed_status_slow_response: return LINE_ENCODER_SpeedStateEncoder_SlowResponse;
+        case speed_status_unreliable: return LINE_ENCODER_SpeedStateEncoder_Unreliable;
+        case speed_status_error: return LINE_ENCODER_SpeedStateEncoder_Error;
     }
-    return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+    return LINE_ENCODER_SpeedStateEncoder_Error;
 }
 
-extern int8_t bmp5_sensor_code;
-extern struct bmi08_sensor_data bmi08_accel;
-extern struct bmi08_sensor_data bmi08_gyro;
+static uint8_t COMM_EncodeSpeedSensorState(sec_state_t state) {
+    switch (state) {
+        case sec_state_ok: return LINE_ENCODER_SpeedSensorStateEncoder_Ok;
+        case sec_state_warning: return LINE_ENCODER_SpeedSensorStateEncoder_SensorWarning;
+        case sec_state_error: return LINE_ENCODER_SpeedSensorStateEncoder_SensorError;
+        case sec_state_open: return LINE_ENCODER_SpeedSensorStateEncoder_OutputOpen;
+        case sec_state_short: return LINE_ENCODER_SpeedSensorStateEncoder_OutputShorted;
+        case sec_state_off: return LINE_ENCODER_SpeedSensorStateEncoder_Off;
+    }
+    return LINE_ENCODER_SpeedSensorStateEncoder_SensorError;
+}
 
 void COMM_UpdateSignals(void) {
-    LINE_Request_SpeedStatus_data.fields.GlobalSpeed = spm_global_speed;
-    LINE_Request_SpeedStatus_data.fields.GlobalSpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
+    LINE_Request_SpeedStatus_data.fields.Speed = SPEED_GetSpeed();
+    LINE_Request_SpeedStatus_data.fields.SpeedState = COMM_EncodeSpeedState(SPEED_GetStatus());
 
-    LINE_Request_RideStatus_data.fields.Distance = 0;
+    LINE_Request_RideStatus_data.fields.Distance = DIST_GetDistance();
     LINE_Request_RideStatus_data.fields.MaxSpeed = 0;
     LINE_Request_RideStatus_data.fields.AverageSpeed = 0;
     LINE_Request_RideStatus_data.fields.Elevation = 0;
@@ -131,13 +146,21 @@ void COMM_UpdateSignals(void) {
 }
 
 void COMM_UpdateDebugSignals() {
-    LINE_Request_RotorSensorMotionDebug_data.fields.aX = bmi08_accel.x;
-    LINE_Request_RotorSensorMotionDebug_data.fields.aY = bmi08_accel.y;
-    LINE_Request_RotorSensorMotionDebug_data.fields.aZ = bmi08_accel.z;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.aX = bmi08_accel.x;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.aY = bmi08_accel.y;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.aZ = bmi08_accel.z;
 
-    LINE_Request_RotorSensorMotionDebug_data.fields.gX = bmi08_gyro.x;
-    LINE_Request_RotorSensorMotionDebug_data.fields.gY = bmi08_gyro.y;
-    LINE_Request_RotorSensorMotionDebug_data.fields.gZ = bmi08_gyro.z;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.gX = bmi08_gyro.x;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.gY = bmi08_gyro.y;
+    // LINE_Request_RotorSensorMotionDebug_data.fields.gZ = bmi08_gyro.z;
+
+    LINE_Request_RotorSensorSpeedDebug_data.fields.FrontSpeed = SPEED_FrontWheel.speed;
+    LINE_Request_RotorSensorSpeedDebug_data.fields.RearSpeed = SPEED_RearWheel.speed;
+    LINE_Request_RotorSensorSpeedDebug_data.fields.FrontSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL));
+    LINE_Request_RotorSensorSpeedDebug_data.fields.RearSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_REAR_SENSOR_CHANNEL));
+
+    LINE_Request_RotorSensorSpeedDebug_data.fields.CrankSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_CRANK_SENSOR_CHANNEL));
+    LINE_Request_RotorSensorSpeedDebug_data.fields.CrankPosition = 0;
 
     LINE_Request_RotorSensorPressureDebug_data.fields.Pressure = ALT_GetPressure();
 }

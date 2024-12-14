@@ -1,4 +1,4 @@
-#include "app/alt.h"
+#include "app/altitude.h"
 #include "bsp/bmp581.h"
 #include "app/config.h"
 
@@ -105,6 +105,8 @@ int32_t CalcAltitude(int32_t a, int32_t k, int32_t i) {
 }
 
 void ALT_Update(void) {
+#if ALT_SENSOR_ENABLED == 1
+    // TODO: implement startup attempts and delay
     if (!ALT_SensorInitialized && SWTIMER_Elapsed(ALT_SensorTimer)) {
         ALT_SetupSensor();
 
@@ -117,6 +119,7 @@ void ALT_Update(void) {
         ALT_SensorInitialized = true;
     }
 
+    // TODO: implement polling interval
     if (ALT_SensorInitialized && ALT_BMP5_InitCode == BMP5_OK) {
         int8_t read_status = bmp5_get_sensor_data(&ALT_BMP5_SensorData, &ALT_BMP5_RateConfig, &BMP581_Device);
         
@@ -126,6 +129,9 @@ void ALT_Update(void) {
             ALT_Pressure = ALT_BMP5_SensorData.pressure / 100;
             ALT_Temperature = ALT_BMP5_SensorData.temperature / 100 + 273;
             ALT_Altitude = CalcAltitude(ALT_QNH, ALT_Temperature, ALT_Pressure);
+            
+            // TODO: verify pressure, altitude, temperature in plausible range
+            // TODO: healing counter
             ALT_Status = ALT_Status_Ok;
         }
         else {
@@ -133,4 +139,5 @@ void ALT_Update(void) {
             ALT_Status = ALT_Status_Error;
         }
     }
+#endif
 }

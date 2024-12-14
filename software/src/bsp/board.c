@@ -43,6 +43,14 @@ void BSP_ClockInitialize (void) {
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_1_Val, GCLK_GEN3);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_2_Val, GCLK_GEN3);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_3_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_4_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_5_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_6_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_7_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_8_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_9_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_10_Val, GCLK_GEN3);
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_11_Val, GCLK_GEN3);
 
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC2_TC3_Val, GCLK_GEN4);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TC4_TC5_Val, GCLK_GEN4);
