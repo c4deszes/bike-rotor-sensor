@@ -78,6 +78,7 @@ add_executable(
     src/app/init.c
     src/app/itpms.c
     src/app/main.c
+    src/app/ride.c
     src/app/sec.c
     src/app/speed.c
     src/app/tasks.c

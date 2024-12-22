@@ -28,14 +28,15 @@ static void DIST_CheckSensorError() {
         DIST_SensorErrorCounter--;
     }
 
-    if (DIST_SensorErrorCounter >= DIST_MEASUREMENT_ERROR_TIMER) {
+    if (DIST_SensorErrorCounter >= DIST_MEASUREMENT_SENSOR_ERROR_TIMER_10MS) {
         DIST_Status = DIST_Status_PermanentError;
     }
 }
 
 void DIST_Update(void) {
     if (DIST_Status == DIST_Status_NotAvailable) {
-        // TODO: if ride begun then set status to OK
+        // TODO: if ride begun only then set status to OK
+        DIST_Status = DIST_Status_Ok;
     }
     else if (DIST_Status == DIST_Status_Ok) {
         DIST_CheckSensorError();
@@ -65,7 +66,7 @@ void DIST_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
         return;
     }
 
-    if(sample.pos > SPM_HIGH_SPEED_CUTOFF_DUTY_US) {
+    if(sample.pos > 10) {
         if (channel == SPM_FRONT_SENSOR_CHANNEL || SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL) != sec_state_ok) {
             DIST_FrontWheelPosition++;
         }

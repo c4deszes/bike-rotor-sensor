@@ -10,8 +10,8 @@
 
 static IMU_Status_t IMU_Status = IMU_Status_NotAvailable;
 // TODO: make these public somehow
-struct bmi08_sensor_data bmi08_accel;
-struct bmi08_sensor_data bmi08_gyro;
+IMU_Vector_t IMU_Accel;
+IMU_Vector_t IMU_Gyro;
 
 static swtimer_t* IMU_SensorTimer = NULL;
 static bool IMU_SensorInitialized = false;
@@ -93,13 +93,13 @@ void IMU_Update(void) {
     if (IMU_SensorInitialized && IMU_BMI088_InitCode == BMI08_OK) {
         int8_t bmi08_read_status;
 #if IMU_SENSOR_ACCEL_ENABLED == 1
-        bmi08_read_status = bmi08a_get_data(&bmi08_accel, &BMI088_Device);
+        bmi08_read_status = bmi08a_get_data(&IMU_Accel, &BMI088_Device);
 
         // TODO: error handling
 #endif
 
 #if IMU_SENSOR_GYRO_ENABLED == 1
-        bmi08_read_status = bmi08g_get_data(&bmi08_gyro, &BMI088_Device);
+        bmi08_read_status = bmi08g_get_data(&IMU_Gyro, &BMI088_Device);
 
         // TODO: error handling
 #endif

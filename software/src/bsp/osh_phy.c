@@ -77,13 +77,16 @@ void OSH_PhyInit(void) {
     EVSYS_ConfigureGenerator(evgens[2], NO_EVT_OUTPUT, ASYNCHRONOUS, EVENT_ID_GEN_EIC_EXTINT_15);       // Input 3 - Crankset
 
     /* Timer configuration */
-    TC_SetupCapture(TC3, tc_prescaler_div2);
+    TC_SetupCapture(TC3, tc_prescaler_div1);
+    TC3_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
     EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0] + 1);
 
-    TC_SetupCapture(TC4, tc_prescaler_div2);
+    TC_SetupCapture(TC4, tc_prescaler_div1);
+    TC4_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
     EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1] + 1);
 
-    TC_SetupCapture(TC5, tc_prescaler_div2);
+    TC_SetupCapture(TC5, tc_prescaler_div1);
+    TC5_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
     EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2] + 1);
 }
 

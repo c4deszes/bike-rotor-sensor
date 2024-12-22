@@ -9,6 +9,15 @@ typedef enum {
     IMU_Status_Error
 } IMU_Status_t;
 
+typedef struct {
+    int16_t x;
+    int16_t y;
+    int16_t z;
+} IMU_Vector_t;
+
+extern IMU_Vector_t IMU_Accel;
+extern IMU_Vector_t IMU_Gyro;
+
 void IMU_Initialize(void);
 
 void IMU_Update(void);

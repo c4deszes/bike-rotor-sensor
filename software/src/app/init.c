@@ -8,6 +8,7 @@
 #include "bsp/osh_phy.h"
 #include "bsp/sensor.h"
 #include "bsp/bmp581.h"
+#include "bsp/bmi088.h"
 #include "app/sch.h"
 #include "app/comm.h"
 #include "app/imu.h"
@@ -16,6 +17,7 @@
 #include "app/gear.h"
 #include "app/itpms.h"
 #include "app/sys_state.h"
+#include "app/ride.h"
 
 #include "app/altitude.h"
 
@@ -42,6 +44,7 @@ wdt_normal_configuration wdt_config = {
 void APP_Initialize() {
     // Low level init
     BSP_ClockInitialize();
+    // TODO: enable watchdog
     //WDT_InitializeNormal(&wdt_config);
     //EIC_Initialize(NULL);
     OSH_PhyInit();
@@ -49,17 +52,17 @@ void APP_Initialize() {
     BMP581_Initialize();
     BMI088_Initialize();
 
-    // Initializing application services
+    // Sensor stack initialization
     SEC_Initialize();
-
     SPEED_Initialize();
     IMU_Initialize();
-
     ALT_Initialize();
-    CAD_Initialize();
+
     DIST_Initialize();
+    CAD_Initialize();
     GEAR_Initialize();
     ITPMS_Initialize();
+    RIDE_Initialize();
 
     SYSSTATE_Initialize();
 

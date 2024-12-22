@@ -8,7 +8,7 @@
 #define SPM_REAR_SENSOR_CHANNEL 1
 #define SPM_CRANK_SENSOR_CHANNEL 2
 
-#define SPM_SENSOR_STARTUP_TIME 1000
+#define SPM_SENSOR_STARTUP_TIME 300
 
 /* Speed sensor buffer size */
 #define SPM_SENSOR_BUFFER_SIZE 64
@@ -22,21 +22,21 @@
  */
 
 /*  */
-#define DIST_MEASUREMENT_ERROR_TIMER 60000
+#define DIST_MEASUREMENT_SENSOR_ERROR_TIMER_10MS 6000 /* 60 seconds */
 /*  */
-#define DIST_MEASUREMENT_DIFF_UP_THRESHOLD 100
-#define DIST_MEASUREMENT_DIFF_DOWN_THRESHOLD 50
+#define DIST_MEASUREMENT_DIFF_UP_THRESHOLD 100000
+#define DIST_MEASUREMENT_DIFF_DOWN_THRESHOLD 50000
 
 /*
  * Cadence sensor configuration
  */
-#define CAD_LOW_SPEED_CUTOFF_US 6000000         /* Maximum time to measure in a single pole configuration (10 RPM)*/
-#define CAD_HIGH_SPEED_CUTOFF_US 300000         /* Minimum time to measure in a single pole configuration (200 RPM)*/
-#define CAD_NOISE_CUTOFF_DUTY_US 2000
+#define CAD_LOW_SPEED_CUTOFF_100US 60000         /* Maximum time to measure in a single pole configuration (10 RPM)*/
+#define CAD_HIGH_SPEED_CUTOFF_100US 3000         /* Minimum time to measure in a single pole configuration (200 RPM)*/
 
-#define CAD_COASTING_EXTRA_TIME 800
+#define CAD_COASTING_EXTRA_TIME 100
 
 #define CAD_POSITION_MAX 15
+#define CAD_SENSOR_ERROR_HEALING_TIME 5000        /* Time to heal from a sensor error */
 
 /*
  * Gear configuration
@@ -46,6 +46,7 @@
 #define GEAR_HOLD_TIME 1000
 #define GEAR_MAX_GEARS 12
 
+// Shimano Cues Cassette 11-48
 #define GEAR_CASSETTE_DEFAULT_RANGE 10
 #define GEAR_CASSETTE_DEFAULT_GEAR_1 11
 #define GEAR_CASSETTE_DEFAULT_GEAR_2 13
@@ -59,6 +60,30 @@
 #define GEAR_CASSETTE_DEFAULT_GEAR_10 48
 #define GEAR_CASSETTE_DEFAULT_GEAR_11 0
 #define GEAR_CASSETTE_DEFAULT_GEAR_12 0
+
+/*
+ * Ride monitoring settings
+ */
+#define RIDE_MONITOR_AUTOSTART_ENABLED 1
+#define RIDE_MONITOR_AUTOSTART_MINIMUM_SPEED 50
+
+#define RIDE_MONITOR_AUTOPAUSE_ENABLED 1
+#define RIDE_MONITOR_AUTOUNPAUSE_ENABLED 1
+#define RIDE_MONITOR_IDLE_TIMEOUT 5
+#define RIDE_MONITOR_IDLE_SPEED 30
+#define RIDE_MONITOR_PAUSE_TIMEOUT 120
+
+#define RIDE_MONITOR_TOP_SPEED_WINDOW 5
+#define RIDE_MONITOR_TOP_SPEED_DELTA 10
+
+/*
+ * Road quality monitoring configuration
+ */
+#define ROAD_QUALITY_ENABLED 1
+/* Whether road quality monitoring is depedent on the ride status being active */
+#define ROAD_QUALITY_RIDE_DEPENDENT 0
+/* The minimum speed required to start road quality monitoring */
+#define ROAD_QUALITY_MIN_SPEED 50   /* 5 km/h */
 
 /*
  * Intertial Measurement Unit configuration
@@ -86,7 +111,7 @@
 #define ALT_SENSOR_ENABLED 1
 
 /* Delays the startup (milliseconds) */
-#define ALT_SENSOR_STARTUP_TIME 150
+#define ALT_SENSOR_STARTUP_TIME 500
 
 /* Maximum number of sensor startup attempts (0 = infinite) */
 #define ALT_SENSOR_STARTUP_ATTEMPTS 1
@@ -108,7 +133,7 @@
 /* ITPMS Automatic startup enable/disable */
 #define ITPMS_AUTO_STARTUP 1
 /* ITPMS startup time in milliseconds */
-#define ITPMS_STARTUP_TIME 2000
+#define ITPMS_STARTUP_TIME 300
 #define ITPMS_MINIMUM_SPEED 100
 #define ITPMS_SPEED_THRESHOLD 5
 

@@ -1,4 +1,4 @@
-APP_SIZE = 0xA000;
+APP_SIZE = 0xB000;
 
 INCLUDE memory.ld
 
