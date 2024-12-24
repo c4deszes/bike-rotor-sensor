@@ -156,8 +156,25 @@ void OSH_PhyUpdate(void) {
         }
     }
 
-    // TODO: check error pin of MAX9921
     OSH_PhySetChannelStatus(2, osh_phy_channel_state_ok);
+
+    // TODO: check error pin of MAX9921
+    // issue1: error pin will be low because IN2 is open
+    // need to run diagnostics occasionally to determine if IN1 is faulty too
+    // need to disable timer during diagnostics
+    // if (GPIO_PinRead(MAX9921_ERROR_PORT, MAX9921_ERROR_PIN) == HIGH) {
+    //     GPIO_PinWrite(MAX9921_DIAG_PORT, MAX9921_DIAG_PIN, LOW);
+    //     OSH_PhySetChannelStatus(2, osh_phy_channel_state_ok);
+    // }
+    // else {
+    //     GPIO_PinWrite(MAX9921_DIAG_PORT, MAX9921_DIAG_PIN, HIGH);
+    //     if (GPIO_PinRead(MAX9921_INPUT3_PORT, MAX9921_INPUT3_PIN) == HIGH) {
+    //         OSH_PhySetChannelStatus(2, osh_phy_channel_state_short);
+    //     }
+    //     else {
+    //         OSH_PhySetChannelStatus(2, osh_phy_channel_state_open);
+    //     }
+    // }
 }
 
 #define TIMER_HANDLER(handler, regs, id) void handler(void) { \
