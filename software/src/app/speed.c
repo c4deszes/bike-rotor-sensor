@@ -29,7 +29,73 @@ void SPEED_Initialize(void) {
 
 }
 
+/**
+ * @brief Calculates immediate speed from the pulse period and wheel parameters
+ * 
+ * If the parameters are invalid, the function returns 0.
+ * If the period is too long, the function clamps the speed to 0.
+ * If the period is too short, the function clamps the speed to the maximum speed.
+ * 
+ * @param period Period in 100us increments
+ * @param poles Number of poles on the wheel
+ * @param circumference Wheel circumference in mm
+ * @return uint16_t Speed in 0.1 km/h increments
+ */
+static inline uint16_t SPEED_CalculateSpeed(uint32_t period, uint8_t poles, uint16_t circumference) {
+    if (period == 0 || poles == 0 || circumference == 0) {
+        return 0;
+    }
+
+    if (period > SPM_LOW_SPEED_CUTOFF_PERIOD_100US) {
+        return 0;
+    }
+    else if (period < SPM_HIGH_SPEED_CUTOFF_PERIOD_US) {
+        return (360UL * circumference) / (SPM_HIGH_SPEED_CUTOFF_PERIOD_US * poles);
+    }
+    else {
+        return (uint16_t)((360UL * circumference) / (period * poles));
+    }
+}
+
+/*
+ * Two sensor speed calculation algorithms:
+ * 1. LastDerate
+ *    takes the last speed of the two sensors and derates it once the last data point is older than a certain threshold
+ */
+
+static inline uint16_t SPEED_Calculate_Derate(speed_channel_status_t* channel) {
+    return SPEED_CalculateSpeed(channel->last_period > channel->period_cnt ? channel->last_period : channel->period_cnt,
+                                UDS_AppContainer.FrontWheel_PoleCount,
+                                UDS_AppContainer.FrontWheel_Circumference);
+}
+
+static inline uint16_t SPEED_CalculateTwoSensors_DerateLast(speed_channel_status_t* front, speed_channel_status_t* rear) {
+    if (front->period_cnt < rear->period_cnt) {
+        return SPEED_Calculate_Derate(front);
+    }
+    else {
+        return SPEED_Calculate_Derate(rear);
+    }
+}
+
 void SPEED_Update(void) {
+    /**
+     * Global speed calculation
+     * 
+     * If both sensors are ok, the global speed should be based on the average of the two sensors
+     * accounting for the fact when the sensor data was acquired.
+     * 
+     * If only one sensor is ok, the global speed should be based on the speed of the working sensor.
+     * 
+     * If both sensors are not ok, the global speed should be 0.
+     */
+    if (SPEED_FrontWheel.period_cnt < SPM_LOW_SPEED_CUTOFF_PERIOD_100US) {
+        SPEED_FrontWheel.period_cnt += 100;
+    }
+    if (SPEED_RearWheel.period_cnt < SPM_LOW_SPEED_CUTOFF_PERIOD_100US) {
+        SPEED_RearWheel.period_cnt += 100;
+    }
+
     if (SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL) != sec_state_ok && SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL) != sec_state_off) {
         SPEED_FrontWheel.state = speed_status_error;
     }
@@ -44,29 +110,18 @@ void SPEED_Update(void) {
         SPEED_RearWheel.state = speed_status_ok;
     }
 
-    /**
-     * Global speed calculation
-     * 
-     * If both sensors are ok, the global speed should be based on the average of the two sensors
-     * accounting for the fact when the sensor data was acquired.
-     * 
-     * If only one sensor is ok, the global speed should be based on the speed of the working sensor.
-     * 
-     * If both sensors are not ok, the global speed should be 0.
-     */
-
     // TODO: inertial speed compensation, also based on sensor timestamps
 
     if (SPEED_FrontWheel.state == speed_status_ok && SPEED_RearWheel.state == speed_status_ok) {
-        SPEED_GlobalSpeed = (SPEED_FrontWheel.speed + SPEED_RearWheel.speed) / 2;
+        SPEED_GlobalSpeed = SPEED_CalculateTwoSensors_DerateLast(&SPEED_FrontWheel, &SPEED_RearWheel);
         SPEED_GlobalStatus = speed_status_ok;
     }
     else if (SPEED_FrontWheel.state == speed_status_ok) {
-        SPEED_GlobalSpeed = SPEED_FrontWheel.speed;
+        SPEED_GlobalSpeed = SPEED_Calculate_Derate(&SPEED_FrontWheel);
         SPEED_GlobalStatus = speed_status_ok;
     }
     else if (SPEED_RearWheel.state == speed_status_ok) {
-        SPEED_GlobalSpeed = SPEED_RearWheel.speed;
+        SPEED_GlobalSpeed = SPEED_Calculate_Derate(&SPEED_RearWheel);
         SPEED_GlobalStatus = speed_status_ok;
     }
     else {
@@ -75,33 +130,20 @@ void SPEED_Update(void) {
     }
 }
 
-static uint16_t SPEED_CalculateSpeed(uint32_t period, uint8_t poles, uint16_t circumference) {
-    // TODO: for 0.1 km/h resolution, we need to measure the period in 0.1ms resolution
-    // TODO: prevent 0 division
-    // TODO: limit output range
-    if (period == 0 || poles == 0 || circumference == 0) {
-        return 0;
-    }
-    return (uint16_t)((360UL * circumference) / (period * poles));
-}
-
 void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
     if (channel == SPM_FRONT_SENSOR_CHANNEL) {
         SPEED_FrontWheel.last_period = sample.period;
-        SPEED_FrontWheel.speed_cnt = sample.period;
-        SPEED_FrontWheel.last_positive = sample.pos;
-        //SPEED_FrontWheel.state = sample.state;
-        // TODO: for 0.1 km/h resolution, we need to measure the period in 0.1ms resolution
+        SPEED_FrontWheel.period_cnt = 0;
         SPEED_FrontWheel.speed = SPEED_CalculateSpeed(SPEED_FrontWheel.last_period,
                                                      UDS_AppContainer.FrontWheel_PoleCount,
                                                      UDS_AppContainer.FrontWheel_Circumference);
+
+        // TODO: if the period is out of range then increase error counter
+        // TODO: if the acceleration is not plausible then increase error counter
     }
     else if (channel == SPM_REAR_SENSOR_CHANNEL) {
         SPEED_RearWheel.last_period = sample.period;
-        SPEED_RearWheel.speed_cnt = sample.period;
-        SPEED_RearWheel.last_positive = sample.pos;
-        //SPEED_RearWheel.state = sample.state;
-        // TODO: for 0.1 km/h resolution, we need to measure the period in 0.1ms resolution
+        SPEED_RearWheel.period_cnt = 0;
         SPEED_RearWheel.speed = SPEED_CalculateSpeed(SPEED_RearWheel.last_period,
                                                     UDS_AppContainer.RearWheel_PoleCount,
                                                     UDS_AppContainer.RearWheel_Circumference);

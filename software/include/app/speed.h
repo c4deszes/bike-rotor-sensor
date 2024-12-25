@@ -16,9 +16,9 @@ typedef enum {
 typedef struct {
     speed_status_t state;
     uint16_t speed;
-    uint32_t last_period;
-    uint32_t last_positive;
-    uint32_t speed_cnt;
+    uint16_t last_period;
+    uint16_t period_cnt;
+    uint8_t error_cnt;
     bool brake;
     bool lockup;
     bool slip;

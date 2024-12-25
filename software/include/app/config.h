@@ -13,9 +13,9 @@
 /* Speed sensor buffer size */
 #define SPM_SENSOR_BUFFER_SIZE 64
 /* Maximum pulse length from the speed sensor */
-#define SPM_LOW_SPEED_CUTOFF_PERIOD_US 9000000      /* Maximum time to measure in a single pole configuration */
-#define SPM_HIGH_SPEED_CUTOFF_PERIOD_US 2000        /* Minimum time to measure in a 30-pole configuration */
-#define SPM_HIGH_SPEED_CUTOFF_DUTY_US 100
+#define SPM_LOW_SPEED_CUTOFF_PERIOD_100US 60000u      /* Maximum time to measure in a single pole configuration */
+#define SPM_HIGH_SPEED_CUTOFF_PERIOD_US 1000u         /* Minimum time to measure in a single pole configuration */
+#define SPM_MINIMUM_POSEDGE_100US 10u                 /* Minimum high/low time in the pulse (noise rejection) */
 
 /*
  * Distance measurement configuration
