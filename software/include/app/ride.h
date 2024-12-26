@@ -17,7 +17,13 @@ void RIDE_Update(void);
 
 uint16_t RIDE_GetDuration(void);
 
+uint16_t RIDE_GetAverageSpeed(void);
+
+uint16_t RIDE_GetTopSpeed(void);
+
 RIDE_Status_t RIDE_GetStatus(void);
+
+
 
 void RIDE_Start(void);
 

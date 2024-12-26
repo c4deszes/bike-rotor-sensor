@@ -64,17 +64,20 @@
 /*
  * Ride monitoring settings
  */
-#define RIDE_MONITOR_AUTOSTART_ENABLED 1
-#define RIDE_MONITOR_AUTOSTART_MINIMUM_SPEED 50
+#define RIDE_MONITOR_AUTOSTART_ENABLED 1        /* When enabled the ride will start when above the minimum speed */
+#define RIDE_MONITOR_AUTOSTART_MINIMUM_SPEED 50 /* Minimum speed for the ride to automatically begin */
 
-#define RIDE_MONITOR_AUTOPAUSE_ENABLED 1
-#define RIDE_MONITOR_AUTOUNPAUSE_ENABLED 1
-#define RIDE_MONITOR_IDLE_TIMEOUT 5
-#define RIDE_MONITOR_IDLE_SPEED 30
-#define RIDE_MONITOR_PAUSE_TIMEOUT 120
+/* Ride status transition parameters */
+#define RIDE_MONITOR_AUTOPAUSE_ENABLED 1        /* When enabled the ride will pause when idle for  */
+#define RIDE_MONITOR_AUTOUNPAUSE_ENABLED 1      /* When enabled the ride will be resumed automatically if speed is above the idle threshold */
+#define RIDE_MONITOR_IDLE_SPEED 20              /* Speed below which the bicycle is considered idle */  
+#define RIDE_MONITOR_IDLE_TIMEOUT_1S 2          /* Time before transitioning from Active to Idle state */
+#define RIDE_MONITOR_PAUSE_TIMEOUT_1S 120       /* Time before transitioning from Idle to Paused state */
+#define RIDE_MONITOR_UNPAUSE_TIMEOUT_1S 2       /* Time before transitioning from Paused to Active state */
 
-#define RIDE_MONITOR_TOP_SPEED_WINDOW 5
-#define RIDE_MONITOR_TOP_SPEED_DELTA 10
+/* To register as top speed the speed must be within a delta within this window */
+#define RIDE_MONITOR_TOP_SPEED_WINDOW 5         /* 5 seconds */
+#define RIDE_MONITOR_TOP_SPEED_DELTA 50         /* 5 km/h */
 
 /*
  * Road quality monitoring configuration

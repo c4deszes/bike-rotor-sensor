@@ -61,6 +61,7 @@ void DIST_Update(void) {
     }
 }
 
+// TODO: only count when ride is active??
 void DIST_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
     if (DIST_Status == DIST_Status_NotAvailable) {
         return;

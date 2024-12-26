@@ -198,8 +198,8 @@ void COMM_UpdateSignals(void) {
     // TODO: connect from ITPMS component
     LINE_Request_RoadStatus_data.fields.ITPMS = LINE_ENCODER_ITPMSEncoder_Stopped;
 
-    LINE_Request_RideStatistics_data.fields.TopSpeed = 0;
-    LINE_Request_RideStatistics_data.fields.AverageSpeed = 0;
+    LINE_Request_RideStatistics_data.fields.TopSpeed = RIDE_GetTopSpeed();
+    LINE_Request_RideStatistics_data.fields.AverageSpeed = RIDE_GetAverageSpeed();
     LINE_Request_RideStatistics_data.fields.Elevation = 0;
     LINE_Request_RideStatistics_data.fields.Descent = 0;
 }

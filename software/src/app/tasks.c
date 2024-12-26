@@ -12,6 +12,7 @@
 #include "common/swtimer.h"
 #include "bsp/sensor.h"
 #include "app/cadence.h"
+#include "app/ride.h"
 
 #include "bsp/usart.h"
 #include "app/config.h"
@@ -71,4 +72,8 @@ void SCH_Task10ms_A(void) {
     COMM_UpdateSignals();
 
     COMM_UpdateDebugSignals();
+}
+
+void SCH_Task1000ms() {
+    RIDE_Update();
 }
