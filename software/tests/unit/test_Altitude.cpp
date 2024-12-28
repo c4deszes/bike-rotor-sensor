@@ -2,7 +2,7 @@
 #include "fff.h"
 
 extern "C" {
-    #include "app/alt.h"
+    #include "app/altitude.h"
     #include "common/swtimer.h"
 
     #include "bmp5.h"
@@ -35,7 +35,7 @@ class AltitudeTest : public testing::Test {
 };
 
 int8_t get_sensor_data(bmp5_sensor_data* sensor_data, const bmp5_osr_odr_press_config* osr_odr_press_cfg, bmp5_dev* dev) {
-    sensor_data->pressure = 101265 * 100;
+    sensor_data->pressure = 101480 * 100;
     sensor_data->temperature = 20 * 100;
     return BMP5_OK;
 }
@@ -44,13 +44,13 @@ TEST_F(AltitudeTest, PressureToAltitude) {
     bmp5_get_sensor_data_fake.custom_fake = get_sensor_data;
     SWTIMER_Elapsed_fake.return_val = true;
 
-    ALT_SetQNH(102500);
+    ALT_SetQNH(102900);
     ALT_Initialize();
     ALT_Update();   // Sets up the sensor
 
     EXPECT_EQ(bmp5_init_fake.call_count, 1);
     EXPECT_EQ(bmp5_get_sensor_data_fake.call_count, 1);
-    EXPECT_EQ(ALT_GetPressure(), 101288);
+    EXPECT_EQ(ALT_GetPressure(), 101480);
     EXPECT_EQ(ALT_GetAltitude(), 100);
 }
 

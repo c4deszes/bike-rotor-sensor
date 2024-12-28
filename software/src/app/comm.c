@@ -170,6 +170,15 @@ static uint8_t COMM_EncodeRideStatus(RIDE_Status_t status) {
     return LINE_ENCODER_RideStatusEncoder_Idle;
 }
 
+static uint8_t COMM_EncodeAltitudeStatus(ALT_Status_t status) {
+    switch (status) {
+        case ALT_Status_NotAvailable: return LINE_ENCODER_GenericStatusFlag_Error;
+        case ALT_Status_Ok: return LINE_ENCODER_GenericStatusFlag_Ok;
+        case ALT_Status_Error: return LINE_ENCODER_GenericStatusFlag_Error;
+    }
+    return LINE_ENCODER_GenericStatusFlag_Error;
+}
+
 // TODO: split task up, e.g.: ride stats only need to be updated when every 1s
 void COMM_UpdateSignals(void) {
     LINE_Request_SpeedStatus_data.fields.Speed = SPEED_GetSpeed();
@@ -197,6 +206,9 @@ void COMM_UpdateSignals(void) {
     LINE_Request_RoadStatus_data.fields.RoadQuality = LINE_ENCODER_RoadQualityEncoder_NotMeasured;
     // TODO: connect from ITPMS component
     LINE_Request_RoadStatus_data.fields.ITPMS = LINE_ENCODER_ITPMSEncoder_Stopped;
+    LINE_Request_RoadStatus_data.fields.AltitudeError = COMM_EncodeAltitudeStatus(ALT_GetStatus());
+    LINE_Request_RoadStatus_data.fields.TemperatureError = ALT_HasTemperatureError() ? LINE_ENCODER_GenericStatusFlag_Error : LINE_ENCODER_GenericStatusFlag_Ok;
+    LINE_Request_RoadStatus_data.fields.PressureError = ALT_HasPressureError() ? LINE_ENCODER_GenericStatusFlag_Error : LINE_ENCODER_GenericStatusFlag_Ok;
 
     LINE_Request_RideStatistics_data.fields.TopSpeed = RIDE_GetTopSpeed();
     LINE_Request_RideStatistics_data.fields.AverageSpeed = RIDE_GetAverageSpeed();

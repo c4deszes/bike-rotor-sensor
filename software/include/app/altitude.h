@@ -15,6 +15,7 @@
 #define APP_ALT_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef enum {
     ALT_Status_NotAvailable,
@@ -32,6 +33,10 @@ void ALT_Update(void);
  * @return ALT_Status_t 
  */
 ALT_Status_t ALT_GetStatus(void);
+
+bool ALT_HasPressureError(void);
+
+bool ALT_HasTemperatureError(void);
 
 /**
  * @brief Returns the current altitude (in meters)

@@ -59,13 +59,7 @@ void SCH_Task10ms_A(void) {
 
     CAD_Update();
 
-    GEAR_Update();
-
-    DIST_Update();
-
     ITPMS_Update();
-
-    ALT_Update();
 
     SYSSTATE_Update();
 
@@ -74,6 +68,14 @@ void SCH_Task10ms_A(void) {
     COMM_UpdateDebugSignals();
 }
 
+void SCH_Task100ms(void) {
+    ALT_Update();
+}
+
 void SCH_Task1000ms() {
     RIDE_Update();
+
+    DIST_Update();      // Only distance status is updated here
+
+    GEAR_Update();
 }
