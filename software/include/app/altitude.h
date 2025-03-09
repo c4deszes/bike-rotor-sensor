@@ -59,4 +59,11 @@ uint32_t ALT_GetPressure(void);
  */
 void ALT_SetQNH(uint32_t qnh);
 
+/**
+ * @brief Returns the current temperature in Kelvins
+ * 
+ * @return int16_t 
+ */
+uint16_t ALT_GetTemperature(void); 
+
 #endif // APP_ALT_H_

@@ -88,6 +88,10 @@ void ALT_SetQNH(uint32_t qnh) {
     ALT_QNH = qnh;
 }
 
+uint16_t ALT_GetTemperature(void) {
+    return ALT_Temperature;
+}
+
 int16_t CalculateAltitude(uint32_t qnh, uint16_t temperature, uint32_t pressure);
 
 void ALT_Update(void) {

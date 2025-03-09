@@ -79,15 +79,15 @@ void OSH_PhyInit(void) {
     /* Timer configuration */
     TC_SetupCapture(TC3, tc_prescaler_div1);
     TC3_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0] + 1);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC3_EVU, evgens[0]);
 
     TC_SetupCapture(TC4, tc_prescaler_div1);
     TC4_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1] + 1);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC4_EVU, evgens[1]);
 
     TC_SetupCapture(TC5, tc_prescaler_div1);
     TC5_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_PRESCALER_DIV4;
-    EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2] + 1);
+    EVSYS_ConfigureUser(EVENT_ID_USER_TC5_EVU, evgens[2]);
 }
 
 void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_state_t status) {

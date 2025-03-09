@@ -20,6 +20,8 @@
 #include "app/altitude.h"
 #include "app/gear.h"
 #include "app/distance.h"
+#include "app/current.h"
+#include "app/volt.h"
 
 // void SCH_Task100us(void) {
 //     //COMM_UpdatePhy();
@@ -70,6 +72,10 @@ void SCH_Task10ms_A(void) {
 
 void SCH_Task100ms(void) {
     ALT_Update();
+
+    CURRENT_Update();
+
+    VOLT_Update();
 }
 
 void SCH_Task1000ms() {

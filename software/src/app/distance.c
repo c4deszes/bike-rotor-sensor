@@ -21,7 +21,8 @@ static void DIST_CheckSensorError() {
     sec_state_t front_state = SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL);
     sec_state_t rear_state = SEC_GetChannelState(SPM_REAR_SENSOR_CHANNEL);
     if ((front_state != sec_state_off && front_state != sec_state_ok) &&
-        (rear_state != sec_state_off && rear_state != sec_state_ok)) {
+        (rear_state != sec_state_off && rear_state != sec_state_ok) &&
+        (DIST_SensorErrorCounter < DIST_MEASUREMENT_SENSOR_ERROR_TIMER_10MS)) {
         DIST_SensorErrorCounter++;
     }
     else if (DIST_SensorErrorCounter > 0) {
@@ -39,14 +40,14 @@ void DIST_Update(void) {
         DIST_Status = DIST_Status_Ok;
     }
     else if (DIST_Status == DIST_Status_Ok) {
-        DIST_CheckSensorError();
+        //DIST_CheckSensorError();
 
         if (DIST_FrontDistance - DIST_RearDistance > DIST_MEASUREMENT_DIFF_UP_THRESHOLD) {
             DIST_Status = DIST_Status_Error;
         }
     }
     else if (DIST_Status == DIST_Status_Error) {
-        DIST_CheckSensorError();
+        //DIST_CheckSensorError();
 
         if (DIST_FrontDistance - DIST_RearDistance < DIST_MEASUREMENT_DIFF_DOWN_THRESHOLD) {
             DIST_Status = DIST_Status_Ok;
@@ -77,12 +78,12 @@ void DIST_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
         }
     }
 
-    if (DIST_FrontWheelPosition >= UDS_AppContainer.FrontWheel_PoleCount) {
-        DIST_FrontDistance += UDS_AppContainer.FrontWheel_Circumference;
+    if (DIST_FrontWheelPosition >= UDS_Properties_RotorSensor.FrontWheel_PoleCount) {
+        DIST_FrontDistance += UDS_Properties_RotorSensor.FrontWheel_Circumference;
         DIST_FrontWheelPosition = 0;
     }
-    if (DIST_RearWheelPosition >= UDS_AppContainer.RearWheel_PoleCount) {
-        DIST_RearDistance += UDS_AppContainer.RearWheel_Circumference;
+    if (DIST_RearWheelPosition >= UDS_Properties_RotorSensor.RearWheel_PoleCount) {
+        DIST_RearDistance += UDS_Properties_RotorSensor.RearWheel_Circumference;
         DIST_RearWheelPosition = 0;
     }
 }

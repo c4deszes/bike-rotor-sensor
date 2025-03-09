@@ -18,6 +18,8 @@
 #include "app/itpms.h"
 #include "app/sys_state.h"
 #include "app/ride.h"
+#include "app/volt.h"
+#include "app/current.h"
 
 #include "app/altitude.h"
 
@@ -57,7 +59,10 @@ void APP_Initialize() {
     SPEED_Initialize();
     IMU_Initialize();
     ALT_Initialize();
+    VOLT_Initialize();
+    CURRENT_Initialize();
 
+    // Software functions
     DIST_Initialize();
     CAD_Initialize();
     GEAR_Initialize();

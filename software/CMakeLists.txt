@@ -10,11 +10,11 @@ find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
 
-CPMAddPackage("gh:c4deszes/samd21-hal#feature/scheduler-new-tasks")
-CPMAddPackage("gh:c4deszes/bike-line-protocol@0.1.0")
-CPMAddPackage("gh:c4deszes/bike-flash-tool@0.1.0")
+CPMAddPackage("gh:c4deszes/samd21-hal#master")
+CPMAddPackage("gh:c4deszes/bike-line-protocol@0.2.0")
+CPMAddPackage("gh:c4deszes/bike-flash-tool#feature/line-lib-update")
 CPMAddPackage("gh:c4deszes/samd21-line-bootloader@0.3.0")
-CPMAddPackage("gh:c4deszes/bike-uds-tool@0.1.0")
+CPMAddPackage("gh:c4deszes/bike-uds-tool@0.2.0")
 
 # Test configuration
 enable_testing()
@@ -30,14 +30,13 @@ add_subdirectory(docs)
 
 line_codegen(
     TARGET protocol-stack-api
-    NETWORK ../customer/network.json
-    NODE RotorSensor
+    CONFIG tools/line/line_codegen.json
     ADAPTER
 )
 
 uds_codegen(
     TARGET uds-lib
-    PROFILE tools/line/uds_profile.json
+    CONFIG tools/line/uds_codegen.json
 )
 
 samx21_hal(samd21e18a ATSAMD21E18A)
@@ -70,6 +69,7 @@ add_executable(
     EXCLUDE_FROM_ALL
 
     src/app/altitude.c
+    src/app/current.c
     src/app/comm.c
     src/app/cadence.c
     src/app/distance.c
@@ -83,6 +83,7 @@ add_executable(
     src/app/speed.c
     src/app/tasks.c
     src/app/sys_state.c
+    src/app/volt.c
 
     src/bsp/bmi088.c
     src/bsp/bmp581.c

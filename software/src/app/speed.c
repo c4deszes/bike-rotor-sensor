@@ -68,9 +68,10 @@ static inline uint16_t SPEED_CalculateSpeed(uint32_t period, uint8_t poles, uint
  */
 
 static inline uint16_t SPEED_Calculate_Derate(speed_channel_status_t* channel) {
+    // TODO: differentiate between front and rear wheel
     return SPEED_CalculateSpeed(channel->last_period > channel->period_cnt ? channel->last_period : channel->period_cnt,
-                                UDS_AppContainer.FrontWheel_PoleCount,
-                                UDS_AppContainer.FrontWheel_Circumference);
+                                            UDS_Properties_RotorSensor.FrontWheel_PoleCount,
+                                            UDS_Properties_RotorSensor.FrontWheel_Circumference);
 }
 
 static inline uint16_t SPEED_CalculateTwoSensors_DerateLast(speed_channel_status_t* front, speed_channel_status_t* rear) {
@@ -139,8 +140,8 @@ void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
         SPEED_FrontWheel.last_period = sample.period;
         SPEED_FrontWheel.period_cnt = 0;
         SPEED_FrontWheel.speed = SPEED_CalculateSpeed(SPEED_FrontWheel.last_period,
-                                                     UDS_AppContainer.FrontWheel_PoleCount,
-                                                     UDS_AppContainer.FrontWheel_Circumference);
+                                                        UDS_Properties_RotorSensor.FrontWheel_PoleCount,
+                                                        UDS_Properties_RotorSensor.FrontWheel_Circumference);
 
         // TODO: if the period is out of range then increase error counter
         // TODO: if the acceleration is not plausible then increase error counter
@@ -149,8 +150,8 @@ void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
         SPEED_RearWheel.last_period = sample.period;
         SPEED_RearWheel.period_cnt = 0;
         SPEED_RearWheel.speed = SPEED_CalculateSpeed(SPEED_RearWheel.last_period,
-                                                    UDS_AppContainer.RearWheel_PoleCount,
-                                                    UDS_AppContainer.RearWheel_Circumference);
+                                                        UDS_Properties_RotorSensor.RearWheel_PoleCount,
+                                                        UDS_Properties_RotorSensor.RearWheel_Circumference);
     }
 }
 

@@ -5,7 +5,7 @@
 #include "line_api.h"
 #include "flash_line_api.h"
 #include "flash_line_diag.h"
-#include "uds_api.h"
+#include "uds_gen.h"
 #include "bl/api.h"
 #include "hal/dsu.h"
 #include "app/imu.h"
@@ -25,11 +25,11 @@
 RINGBUFFER_8(COMM_UsartBufferTx, 128);
 RINGBUFFER_8(COMM_UsartBufferRx, 128);
 
+// TODO: update
 static LINE_Diag_PowerStatus_t power_status = {
-    .U_status = LINE_DIAG_POWER_STATUS_VOLTAGE_OK,          // TODO: implement voltage measurement
-    .BOD_status = LINE_DIAG_POWER_STATUS_BOD_NONE,          // TODO: implement BOD
-    .I_operating = LINE_DIAG_POWER_STATUS_OP_CURRENT(100),  // TODO: implement current measurement
-    .I_sleep = LINE_DIAG_POWER_STATUS_SLEEP_CURRENT(100)    // TODO: implement current measurement
+    .U_measured = 120,
+    .I_operating = 50u,
+    .I_sleep = LINE_DIAG_POWER_STATUS_SLEEP_CURRENT(100)
 };
 
 // TODO: use version from CMake
@@ -40,48 +40,54 @@ static LINE_Diag_SoftwareVersion_t sw_version = {
 };
 
 // TODO: implement
-uint8_t LINE_Diag_GetOperationStatus(void) {
+uint8_t LINE_Diag_BicycleNetwork_RotorSensor_GetOperationStatus(void) {
     return LINE_DIAG_OP_STATUS_OK;
 }
-
-LINE_Diag_PowerStatus_t* LINE_Diag_GetPowerStatus(void) {
+LINE_Diag_PowerStatus_t* LINE_Diag_BicycleNetwork_RotorSensor_GetPowerStatus(void) {
     return &power_status;
 }
-
-uint32_t LINE_Diag_GetSerialNumber(void) {
+uint32_t LINE_Diag_BicycleNetwork_RotorSensor_GetSerialNumber(void) {
     return DSU_GetSerialNumber32();
 }
-
-LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
+LINE_Diag_SoftwareVersion_t* LINE_Diag_BicycleNetwork_RotorSensor_GetSoftwareVersion(void) {
     return &sw_version;
 }
 
+void LINE_Diag_BicycleNetwork_RotorSensor_OnWakeup(void) {
+
+}
+void LINE_Diag_BicycleNetwork_RotorSensor_OnIdle(void) {
+    // TODO: implement
+}
+void LINE_Diag_BicycleNetwork_RotorSensor_OnShutdown(void) {
+    // TODO: implement
+}
+void LINE_Diag_BicycleNetwork_RotorSensor_OnConditionalChangeAddress(uint8_t old_address, uint8_t new_address) {
+
+}
+
 void COMM_Initialize(void) {
-    USART_Initialize(LINE_NETWORK_BicycleNetwork1_BAUDRATE, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
+    USART_Initialize(LINE_NETWORK_BicycleNetwork_BAUDRATE, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
     USART_Enable();
 
-    LINE_Transport_Init(true);
     LINE_App_Init();
-    LINE_Diag_SetAddress(LINE_NODE_RotorSensor_DIAG_ADDRESS);
-
-    FLASH_LINE_Init(FLASH_LINE_APPLICATION_MODE);
-
     UDS_Init();
-    UDS_LINE_Init();
+
+    FLASH_LINE_Init(0, FLASH_LINE_APPLICATION_MODE);
 }
 
 void COMM_UpdatePhy(void) {
     uint8_t length = USART_Available();
     while (length > 0) {
         uint8_t data = USART_Read();
-        LINE_Transport_Receive(data);
+        LINE_Transport_Receive(LINE_CHANNEL_BicycleNetwork, data);
         length--;
     }
 
-    LINE_Transport_Update(1);
+    LINE_Transport_Update(LINE_CHANNEL_BicycleNetwork, 1);
 }
 
-void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checksum) {
+void LINE_Transport_WriteResponse(uint8_t channel, uint8_t size, uint8_t* payload, uint8_t checksum) {
     const uint8_t fix = 69;
     USART_WriteData(&size, sizeof(uint8_t));
     // TODO: fix for skipped 3rd byte
@@ -92,7 +98,7 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_FlushOutput();
 }
 
-void LINE_Transport_WriteRequest(uint16_t request) {
+void LINE_Transport_WriteRequest(uint8_t channel, uint16_t request) {
     return;
 }
 
@@ -106,12 +112,15 @@ bool COMM_BootRequest(void) {
     return bootResetFlag;
 }
 
-uint8_t FLASH_BL_EnterBoot(void) {
+fl_BootEntryResponse_t FLASH_BL_EnterBoot(void) {
+    fl_BootEntryResponse_t response;
     // TODO: only allow boot entry when idle
-
     bootResetFlag = true;
 
-    return FLASH_LINE_BOOT_ENTRY_SUCCESS;
+    response.entry_status = FLASH_LINE_BOOT_ENTRY_SUCCESS;
+    response.serial_number = LINE_Diag_BicycleNetwork_RotorSensor_GetSerialNumber();
+
+    return response;
 }
 
 static uint8_t COMM_EncodeSpeedState(speed_status_t state) {
