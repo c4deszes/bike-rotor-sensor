@@ -3,7 +3,7 @@
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 
 #include "app/init.h"
-#include "app/sch.h"
+#include "common/scheduler.h"
 
 int main (void) {
     /* Initialize the application */

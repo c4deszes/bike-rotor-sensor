@@ -2,6 +2,8 @@
 #include "common/swtimer.h"
 #include "app/sec.h"
 #include "app/comm.h"
+#include "app/feature.h"
+#include "app/diagnostics.h"
 
 #include "bl/api.h"
 
@@ -35,11 +37,7 @@ static void SYSSTATE_Reset(void) {
 
 void SYSSTATE_Update(void) {
     if (sys_state == sys_state_normal) {
-        if (COMM_ResetRequest()) {
-            sys_state = sys_state_goto_reset;
-            SWTIMER_Setup(transition_timer, SYS_STATE_RESET_DELAY);
-        }
-        else if(COMM_BootRequest()) {
+        if(DIAG_BootRequest()) {
             sys_state = sys_state_goto_boot;
             SWTIMER_Setup(transition_timer, SYS_STATE_BOOT_ENTRY_DELAY);
         }

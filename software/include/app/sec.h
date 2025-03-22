@@ -30,8 +30,6 @@ typedef enum {
 
 /**
  * @brief Initializes the sensors
- * 
- * This includes initializing the physical layer
  */
 void SEC_Initialize(void);
 
@@ -49,8 +47,14 @@ void SEC_Update(void);
  */
 sec_state_t SEC_GetChannelState(uint8_t channel);
 
+/**
+ * @brief Turns on all speed sensors
+ */
 void SEC_TurnOn(void);
 
+/**
+ * @brief Turns off all speed sensors
+ */
 void SEC_TurnOff(void);
 
 #endif // APP_SENSOR_CONTROL_H_

@@ -21,10 +21,17 @@ typedef enum {
     ALT_Status_NotAvailable,
     ALT_Status_Ok,
     ALT_Status_Error,
+    ALT_Status_PermanentError
 } ALT_Status_t;
 
+/**
+ * @brief Initializes the altitude sensor
+ */
 void ALT_Initialize(void);
 
+/**
+ * @brief Polls the pressure sensor for new data and updates the altitude value
+ */
 void ALT_Update(void);
 
 /**
@@ -34,8 +41,20 @@ void ALT_Update(void);
  */
 ALT_Status_t ALT_GetStatus(void);
 
+/**
+ * @brief Returns whether the altitude sensor has a pressure error
+ * 
+ * @return true 
+ * @return false 
+ */
 bool ALT_HasPressureError(void);
 
+/**
+ * @brief Returns whether the altitude sensor has a temperature error
+ * 
+ * @return true 
+ * @return false 
+ */
 bool ALT_HasTemperatureError(void);
 
 /**
@@ -48,7 +67,7 @@ int16_t ALT_GetAltitude(void);
 /**
  * @brief Returns the current pressure
  * 
- * @return uint32_t 
+ * @return uint32_t Pressure in Pascals
  */
 uint32_t ALT_GetPressure(void);
 
@@ -62,7 +81,7 @@ void ALT_SetQNH(uint32_t qnh);
 /**
  * @brief Returns the current temperature in Kelvins
  * 
- * @return int16_t 
+ * @return uint16_t Temperature in Kelvins
  */
 uint16_t ALT_GetTemperature(void); 
 

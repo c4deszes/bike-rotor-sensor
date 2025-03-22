@@ -1,3 +1,16 @@
+/**
+ * @file ride.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2025-03-15
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ * The ride module is responsible for managing the ride state and calculating the ride statistics.
+ * 
+ * The ride statistics include the ride duration, average speed, and top speed.
+ */
 #if !defined(_APP_RIDE_H)
 #define _APP_RIDE_H
 

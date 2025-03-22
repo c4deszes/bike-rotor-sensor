@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.20)
 project(
     rotor-sensor
     DESCRIPTION "Rotor Sensor"
-    LANGUAGES C CXX ASM)
-set(PROJECT_VERSION "0.3.0")
+    LANGUAGES C CXX ASM
+    VERSION "0.3.0")
 
 find_package(Python REQUIRED)
 
@@ -28,17 +28,33 @@ include(FetchContent)
 # Project
 add_subdirectory(docs)
 
+####################################################################################################
+# Code generation
+####################################################################################################
+
+# LINE protocol code generation
 line_codegen(
     TARGET protocol-stack-api
     CONFIG tools/line/line_codegen.json
     ADAPTER
 )
 
+# LINE UDS extension code generation
 uds_codegen(
     TARGET uds-lib
     CONFIG tools/line/uds_codegen.json
 )
 
+# Software version header generation
+set(APP_GENCODE_DIR ${CMAKE_CURRENT_BINARY_DIR}/gencode)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/app/metainfo.h.in
+               ${APP_GENCODE_DIR}/metainfo.h)
+
+####################################################################################################
+# Libraries
+####################################################################################################
+
+# SAMD21 HAL library
 samx21_hal(samd21e18a ATSAMD21E18A)
 
 # BMP581 Pressure sensor library
@@ -64,14 +80,20 @@ target_sources(bmi08x INTERFACE
 )
 target_include_directories(bmi08x INTERFACE lib/bmi08x)
 
+####################################################################################################
+# Application
+####################################################################################################
 add_executable(
     application
     EXCLUDE_FROM_ALL
 
+    # Application layer
     src/app/altitude.c
-    src/app/current.c
-    src/app/comm.c
     src/app/cadence.c
+    src/app/comm.c
+    src/app/config.c
+    src/app/current.c
+    src/app/diagnostics.c
     src/app/distance.c
     src/app/gear.c
     src/app/imu.c
@@ -85,6 +107,7 @@ add_executable(
     src/app/sys_state.c
     src/app/volt.c
 
+    # BSP layer
     src/bsp/bmi088.c
     src/bsp/bmp581.c
     src/bsp/osh_phy.c
@@ -93,7 +116,8 @@ add_executable(
     src/bsp/board.c
     src/bsp/usart.c
 )
-target_include_directories(application PRIVATE include)
+target_include_directories(application PRIVATE include
+                                               ${APP_GENCODE_DIR})
 target_link_libraries(application PRIVATE   samd21e18a
                                             uds-lib
                                             flash-line-api flash-line-sources
@@ -109,10 +133,14 @@ target_link_options(application PRIVATE -Wl,-Map=application.map -Wl,--gc-sectio
 add_library(test-lib INTERFACE)
 target_include_directories(test-lib INTERFACE include lib/bmp5x)
 
+# Post processing
 hexify(TARGET application HEX ${CMAKE_CURRENT_BINARY_DIR}/application_noheader.hex)
 dump_symbols(application ${CMAKE_CURRENT_BINARY_DIR}/application.lss)
 dump_size(application)
 
+####################################################################################################
+# Bootloader
+####################################################################################################
 bootloader_header(
     TARGET factory_header
     CONFIG ${CMAKE_CURRENT_SOURCE_DIR}/tools/bootloader/boot_config.json

@@ -30,10 +30,22 @@ typedef enum {
     DIST_Status_PermanentError
 } DIST_Status_t;
 
+/**
+ * @brief Initializes the distance measurement service
+ */
 void DIST_Initialize(void);
 
+/**
+ * @brief Updates the distance measurement 
+ */
 void DIST_Update(void);
 
+/**
+ * @brief Callback function for the front and rear wheel sensors
+ * 
+ * @param channel The channel number of the sensor
+ * @param sample The sensor sample
+ */
 void DIST_OnTick(uint8_t channel, osh_sensor_sample_t sample);
 
 void DIST_ResetDistance(void);

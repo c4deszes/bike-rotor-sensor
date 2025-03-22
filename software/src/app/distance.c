@@ -4,14 +4,15 @@
 
 #include "uds_gen.h"
 
-static uint8_t DIST_FrontWheelPosition = 0;
+/* Distance status variables */
+static DIST_Status_t DIST_Status = DIST_Status_NotAvailable;
 static uint32_t DIST_FrontDistance = 0;
-static uint8_t DIST_RearWheelPosition = 0;
 static uint32_t DIST_RearDistance = 0;
 
-static uint16_t DIST_SensorErrorCounter = 0;
+static uint8_t DIST_FrontWheelPosition = 0;
+static uint8_t DIST_RearWheelPosition = 0;
 
-static DIST_Status_t DIST_Status = DIST_Status_NotAvailable;
+static uint16_t DIST_SensorErrorCounter = 0;
 
 void DIST_Initialize(void) {
     DIST_ResetDistance();
@@ -40,14 +41,14 @@ void DIST_Update(void) {
         DIST_Status = DIST_Status_Ok;
     }
     else if (DIST_Status == DIST_Status_Ok) {
-        //DIST_CheckSensorError();
+        DIST_CheckSensorError();
 
         if (DIST_FrontDistance - DIST_RearDistance > DIST_MEASUREMENT_DIFF_UP_THRESHOLD) {
             DIST_Status = DIST_Status_Error;
         }
     }
     else if (DIST_Status == DIST_Status_Error) {
-        //DIST_CheckSensorError();
+        DIST_CheckSensorError();
 
         if (DIST_FrontDistance - DIST_RearDistance < DIST_MEASUREMENT_DIFF_DOWN_THRESHOLD) {
             DIST_Status = DIST_Status_Ok;

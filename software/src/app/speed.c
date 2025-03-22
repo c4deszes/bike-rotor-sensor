@@ -6,31 +6,31 @@
 #include "app/sec.h"
 
 /** Local variables */
-uint16_t SPEED_GlobalSpeed = 0;
-speed_status_t SPEED_GlobalStatus = speed_status_ok;
+static uint16_t SPEED_GlobalSpeed = 0;
+static speed_status_t SPEED_GlobalStatus = speed_status_ok;
 
-speed_channel_status_t SPEED_FrontWheel = {
-    .state = speed_status_ok,
-    .speed = 0,
-    .last_period = UINT16_MAX,
-    .period_cnt = 0,
-    .brake = false,
-    .lockup = false,
-    .slip = false
-};
-
-speed_channel_status_t SPEED_RearWheel = {
-    .state = speed_status_ok,
-    .speed = 0,
-    .last_period = UINT16_MAX,
-    .period_cnt = 0,
-    .brake = false,
-    .lockup = false,
-    .slip = false
-};
+speed_channel_status_t SPEED_FrontWheel;
+speed_channel_status_t SPEED_RearWheel;
 
 void SPEED_Initialize(void) {
+    SPEED_GlobalSpeed = 0;
+    SPEED_GlobalStatus = speed_status_ok;
 
+    SPEED_FrontWheel.state = speed_status_ok;
+    SPEED_FrontWheel.speed = 0;
+    SPEED_FrontWheel.last_period = UINT16_MAX;
+    SPEED_FrontWheel.period_cnt = 0;
+    SPEED_FrontWheel.brake = false;
+    SPEED_FrontWheel.lockup = false;
+    SPEED_FrontWheel.slip = false;
+
+    SPEED_RearWheel.state = speed_status_ok;
+    SPEED_RearWheel.speed = 0;
+    SPEED_RearWheel.last_period = UINT16_MAX;
+    SPEED_RearWheel.period_cnt = 0;
+    SPEED_RearWheel.brake = false;
+    SPEED_RearWheel.lockup = false;
+    SPEED_RearWheel.slip = false;
 }
 
 /**

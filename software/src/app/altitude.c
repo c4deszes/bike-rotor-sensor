@@ -7,15 +7,20 @@
 #include "bmp5.h"
 #include "bmp5_defs.h"
 
-static ALT_Status_t ALT_Status = ALT_Status_NotAvailable;
-static uint32_t ALT_Pressure = 0;
-static int16_t ALT_Altitude = 0;
-static uint16_t ALT_Temperature = 0;
-static uint32_t ALT_QNH = ALT_SENSOR_DEFAULT_QNH;
+/* Altitude measurement status */
+static ALT_Status_t ALT_Status;
+static uint32_t ALT_Pressure;
+static int16_t ALT_Altitude;
+static uint16_t ALT_Temperature;
 
-static swtimer_t* ALT_SensorTimer = NULL;
-static bool ALT_SensorInitialized = false;
-static int8_t ALT_BMP5_InitCode = BMP5_OK;
+/* Altitude sensor */
+static swtimer_t* ALT_SensorTimer;
+static uint8_t ALT_StartupAttempts;
+static bool ALT_SensorInitialized;
+static int8_t ALT_BMP5_InitCode;
+static uint8_t ALT_RuntimeErrorCnt;
+
+/* BMP58X configuration */
 static struct bmp5_osr_odr_press_config ALT_BMP5_RateConfig = { 0 };
 static struct bmp5_iir_config ALT_BMP5_IIRConfig = {
     .set_iir_t = BMP5_IIR_FILTER_COEFF_1,   // TODO: choose filter coefficient
@@ -60,7 +65,16 @@ static void ALT_SetupSensor() {
 
 void ALT_Initialize(void) {
     ALT_Status = ALT_Status_NotAvailable;
+    ALT_Pressure = 0;
+    ALT_Altitude = 0;
+    ALT_Temperature = 0;
+
     ALT_SensorTimer = SWTIMER_Create();
+    ALT_StartupAttempts = 0;
+    ALT_SensorInitialized = false;
+    ALT_BMP5_InitCode = BMP5_OK;
+    ALT_RuntimeErrorCnt = 0;
+
     SWTIMER_Setup(ALT_SensorTimer, ALT_SENSOR_STARTUP_TIME);
 }
 
@@ -69,10 +83,12 @@ ALT_Status_t ALT_GetStatus(void) {
 }
 
 bool ALT_HasPressureError(void) {
+    // TODO: implement
     return false;
 }
 
 bool ALT_HasTemperatureError(void) {
+    // TODO: implement
     return false;
 }
 
@@ -84,10 +100,6 @@ uint32_t ALT_GetPressure(void) {
     return ALT_Pressure;
 }
 
-void ALT_SetQNH(uint32_t qnh) {
-    ALT_QNH = qnh;
-}
-
 uint16_t ALT_GetTemperature(void) {
     return ALT_Temperature;
 }
@@ -95,32 +107,40 @@ uint16_t ALT_GetTemperature(void) {
 int16_t CalculateAltitude(uint32_t qnh, uint16_t temperature, uint32_t pressure);
 
 void ALT_Update(void) {
-#if ALT_SENSOR_ENABLED == 1
-    // TODO: implement startup attempts and delay
-    if (!ALT_SensorInitialized && SWTIMER_Elapsed(ALT_SensorTimer)) {
+    if (!ALT_SensorInitialized && CONFIG_Props.Altitude_Enabled && SWTIMER_Elapsed(ALT_SensorTimer)) {
         ALT_SetupSensor();
 
         if (ALT_BMP5_InitCode == BMP5_OK) {
             ALT_Status = ALT_Status_Ok;
+            ALT_SensorInitialized = true;
         } else {
+            SWTIMER_Setup(ALT_SensorTimer, ALT_SENSOR_STARTUP_ATTEMPT_DELAY);
             ALT_Status = ALT_Status_Error;
-        }
 
-        ALT_SensorInitialized = true;
+#if ALT_SENSOR_STARTUP_ATTEMPTS > 0
+            if (ALT_StartupAttempts < ALT_SENSOR_STARTUP_ATTEMPTS) {
+                ALT_StartupAttempts++;
+            }
+            else {
+                ALT_Status = ALT_Status_PermanentError;
+            }
+#endif
+        }
     }
 
-    // TODO: implement polling interval
-    if (ALT_SensorInitialized && ALT_BMP5_InitCode == BMP5_OK) {
-        int8_t read_status = bmp5_get_sensor_data(&ALT_BMP5_SensorData, &ALT_BMP5_RateConfig, &BMP581_Device);
+    if (ALT_SensorInitialized && ALT_Status != ALT_Status_PermanentError) {
+        int8_t read_status = bmp5_get_sensor_data(&ALT_BMP5_SensorData,
+                                                  &ALT_BMP5_RateConfig,
+                                                  &BMP581_Device);
 
         if (read_status == BMP5_OK) {
-            // TODO: Convert altitude from ALT_BMP5_SensorData.pressure
-            // TODO: Calculate altitude from pressure and QNH
             ALT_Pressure = ALT_BMP5_SensorData.pressure / 100;
             ALT_Temperature = ALT_BMP5_SensorData.temperature / 100 + 273;
-            ALT_Altitude = CalculateAltitude(ALT_QNH, ALT_Temperature, ALT_Pressure);
+            ALT_Altitude = CalculateAltitude(CONFIG_Props.Altitude_QNH * 100,
+                                             ALT_Temperature,
+                                             ALT_Pressure);
             
-            // TODO: verify pressure, altitude, temperature in plausible range
+            // TODO: verify pressure, temperature in plausible range
             if (ALT_Altitude > 5000 || ALT_Altitude < -500) {
                 ALT_Status = ALT_Status_Error;
             }
@@ -129,11 +149,17 @@ void ALT_Update(void) {
             }
         }
         else {
-            // TODO: increase error counter, disable operation after a number of errors
             ALT_Status = ALT_Status_Error;
+#if ALT_SENSOR_POLL_MAX_ERRORS > 0
+            if (ALT_RuntimeErrorCnt < ALT_SENSOR_POLL_MAX_ERRORS) {
+                ALT_RuntimeErrorCnt++;
+            }
+            else {
+                ALT_Status = ALT_Status_PermanentError;
+            }
+#endif
         }
     }
-#endif
 }
 
 #define LOOKUP_OUT_OF_RANGE 0xFF

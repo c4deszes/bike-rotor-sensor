@@ -22,7 +22,6 @@ static const gpio_pin_input_configuration input = {
     .sample = CONTINUOUS
 };
 
-static uint32_t accumulates[3];
 static osh_phy_channel_state_t phy_states[3];
 static uint8_t evgens[3] = {0xFF, 0xFF, 0xFF};
 

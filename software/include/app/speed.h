@@ -27,14 +27,32 @@ typedef struct {
 extern speed_channel_status_t SPEED_FrontWheel;
 extern speed_channel_status_t SPEED_RearWheel;
 
+/**
+ * @brief Initializes the speed measurement service
+ */
 void SPEED_Initialize(void);
 
+/**
+ * @brief Updates the speed measurements
+ */
 void SPEED_Update(void);
 
+/**
+ * @brief Called when new speed information is available
+ * 
+ * @param channel Speed sensor channel
+ * @param sample Speed sensor data
+ */
 void SPEED_OnTick(uint8_t channel, osh_sensor_sample_t sample);
 
+/**
+ * @brief Returns the calculated bicycle speed
+ */
 uint16_t SPEED_GetSpeed();
 
+/**
+ * @brief Returns the global speed status
+ */
 speed_status_t SPEED_GetStatus();
 
 #endif // APP_SPM_H_

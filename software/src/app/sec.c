@@ -60,12 +60,10 @@ void SEC_Update(void) {
     }
 
     if(_enabled && !_status) {
-        // Turn on PHY
         OSH_PhyTurnOn();
         _status = true;
     }
     if(!_enabled && _status) {
-        // Turn off PHY
         OSH_PhyTurnOff();
         _status = false;
     }

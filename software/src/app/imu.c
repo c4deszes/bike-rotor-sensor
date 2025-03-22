@@ -1,5 +1,6 @@
 #include "app/imu.h"
 #include "app/config.h"
+#include "app/feature.h"
 
 #include "bsp/bmi088.h"
 #include "common/swtimer.h"
@@ -74,7 +75,6 @@ void IMU_Initialize(void) {
 }
 
 void IMU_Update(void) {
-#if IMU_SENSOR_ENABLED == 1
     // TODO: implement startup attempts and delay
     if (!IMU_SensorInitialized && SWTIMER_Elapsed(IMU_SensorTimer)) {
         BMI088_SetupSensor();
@@ -89,7 +89,7 @@ void IMU_Update(void) {
         IMU_SensorInitialized = true;
     }
 
-    // TODO: implement polling interval
+    // TODO: implement max errors and healing time
     if (IMU_SensorInitialized && IMU_BMI088_InitCode == BMI08_OK) {
         int8_t bmi08_read_status;
 #if IMU_SENSOR_ACCEL_ENABLED == 1
@@ -104,7 +104,6 @@ void IMU_Update(void) {
         // TODO: error handling
 #endif
     }
-#endif
 }
 
 IMU_Status_t IMU_GetStatus(void) {

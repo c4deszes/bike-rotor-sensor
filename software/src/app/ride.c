@@ -1,6 +1,7 @@
 #include "app/ride.h"
 
 #include "app/speed.h"
+#include "app/feature.h"
 #include "app/config.h"
 
 static RIDE_Status_t RIDE_Status;
@@ -55,19 +56,16 @@ void RIDE_Update(void) {
     // Detect when ride begins
     uint16_t speed = SPEED_GetSpeed();
 
-#if RIDE_MONITOR_AUTOSTART_ENABLED == 1
-
     // TODO: both wheel speeds above minimum
     // TODO: crank arm single revolution
     // TODO: if any of the sensors fail (or all) then the ride would start given the other
     //       conditions are met
     if (RIDE_Status == RIDE_Status_NotStarted &&
-        speed >= RIDE_MONITOR_AUTOSTART_MINIMUM_SPEED &&
+        CONFIG_Props.Ride_AutoStart &&
+        speed >= CONFIG_Props.Ride_IdleSpeed &&
         (SPEED_GetStatus() == speed_status_ok || SPEED_GetStatus() == speed_status_slow_response)) {
         RIDE_Start();
     }
-
-#endif
 
     if (RIDE_Status == RIDE_Status_Active || RIDE_Status == RIDE_Status_Idle) {
         if (RIDE_Duration < UINT16_MAX) {
@@ -84,30 +82,28 @@ void RIDE_Update(void) {
             // Track descent
 
             if ((SPEED_GetStatus() == speed_status_ok || SPEED_GetStatus() == speed_status_slow_response)) {
-                if (speed < RIDE_MONITOR_IDLE_SPEED && RIDE_Status == RIDE_Status_Active) {
+                if (speed < CONFIG_Props.Ride_IdleSpeed && RIDE_Status == RIDE_Status_Active) {
                     RIDE_IdleTimeoutCnt++;
                 }
-                else if (speed >= RIDE_MONITOR_IDLE_SPEED) {
+                else if (speed >= CONFIG_Props.Ride_IdleSpeed) {
                     RIDE_Status = RIDE_Status_Active;
                     RIDE_IdleTimeoutCnt = 0;
                 }
 
-                if (RIDE_IdleTimeoutCnt >= RIDE_MONITOR_IDLE_TIMEOUT_1S) {
+                if (RIDE_IdleTimeoutCnt >= CONFIG_Props.Ride_IdleTimeout) {
                     RIDE_Status = RIDE_Status_Idle;
                 }
             }
 
-#if RIDE_MONITOR_AUTOPAUSE_ENABLED == 1
-            if (RIDE_Status == RIDE_Status_Idle) {
+            if (RIDE_Status == RIDE_Status_Idle && CONFIG_Props.Ride_AutoPause) {
                 RIDE_PauseTimeoutCnt++;
-                if (RIDE_PauseTimeoutCnt >= RIDE_MONITOR_PAUSE_TIMEOUT_1S) {
+                if (RIDE_PauseTimeoutCnt >= CONFIG_Props.Ride_PauseTimeout) {
                     RIDE_Pause();
                 }
             }
             else {
                 RIDE_PauseTimeoutCnt = 0;
             }
-#endif
         }
         else {
             RIDE_Pause();
@@ -115,17 +111,15 @@ void RIDE_Update(void) {
     }
     else if (RIDE_Status == RIDE_Status_Paused) {
 
-#if RIDE_MONITOR_AUTOUNPAUSE_ENABLED == 1
-        if (speed >= RIDE_MONITOR_IDLE_SPEED) {
+        if (speed >= CONFIG_Props.Ride_IdleSpeed && CONFIG_Props.Ride_AutoResume) {
             RIDE_PauseTimeoutCnt++;
-            if (RIDE_PauseTimeoutCnt >= RIDE_MONITOR_UNPAUSE_TIMEOUT_1S) {
+            if (RIDE_PauseTimeoutCnt >= CONFIG_Props.Ride_ResumeTimeout) {
                 RIDE_Resume();
             }
         }
         else {
             RIDE_PauseTimeoutCnt = 0;
         }
-#endif
     }
 }
 

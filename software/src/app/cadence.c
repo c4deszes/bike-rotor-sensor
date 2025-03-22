@@ -1,24 +1,33 @@
 #include "app/cadence.h"
 
+#include "app/feature.h"
 #include "app/config.h"
 #include "app/sec.h"
 
 #include "common/swtimer.h"
 
-static CADENCE_Status_t CAD_Status = CADENCE_Status_NotAvailable;
+/* Cadence */
+static CADENCE_Status_t CAD_Status;
+static uint8_t CAD_Cadence;
 
-static uint32_t CAD_LastPeriod = 0;
-static uint32_t CAD_PositionCounter = 0;
-static uint8_t CAD_Position = 0;
-static uint8_t CAD_Cadence = 0;
+/* Internal variables */
+static uint32_t CAD_LastPeriod;
+static uint32_t CAD_PositionCounter;
+static uint8_t CAD_Position;
 
 #define CAD_MINUTE_100US_REF 600000UL
 
 void CAD_Initialize(void) {
     CAD_Status = CADENCE_Status_NotAvailable;
+    CAD_Cadence = 0;
+    
+    CAD_LastPeriod = 0;
+    CAD_PositionCounter = 0;
+    CAD_Position = 0;
 }
 
-uint8_t CAD_CalculateCadence(uint32_t period) {
+static uint8_t CAD_CalculateCadence(uint32_t period, uint8_t poles) {
+    // TODO: calculate cutoff differently
     if (period >= CAD_LOW_SPEED_CUTOFF_100US) {
         return (uint8_t)(CAD_MINUTE_100US_REF / CAD_LOW_SPEED_CUTOFF_100US);
     }
@@ -26,7 +35,7 @@ uint8_t CAD_CalculateCadence(uint32_t period) {
         return (uint8_t)(CAD_MINUTE_100US_REF / CAD_HIGH_SPEED_CUTOFF_100US);
     }
     else {
-        return (uint8_t)(CAD_MINUTE_100US_REF / period);
+        return (uint8_t)(CAD_MINUTE_100US_REF / (period * poles));
     }
 }
 
@@ -53,10 +62,11 @@ void CAD_Update(void) {
         // Normal operation, calculate cadence, position and determine coasting
         else {
             if (CAD_PositionCounter > 1) {
-                CAD_Cadence = CAD_CalculateCadence(CAD_LastPeriod);
+                CAD_Cadence = CAD_CalculateCadence(CAD_LastPeriod, CONFIG_Props.CrankArm_PoleCount);
                 CAD_Status = CADENCE_Status_Ok;
                 CAD_PositionCounter -= 1;
 
+                // TODO: update position
                 //CAD_Position = (CAD_LastPeriod / 100 - CAD_PositionCounter) / (CAD_LastPeriod / 100 / CAD_POSITION_MAX);
             }
             else {
@@ -64,7 +74,8 @@ void CAD_Update(void) {
                 if (CAD_LastPeriod < CAD_LOW_SPEED_CUTOFF_100US) {
                     CAD_LastPeriod += 100;
                     // TODO: function limits returned value to 10rpm
-                    CAD_Cadence = CAD_CalculateCadence(CAD_LastPeriod);
+                    // but here it should go down to 0rpm
+                    CAD_Cadence = CAD_CalculateCadence(CAD_LastPeriod, CONFIG_Props.CrankArm_PoleCount);
                 }
                 CAD_Status = CADENCE_Status_Coasting;
                 CAD_Position = CAD_POSITION_MAX;
