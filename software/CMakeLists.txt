@@ -4,12 +4,21 @@ project(
     rotor-sensor
     DESCRIPTION "Rotor Sensor"
     LANGUAGES C CXX ASM
-    VERSION "0.3.0")
+    VERSION "0.4.0")
+
+####################################################################################################
+# Options
+####################################################################################################
+option(BUILD_UNIT_TESTS "Build unit tests" OFF)
+option(BUILD_SIL_TESTS "Build SIL target and tests" OFF)
 
 find_package(Python REQUIRED)
 
 include(tools/cmake/CPM.cmake)
 
+####################################################################################################
+# Dependencies
+####################################################################################################
 CPMAddPackage("gh:c4deszes/samd21-hal#master")
 CPMAddPackage("gh:c4deszes/bike-line-protocol@0.2.0")
 CPMAddPackage("gh:c4deszes/bike-flash-tool#feature/line-lib-update")
@@ -25,7 +34,9 @@ include(CTest)
 include(GoogleTest)
 include(FetchContent)
 
-# Project
+####################################################################################################
+# Documentation
+####################################################################################################
 add_subdirectory(docs)
 
 ####################################################################################################
@@ -58,27 +69,29 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/app/metainfo.h.in
 samx21_hal(samd21e18a ATSAMD21E18A)
 
 # BMP581 Pressure sensor library
-add_library(
-    bmp5 INTERFACE
-)
-target_sources(bmp5 INTERFACE
-    lib/bmp5x/bmp5.c
-)
-target_compile_definitions(bmp5 INTERFACE
+add_library(bmp5x-api INTERFACE)
+target_compile_definitions(bmp5x-api INTERFACE
     BMP5_USE_FIXED_POINT
     BMP5_FIXED_POINT_DIGIT_PRECISION=2)
-target_include_directories(bmp5 INTERFACE lib/bmp5x)
+target_include_directories(bmp5x-api INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmp5x)
+
+add_library(bmp5x INTERFACE)
+target_sources(bmp5x INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmp5x/bmp5.c
+)
+target_link_libraries(bmp5x INTERFACE bmp5x-api)
 
 # BMI088 IMU library
-add_library(
-    bmi08x INTERFACE
-)
+add_library(bmi08x-api INTERFACE)
+target_include_directories(bmi08x-api INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmi08x)
+
+add_library(bmi08x INTERFACE)
 target_sources(bmi08x INTERFACE
-    lib/bmi08x/bmi08a.c
-    lib/bmi08x/bmi08g.c
-    lib/bmi08x/bmi08xa.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmi08x/bmi08a.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmi08x/bmi08g.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bmi08x/bmi08xa.c
 )
-target_include_directories(bmi08x INTERFACE lib/bmi08x)
+target_link_libraries(bmi08x INTERFACE bmi08x-api)
 
 ####################################################################################################
 # Application
@@ -123,7 +136,7 @@ target_link_libraries(application PRIVATE   samd21e18a
                                             flash-line-api flash-line-sources
                                             protocol-stack-api
                                             bootloader-api
-                                            bmp5
+                                            bmp5x
                                             bmi08x)
 
 set_target_properties(application PROPERTIES SUFFIX ".elf")
@@ -167,4 +180,12 @@ add_custom_target(application-full
     DEPENDS application-hex application-lss application-memory application-merge factory_header
 )
 
-add_subdirectory(tests/unit)
+#####################################################################################################
+# Tests
+#####################################################################################################
+if (BUILD_SIL_TESTS)
+    add_subdirectory(tests/sil)
+endif()
+if (BUILD_UNIT_TESTS)
+    add_subdirectory(tests/unit)
+endif()

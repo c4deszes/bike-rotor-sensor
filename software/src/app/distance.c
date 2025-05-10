@@ -2,8 +2,6 @@
 #include "app/config.h"
 #include "app/sec.h"
 
-#include "uds_gen.h"
-
 /* Distance status variables */
 static DIST_Status_t DIST_Status = DIST_Status_NotAvailable;
 static uint32_t DIST_FrontDistance = 0;
@@ -79,12 +77,12 @@ void DIST_OnTick(uint8_t channel, osh_sensor_sample_t sample) {
         }
     }
 
-    if (DIST_FrontWheelPosition >= UDS_Properties_RotorSensor.FrontWheel_PoleCount) {
-        DIST_FrontDistance += UDS_Properties_RotorSensor.FrontWheel_Circumference;
+    if (DIST_FrontWheelPosition >= CONFIG_Props.FrontWheel_PoleCount) {
+        DIST_FrontDistance += CONFIG_Props.FrontWheel_Circumference;
         DIST_FrontWheelPosition = 0;
     }
-    if (DIST_RearWheelPosition >= UDS_Properties_RotorSensor.RearWheel_PoleCount) {
-        DIST_RearDistance += UDS_Properties_RotorSensor.RearWheel_Circumference;
+    if (DIST_RearWheelPosition >= CONFIG_Props.RearWheel_PoleCount) {
+        DIST_RearDistance += CONFIG_Props.RearWheel_Circumference;
         DIST_RearWheelPosition = 0;
     }
 }

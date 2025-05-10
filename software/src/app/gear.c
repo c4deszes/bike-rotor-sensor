@@ -3,7 +3,6 @@
 #include "app/feature.h"
 #include "app/config.h"
 #include "app/cadence.h"
-#include "app/speed.h"
 #include "app/sec.h"
 #include "common/swtimer.h"
 

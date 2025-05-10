@@ -1,15 +1,5 @@
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        release-1.12.0
-)
-FetchContent_Declare(
-    fff
-    GIT_REPOSITORY https://github.com/meekrosoft/fff.git
-    GIT_TAG        5111c61e1ef7848e3afd3550044a8cf4405f4199
-)
-
-FetchContent_MakeAvailable(googletest fff)
+CPMAddPackage("gh:google/googletest@1.12.0")
+CPMAddPackage("gh:meekrosoft/fff#5111c61e1ef7848e3afd3550044a8cf4405f4199")
 
 function(add_test TARGET)
     target_compile_options(${TARGET} PRIVATE $<$<COMPILE_LANGUAGE:C>:--coverage>)

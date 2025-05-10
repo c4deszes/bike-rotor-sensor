@@ -7,10 +7,18 @@
     },
     "configurePresets": [
         {
-            "name": "armgcc-default",
+            "name": "armgcc",
             "binaryDir": "${sourceDir}/_build/${presetName}",
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/armgcc-toolchain.cmake"
+            },
+            "hidden": true
+        },
+        {
+            "name": "mingw",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
             },
             "hidden": true
         },
@@ -30,27 +38,13 @@
         },
         {
             "name": "armgcc-release-unix",
-            "inherits": ["armgcc-default"],
-            "generator": "Unix Makefiles",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
+            "inherits": ["armgcc", "release"],
+            "generator": "Unix Makefiles"
         },
         {
             "name": "armgcc-debug-unix",
-            "inherits": ["armgcc-default"],
-            "generator": "Unix Makefiles",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "mingw-default",
-            "binaryDir": "${sourceDir}/_build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
-            },
-            "hidden": true
+            "inherits": ["armgcc", "debug"],
+            "generator": "Unix Makefiles"
         }
     ],
     "buildPresets": [
@@ -67,6 +61,11 @@
         {
             "name": "build-tests",
             "targets": [ "test_Altitude" ],
+            "hidden": true
+        },
+        {
+            "name": "build-sil",
+            "targets": [ "rotorsensor-server" ],
             "hidden": true
         },
         {

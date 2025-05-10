@@ -1,6 +1,3 @@
-[submodule "software/ext/googletest"]
-	path = software/ext/googletest
-	url = http://github.com/google/googletest.git
 [submodule "customer"]
 	path = customer
 	url = https://github.com/c4deszes/bike-electronics-system.git

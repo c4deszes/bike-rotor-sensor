@@ -1,2 +1,8 @@
-intelhex
+# Build tools
+intelhex==2.3.0
 line-protocol[dev]@git+https://github.com/c4deszes/bike-line-protocol.git#subdirectory=python-lib
+
+# Testing
+pytest==7.4.0
+pycapnp==2.0.0
+gcovr==8.3.0
