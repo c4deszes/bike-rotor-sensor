@@ -4,6 +4,9 @@ System requirements
 .. toctree::
 
     mechanical
-    configurations
     measurement
     output_stage
+    configurations
+    ride_status
+    statistics
+    logging

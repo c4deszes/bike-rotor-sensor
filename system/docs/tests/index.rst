@@ -6,4 +6,3 @@ Test plan
 
     electrical
     environmental
-    optical

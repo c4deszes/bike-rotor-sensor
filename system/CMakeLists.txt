@@ -5,6 +5,6 @@ find_package(Python COMPONENTS Interpreter Development)
 
 set(DOCS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/docs)
 add_custom_target(
-	docs ALL
-	COMMAND sphinx-build -E ${DOCS_DIR} ${DOCS_DIR}/_build
+    docs ALL
+    COMMAND sphinx-build -E ${DOCS_DIR} ${DOCS_DIR}/_build
 )

@@ -14,5 +14,3 @@ Mounting
     The area is a ``31mm x 52 mm`` rectangle with a ``10mm`` hole in the middle.
 
     .. image:: assets/mounting.png
-
-

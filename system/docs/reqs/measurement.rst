@@ -31,7 +31,23 @@ Speed
     :id: REQ_SYS_ACCELERATION_PLAUSIBILITY
     :status: draft
 
-    Accelerations that go beyond 
+    Accelerations that go beyond 1G (9.8m/s^2) shall be considered unplausabible, such conditions
+    shall be ignored in the speed calculation. 
+
+Cadence
+-------
+
+.. req-sys:: Cadence range
+    :id: REQ_SYS_CADENCE_RANGE
+    :status: draft
+
+    Cadence shall be measured in the range of ``10RPM`` to ``200RPM``.
+
+.. req-sys:: Coasting
+    :id: REQ_SYS_CADENCE_COASTING
+    :status: draft
+
+    The device shall determine if the user is coasting (not pedaling).
 
 Distance
 --------
@@ -61,10 +77,10 @@ Braking
     :status: draft
     :tags: safety
 
-    Each channel shall monitor the acceleration, when the acceleration is below ``-6 m/s^2`` the
+    Each channel shall monitor the acceleration, when the acceleration is below ``-1.25 m/s^2`` the
     corresponding brake signal shall be set.
 
-    Once the acceleration value is above ``-2 m/s^2`` the corresponding brake signal shall be
+    Once the acceleration value is above ``-1 m/s^2`` the corresponding brake signal shall be
     cleared.
 
     The rear wheel braking signal should always be prioritized, if it's indicating braking then
@@ -72,8 +88,6 @@ Braking
     determination of braking condition.
 
     Ignore braking indication from sensors which have reported errors or warnings.
-
-    *TODO: minimum reaction time calculation*
 
 Lockup & Slip
 -------------
@@ -105,3 +119,13 @@ iTPMS
     that was faster on average should be marked as low pressure.
 
     The measurement shall be trigger-able externally, but the ECU may decide to run it on it's own.
+
+Altitude
+--------
+
+.. req-sys:: Altitude
+    :id: REQ_SYS_ALTITUDE_MEASUREMENT
+    :status: draft
+
+    The device shall sense it's altitude on earth and use it to determine elevation changes.
+    The altitude is not required to be accurate at all, but the deltas should be close.
