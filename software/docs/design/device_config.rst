@@ -1,7 +1,7 @@
 Device configuration
 --------------------
 
-The device configuration is a single NVM page (128 bytes).
+The device configuration is a single NVM sector (256 bytes).
 
 Layout
 ------

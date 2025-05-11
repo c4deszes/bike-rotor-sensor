@@ -1,6 +1,6 @@
 import sys, os
 
-version = '0.1'
+version = '2.1'
 sys.path.append(os.path.abspath("./_ext"))
 
 extensions = [
