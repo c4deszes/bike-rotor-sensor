@@ -4,7 +4,7 @@ project(
     rotor-sensor
     DESCRIPTION "Rotor Sensor"
     LANGUAGES C CXX ASM
-    VERSION "0.4.0")
+    VERSION "0.5.0")
 
 ####################################################################################################
 # Options
@@ -19,7 +19,7 @@ include(tools/cmake/CPM.cmake)
 ####################################################################################################
 # Dependencies
 ####################################################################################################
-CPMAddPackage("gh:c4deszes/samd21-hal#master")
+CPMAddPackage("gh:c4deszes/samd21-hal#feature/new-peripherals2")
 CPMAddPackage("gh:c4deszes/bike-line-protocol@0.2.0")
 CPMAddPackage("gh:c4deszes/bike-flash-tool#feature/line-lib-update")
 CPMAddPackage("gh:c4deszes/samd21-line-bootloader@0.3.0")

@@ -1,5 +1,5 @@
 #include "bsp/sensor.h"
-#include "app/config.h"
+#include "app/feature.h"
 #include "bsp/sensor_internal.h"
 
 osh_sensor_data sensors[3];

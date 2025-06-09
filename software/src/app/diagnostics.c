@@ -6,6 +6,7 @@
 #include "flash_line_diag.h"
 #include "metainfo.h"
 #include "app/current.h"
+#include "app/volt.h"
 #include "app/speed.h"
 #include "app/altitude.h"
 #include "hal/dsu.h"
@@ -52,7 +53,7 @@ void DIAG_Update(void) {
     }
 
     /* Update the power status */
-    // TODO: update voltage
+    DIAG_PowerStatus.U_measured = VOLT_GetVoltage() / 100;
     DIAG_PowerStatus.I_operating = CURRENT_GetCurrent();
 }
 

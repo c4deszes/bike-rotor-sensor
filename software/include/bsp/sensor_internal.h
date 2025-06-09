@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "bsp/sensor.h"
-#include "app/config.h"
+#include "app/feature.h"
 
 typedef struct {
     uint8_t tail;

@@ -53,6 +53,8 @@ void BSP_ClockInitialize (void) {
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_10_Val, GCLK_GEN3);
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_EVSYS_11_Val, GCLK_GEN3);
 
+    GCLK_SelectGenerator(GCLK_CLKCTRL_ID_ADC_Val, GCLK_GEN3);              // RTC
+
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC2_TC3_Val, GCLK_GEN5);      // Speed sensor
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TC4_TC5_Val, GCLK_GEN5);       // Speed sensor
     GCLK_SelectGenerator(GCLK_CLKCTRL_ID_TCC0_TCC1_Val, GCLK_GEN4);     // Scheduler
@@ -80,6 +82,7 @@ void BSP_ClockInitialize (void) {
     // PM_REGS->PM_APBBMASK = PM_APBBMASK_Msk;
 
     PM_REGS->PM_APBCMASK = PM_APBCMASK_EVSYS_Msk |
+                           PM_APBCMASK_ADC_Msk |
                            PM_APBCMASK_TC3_Msk |
                            PM_APBCMASK_TC4_Msk |
                            PM_APBCMASK_TC5_Msk |

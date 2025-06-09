@@ -7,6 +7,12 @@
 // TODO: isn't that great that we include it, since it could transitively end up in the app
 #include "sam.h"
 
+/** Voltage monitoring pin */
+#define VOLT_GPIO_PORT PORT_GROUP_A
+#define VOLT_GPIO_PIN 8
+#define VOLT_GPIO_PINMUX MUX_PA08B_ADC_AIN16
+#define VOLT_GPIO_ADC_CHANNEL 16
+
 /** 2-wire hall effect sensor driver pins */
 #define MAX9621_INPUT1_PORT PORT_GROUP_A
 #define MAX9621_INPUT1_PIN 7

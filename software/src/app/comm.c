@@ -7,7 +7,6 @@
 #include "flash_line_diag.h"
 #include "uds_gen.h"
 #include "bl/api.h"
-#include "hal/dsu.h"
 #include "app/imu.h"
 #include "app/cadence.h"
 #include "app/ride.h"

@@ -3,7 +3,7 @@
 #include "hal/tc.h"
 #include "bsp/sensor.h"
 #include "hal/gpio.h"
-#include "app/config.h"
+#include "app/feature.h"
 
 #include "bsp/pinout.h"
 
