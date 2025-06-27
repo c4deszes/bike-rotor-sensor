@@ -1,6 +1,8 @@
 #include "app/ride.h"
 
 #include "app/speed.h"
+#include "app/distance.h"
+#include "app/ridelogs.h"
 #include "app/feature.h"
 #include "app/config.h"
 
@@ -50,6 +52,16 @@ static void RIDE_UpdateTopSpeed(uint16_t last_speed) {
 static void RIDE_UpdateAverageSpeed(uint16_t last_speed) {
     RIDE_SpeedSum += last_speed;
     RIDE_AverageSpeed = RIDE_SpeedSum / RIDE_Duration;
+}
+
+static void RIDE_ResetStatistics(void) {
+    RIDE_Duration = 0;
+    RIDE_SpeedSum = 0;
+    RIDE_AverageSpeed = 0;
+    RIDE_TopSpeed = 0;
+    for (uint8_t i = 0; i < RIDE_MONITOR_TOP_SPEED_WINDOW; i++) {
+        RIDE_TopSpeedWindow[i] = 0;
+    }
 }
 
 void RIDE_Update(void) {
@@ -114,7 +126,7 @@ void RIDE_Update(void) {
         if (speed >= CONFIG_Props.Ride_IdleSpeed && CONFIG_Props.Ride_AutoResume) {
             RIDE_PauseTimeoutCnt++;
             if (RIDE_PauseTimeoutCnt >= CONFIG_Props.Ride_ResumeTimeout) {
-                RIDE_Resume();
+                RIDE_Start();
             }
         }
         else {
@@ -124,40 +136,35 @@ void RIDE_Update(void) {
 }
 
 void RIDE_Start(void) {
-    if (RIDE_Status != RIDE_Status_NotStarted) {
-        return;
-    }
+    if (RIDE_Status = RIDE_Status_NotStarted) {
+        RIDE_Status = RIDE_Status_Active;
 
-    RIDE_Status = RIDE_Status_Active;
-    RIDE_Duration = 0;
-    RIDE_AverageSpeed = 0;
-    RIDE_SpeedSum = 0;
-    RIDE_TopSpeed = 0;
-    for (uint8_t i = 0; i < RIDE_MONITOR_TOP_SPEED_WINDOW; i++) {
-        RIDE_TopSpeedWindow[i] = 0;
+        DIST_ResetDistance();
+        RIDE_ResetStatistics();
+        RIDELOGS_ResetActiveRecord();
+    }
+    else if (RIDE_Status == RIDE_Status_Paused) {
+        RIDE_IdleTimeoutCnt = 0;
+        RIDE_PauseTimeoutCnt = 0;
+        RIDE_Status = RIDE_Status_Active;
     }
 }
 
 void RIDE_Pause(void) {
-    if (RIDE_Status == RIDE_Status_NotStarted) {
-        return;
+    if (RIDE_Status == RIDE_Status_Active || RIDE_Status == RIDE_Status_Idle) {
+        RIDE_Status = RIDE_Status_Paused;
     }
-    RIDE_Status = RIDE_Status_Paused;
-}
-
-void RIDE_Resume(void) {
-    if (RIDE_Status != RIDE_Status_Paused) {
-        return;
-    }
-    RIDE_IdleTimeoutCnt = 0;
-    RIDE_Status = RIDE_Status_Active;
 }
 
 void RIDE_Stop(void) {
-    if (RIDE_Status == RIDE_Status_NotStarted) {
-        return;
+    if (RIDE_Status == RIDE_Status_Active ||
+        RIDE_Status == RIDE_Status_Idle ||
+        RIDE_Status == RIDE_Status_Paused) {
+
+        RIDELOGS_UpdateActiveRecord();
+        RIDELOGS_PushActiveRecord();
+        RIDE_Status = RIDE_Status_NotStarted;
     }
-    RIDE_Status = RIDE_Status_NotStarted;
 }
 
 RIDE_Status_t RIDE_GetStatus(void) {

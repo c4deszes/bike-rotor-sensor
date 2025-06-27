@@ -23,6 +23,7 @@
 #include "app/itpms.h"
 #include "app/sys_state.h"
 #include "app/ride.h"
+#include "app/ridelogs.h"
 #include "app/volt.h"
 #include "app/current.h"
 #include "app/sec.h"
@@ -60,6 +61,7 @@ void APP_Initialize() {
     GEAR_Initialize();
     ITPMS_Initialize();
     RIDE_Initialize();
+    RIDELOGS_Initialize();
 
     SYSSTATE_Initialize();
 

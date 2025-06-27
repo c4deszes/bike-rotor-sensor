@@ -3,11 +3,6 @@
 
 #include "bsp/usart.h"
 
-static const gpio_pin_input_configuration input = {
-    .pull = FLOATING,
-    .sample = CONTINUOUS
-};
-
 static const gpio_pin_output_configuration output = {
     .drive = NORMAL,
     .input = ONDEMAND
@@ -52,4 +47,8 @@ uint8_t USART_Read(void) {
 
 void USART_FlushOutput(void) {
     SERCOM_USART_FlushOutput(SERCOM0);
+}
+
+void USART_GoToSleep(void) {
+    GPIO_PinWrite(UART_CS_PORT, UART_CS_PIN, LOW);
 }

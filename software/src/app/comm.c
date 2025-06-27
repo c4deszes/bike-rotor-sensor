@@ -31,8 +31,7 @@ void COMM_Initialize(void) {
     LINE_App_Init();
     UDS_Init();
 
-    // TODO: change 0 to diag channel
-    FLASH_LINE_Init(0, FLASH_LINE_APPLICATION_MODE);
+    FLASH_LINE_Init(LINE_NODE_RotorSensor_DIAG_CHANNEL, FLASH_LINE_APPLICATION_MODE);
 }
 
 void COMM_UpdatePhy(void) {
@@ -159,8 +158,8 @@ void COMM_UpdateSlowSignals(void) {
     /* RideStatus frame */
     LINE_Request_RideStatus_data.fields.Duration = RIDE_GetDuration();
     LINE_Request_RideStatus_data.fields.RideStatus = COMM_EncodeRideStatus(RIDE_GetStatus());
-    LINE_Request_RideStatus_data.fields.DistanceStatus = COMM_EncoderDistanceStatus(DIST_GetStatus());
-    LINE_Request_RideStatus_data.fields.Distance = COMM_EncodeDistance(DIST_GetDistance());
+    LINE_Request_RideStatus_data.fields.DistanceStatus = COMM_EncoderDistanceStatus(RIDE_GetStatus() == RIDE_Status_NotStarted ? DIST_Status_NotAvailable : DIST_GetStatus());
+    LINE_Request_RideStatus_data.fields.Distance = COMM_EncodeDistance(RIDE_GetStatus() == RIDE_Status_NotStarted ? 0 : DIST_GetDistance());
 
     /* RoadStatus frame */
     LINE_Request_RoadStatus_data.fields.Altitude = LINE_ENCODER_AltitudeEncoder_Encode(ALT_GetAltitude());

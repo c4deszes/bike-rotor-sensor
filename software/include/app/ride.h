@@ -36,8 +36,6 @@ uint16_t RIDE_GetTopSpeed(void);
 
 RIDE_Status_t RIDE_GetStatus(void);
 
-
-
 void RIDE_Start(void);
 
 void RIDE_Pause(void);

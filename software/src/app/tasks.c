@@ -13,6 +13,7 @@
 #include "bsp/sensor.h"
 #include "app/cadence.h"
 #include "app/ride.h"
+#include "app/ridelogs.h"
 
 #include "bsp/usart.h"
 #include "app/config.h"
@@ -83,6 +84,8 @@ void SCH_Task100ms(void) {
     GEAR_Update();
 
     VOLT_Update();
+
+    RIDELOGS_UpdateActiveRecord();
 
     COMM_UpdateSlowSignals();
 }

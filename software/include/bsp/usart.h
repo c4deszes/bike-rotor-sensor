@@ -17,4 +17,6 @@ void USART_WriteData(uint8_t* data, const uint8_t size);
 
 void USART_FlushOutput(void);
 
+void USART_GoToSleep(void);
+
 #endif // BSP_UART_H_

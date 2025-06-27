@@ -3,6 +3,8 @@
 #include "app/sec.h"
 #include "app/comm.h"
 #include "app/feature.h"
+#include "app/ridelogs.h"
+#include "app/ride.h"
 #include "app/diagnostics.h"
 
 #include "bl/api.h"
@@ -54,5 +56,7 @@ void SYSSTATE_Update(void) {
     }
     else if (sys_state == sys_state_goto_sleep) {
         // TODO: sleep support
+        RIDE_Stop();
+        RIDELOGS_SaveContainer();
     }
 }
