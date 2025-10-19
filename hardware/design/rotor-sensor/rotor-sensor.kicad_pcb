@@ -1662,7 +1662,7 @@
       (net 27 "/M06_BMI088_MISO") (pinfunction "SDO1") (pintype "output") (thermal_bridge_angle 45) (tstamp 30952572-fc50-492a-90c1-18efcaeedc64))
     (pad "16" smd roundrect (at -1.915 0 90) (size 0.25 0.475) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25)
       (net 41 "unconnected-(U3-INT1-Pad16)") (pinfunction "INT1") (pintype "bidirectional+no_connect") (thermal_bridge_angle 45) (tstamp d61264f4-8dca-4167-a35f-bdab71061cd3))
-    (model "C:/Workspace/bicycle/rotor-sensor/hardware/design/rotor-sensor/models/BMI088.step"
+    (model "${KIPRJMOD}/models/BMI088.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 90 180 0))
@@ -1970,7 +1970,7 @@
       (net 1 "GND") (pinfunction "GND") (pintype "power_in") (tstamp e95a4d30-874f-4627-811b-d2f56359fc26))
     (pad "10" smd roundrect (at 0.7625 -0.5 270) (size 0.35 0.425) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25)
       (net 2 "+3.3V") (pinfunction "VDD") (pintype "power_in") (tstamp 92ef454f-ba88-487e-8fac-284ec889caa1))
-    (model "C:/Workspace/bicycle/rotor-sensor/hardware/design/rotor-sensor/models/BMP581.step"
+    (model "${KIPRJMOD}/models/BMP581.step"
       (offset (xyz -1 -1 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
