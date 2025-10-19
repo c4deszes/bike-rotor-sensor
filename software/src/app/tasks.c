@@ -8,7 +8,6 @@
 #include "app/spm.h"
 #include "app/iet.h"
 #include "app/itpms.h"
-#include "app/sys_state.h"
 #include "common/swtimer.h"
 
 #include "bsp/usart.h"
@@ -25,8 +24,6 @@ void SCH_Task1ms(void) {
     COMM_UpdatePhy();
 
     SPM_Update();
-
-    SYSSTATE_Update();
 }
 
 void SCH_Task10ms_A(void) {

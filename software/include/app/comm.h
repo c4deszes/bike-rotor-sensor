@@ -23,8 +23,4 @@ void COMM_UpdateSignals(void);
  */
 void COMM_UpdatePhy(void);
 
-bool COMM_ResetRequest(void);
-
-bool COMM_BootRequest(void);
-
 #endif // APP_COMM_H_

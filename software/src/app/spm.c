@@ -44,7 +44,7 @@ uint16_t SPM_PeriodToSpeed(uint32_t period_us) {
         return 0;
     }
 
-    uint32_t speed = ((spm_wheel_size_um * 360U) / (period_us * 10U * 30U));
+    uint32_t speed = (spm_wheel_size_um * 100 / period_us) / 36;
 
     if (speed > 700) {
         return 700;
