@@ -18,14 +18,6 @@ set(CTEST_OUTPUT_ON_FAILURE ON)
 
 include(CTest)
 include(GoogleTest)
-add_subdirectory("ext/googletest")
-
-# Linting configuration
-#set(CMAKE_C_CPPLINT "cpplint")
-
-# Tools
-include(tools/cmake/application.cmake)
-include(tools/cmake/gcc-lto.cmake)
 
 # Project
 add_subdirectory(docs)

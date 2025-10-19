@@ -20,7 +20,8 @@
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
-            }
+            },
+            "hidden": true
         },
         {
             "name": "armgcc-release-mingw",
@@ -43,15 +44,16 @@
             "inherits": "armgcc-default",
             "generator": "MinGW Makefiles",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+                "PROJECT_PROFILE": "max9621"
+            },
+            "hidden": true
         },
         {
             "name": "mingw-default",
             "generator": "MinGW Makefiles",
             "binaryDir": "${sourceDir}/_build/${presetName}",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/tools/cmake/mingw-toolchain.cmake"
+                "PROJECT_PROFILE": "ap22802"
             },
             "hidden": true
         },
