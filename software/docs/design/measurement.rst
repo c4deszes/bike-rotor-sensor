@@ -16,9 +16,6 @@ Speed measurement
     def calculate(speed, poles, circumference):
         return 1 / ((speed / 3.6 / circumference) * poles)
 
-Setup
------
-
 .. jupyter-execute::
     :hide-code:
 

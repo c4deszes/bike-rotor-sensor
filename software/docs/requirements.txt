@@ -1,6 +1,5 @@
+# TODO: specify the version of each package
 Sphinx
-schemdraw[matplotlib,svgmath]
-UliEngineering
 sphinx-needs
 jupyter-sphinx
 matplotlib

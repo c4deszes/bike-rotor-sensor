@@ -1,18 +1,13 @@
 #include "bsp/sensor.h"
-#include "bsp/config.h"
-
+#include "app/feature.h"
 #include "bsp/sensor_internal.h"
 
-// uint16_t osh_sensor_data[OSH_CHANNEL_COUNT][OSH_SENSOR_BUFFER_SIZE];
-// uint8_t tail[OSH_CHANNEL_COUNT];
-// uint8_t head[OSH_CHANNEL_COUNT];
-
-osh_sensor_data sensors[OSH_CHANNEL_COUNT];
+osh_sensor_data sensors[3];
 
 const osh_sensor_sample_t error_sample = {.pos = 0, .period = 0};
 
 void SENSOR_Initialize(void) {
-    for (uint8_t i = 0; i < OSH_CHANNEL_COUNT; i++) {
+    for (uint8_t i = 0; i < 3; i++) {
         sensors[i].direction = osh_sensor_direction_unknown;
         sensors[i].state = osh_sensor_state_ok;
         sensors[i].head = 0;
@@ -28,29 +23,29 @@ void SENSOR_Process(uint8_t channel, uint32_t width, uint32_t period) {
 }
 
 osh_sensor_sample_t SENSOR_GetSample(uint8_t channel) {
-    if(channel >= OSH_CHANNEL_COUNT) {
+    if(channel >= 3) {
         return error_sample;
     }
     if (sensors[channel].head == sensors[channel].tail) {
         return error_sample;
     }
     osh_sensor_sample_t entry = sensors[channel].samples[sensors[channel].tail];
-    sensors[channel].tail = (sensors[channel].tail + 1) % OSH_SENSOR_BUFFER_SIZE;
+    sensors[channel].tail = (sensors[channel].tail + 1) % SPM_SENSOR_BUFFER_SIZE;
     return entry;
 }
 
 uint8_t SENSOR_HasData(uint8_t channel) {
-    if(channel >= OSH_CHANNEL_COUNT) {
+    if(channel >= 3) {
         return 0;
     }
-    return ((uint8_t)(OSH_SENSOR_BUFFER_SIZE + sensors[channel].head - sensors[channel].tail)) % OSH_SENSOR_BUFFER_SIZE;
+    return ((uint8_t)(SPM_SENSOR_BUFFER_SIZE + sensors[channel].head - sensors[channel].tail)) % SPM_SENSOR_BUFFER_SIZE;
 }
 
 bool SENSOR_PutData(uint8_t channel, osh_sensor_sample_t sample) {
-    if(channel >= OSH_CHANNEL_COUNT) {
+    if(channel >= 3) {
         return false;
     }
-    uint8_t next = (sensors[channel].head + 1) % OSH_SENSOR_BUFFER_SIZE;
+    uint8_t next = (sensors[channel].head + 1) % SPM_SENSOR_BUFFER_SIZE;
     if (next == sensors[channel].tail) {
         return false;
     }

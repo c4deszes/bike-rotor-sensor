@@ -82,3 +82,18 @@ iTPMS
     :mitigation: none
 
     Low tire pressure will eventually be detected, just like deflated tires.
+
+Altitude
+--------
+
+.. fmea:: Wrong altitude measurement
+    :id: FMEA_SYS_WRONG_ALTITUDE
+    :status: draft
+    :probability: occasional
+    :severity: minor
+    :detection: low
+    :mitigation: none
+
+    Altitude measurement can be wrong for multiple reasons, failure of the pressure sensor, not
+    setting up the QNH on the device or temperature drifting. However this functionality is not
+    critical to the function of the device.

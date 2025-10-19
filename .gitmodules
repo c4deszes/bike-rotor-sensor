@@ -1,6 +1,9 @@
-[submodule "software/ext/googletest"]
-	path = software/ext/googletest
-	url = http://github.com/google/googletest.git
 [submodule "customer"]
 	path = customer
 	url = https://github.com/c4deszes/bike-electronics-system.git
+[submodule "software/lib/bmi08x"]
+	path = software/lib/bmi08x
+	url = https://github.com/boschsensortec/BMI08x_SensorAPI.git
+[submodule "software/lib/bmp5x"]
+	path = software/lib/bmp5x
+	url = https://github.com/boschsensortec/BMP5_SensorAPI.git

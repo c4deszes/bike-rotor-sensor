@@ -23,11 +23,6 @@ typedef enum {
 
 extern itpms_state_t itpms_state;
 
-// external config:
-//  - channel mapping
-//  - measurement duration/distance
-//  - threshold
-
 /**
  * @brief Initializes the tire pressure monitoring service
  */
@@ -38,8 +33,14 @@ void ITPMS_Initialize(void);
  */
 void ITPMS_Update(void);
 
+/**
+ * @brief Starts the tire pressure monitoring service, if not already started
+ */
 void ITPMS_Start(void);
 
+/**
+ * @brief Stops the tire pressure monitoring service
+ */
 void ITPMS_Stop(void);
 
 #endif // APP_ITPMS_

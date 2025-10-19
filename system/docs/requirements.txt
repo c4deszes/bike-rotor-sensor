@@ -1,5 +1,4 @@
 Sphinx
-schemdraw[matplotlib,svgmath]
 UliEngineering
 sphinx-needs
 jupyter-sphinx
@@ -9,8 +8,6 @@ sphinxcontrib-drawio
 sphinxcontrib-jsmath
 sphinxcontrib-kroki
 sphinxcontrib-mermaid
-sphinxcontrib-plantuml
-sphinxcontrib-wavedrom
 linuxdoc
 prettytable
 jupyter

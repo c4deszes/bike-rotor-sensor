@@ -1,5 +1,5 @@
-Measurement
-===========
+Speed measurement
+=================
 
 .. jupyter-execute::
     :hide-code:
@@ -11,7 +11,7 @@ Measurement
     from prettytable import PrettyTable
 
 Speed
-------------
+-----
 
 .. req-drs:: Period measurement
     :id: DRS_SYS_PERIOD_MEASUREMENT
@@ -49,19 +49,6 @@ Speed
 
     Based on these values the timer resolution shall be ``1us`` with a maximum measured period of
     ``9s``, anything above this shall be considered as ``0 km/h``.
-
-Distance
---------
-
-.. req-drs:: Distance measurement
-    :id: DRS_SYS_DISTANCE_MEASUREMENT
-    :status: draft
-    :satisfies: REQ_SYS_DISTANCE_RANGE
-
-    To measure ``200km`` of distance at the stricter ``1m`` resolution requirement the number of
-    increments the software needs to be able to record is ``200000``.
-
-    Therefore the distance has to be stored as ``24 bit`` or more likely ``32 bit value``.
 
 Braking
 -------

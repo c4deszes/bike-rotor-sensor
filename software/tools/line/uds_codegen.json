@@ -1,0 +1,6 @@
+{
+    "RotorSensor": {
+        "channel": 0,
+        "profile": "../../../customer/uds/rotor_sensor.json"
+    }
+}

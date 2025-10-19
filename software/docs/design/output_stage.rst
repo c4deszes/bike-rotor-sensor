@@ -11,7 +11,7 @@ Physical layer
 --------------
 
 Responsibilities are turning on and off the two channels, checking for errors on channels, like
-short circuits and disconnected sensors. The common part of this component configures the tiemrs
+short circuits and disconnected sensors. The common part of this component configures the timers
 for each channel and connects their event input to the generators.
 
 Sensor layer

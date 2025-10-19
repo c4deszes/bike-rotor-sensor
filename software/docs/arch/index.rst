@@ -1,7 +1,7 @@
-Software architecture
-=====================
+Architecture
+============
 
-Block diagrams
---------------
+.. toctree::
 
-.. drawio-image:: diagrams/block-view.drawio
+    package-view
+    block-view

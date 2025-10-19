@@ -15,6 +15,8 @@ Speed sensor
     The local effect is the lack of speed information, as long as the other speed sensor is working
     it's not a problem.
 
+    The primary mitigation is in the waterproofing and electrical isolation of the sensor assembly.
+
 .. fmea:: Speed sensor cable open
     :id: FMEA_SYS_SPEED_SENSOR_OPEN
     :status: draft
@@ -25,6 +27,8 @@ Speed sensor
 
     The local effect is the lack of speed information, as long as the other speed sensor is working
     it's not a problem.
+
+    The primary mitigation is the locking sensor connector.
 
 .. fmea:: Lack of magnetic field
     :id: FMEA_SYS_SPEED_SENSOR_NO_MAGNETIC_FIELD
@@ -59,3 +63,20 @@ Inertial measurement unit
 
     Wrong IMU data is not detected unless the IMU directly reports the error, other than that we
     can monitor the global speed value and disable the inertial compensation.
+
+Pressure sensor
+---------------
+
+.. fmea:: Pressure sensor failure
+    :id: FMEA_SYS_BAROMETER_FAILURE
+    :status: draft
+    :probability: occasional
+    :severity: minor
+    :detection: high
+    :mitigation: none
+
+    Lack of communication with the Barometer chip may be detected, altitude information in this case
+    is not used.
+
+    Wrong pressure data is not detected, but for near sea level altitudes any offset in the
+    measured pressure or a wrong pressure reference won't lead to inaccurate elevation measurements.

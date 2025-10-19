@@ -1,6 +1,6 @@
 import sys, os
 
-version = '2.0'
+version = '2.1'
 sys.path.append(os.path.abspath("./_ext"))
 
 extensions = [
@@ -23,6 +23,8 @@ extensions = [
 autosectionlabel_prefix_document = True
 
 # Sphinx configuration
+html_static_path = ['_static']
+html_style = 'css/custom.css'
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     "collapse_navigation" : False

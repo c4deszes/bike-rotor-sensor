@@ -41,4 +41,6 @@ void OSH_PhyUpdate(void);
  */
 osh_phy_channel_state_t OSH_PhyGetChannelState(uint8_t channel);
 
+void OSH_PhySetChannelStatus(uint8_t channel, osh_phy_channel_state_t status);
+
 #endif

@@ -2,10 +2,14 @@
 #include "common/swtimer.h"
 #include "app/sec.h"
 #include "app/comm.h"
+#include "app/feature.h"
+#include "app/ridelogs.h"
+#include "app/ride.h"
+#include "app/diagnostics.h"
 
 #include "bl/api.h"
 
-#include "atsamd21e18a.h"
+#include "sam.h"
 
 typedef enum {
     sys_state_normal,
@@ -24,7 +28,7 @@ void SYSSTATE_Initialize(void) {
 
 uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
 static void SYSSTATE_BootEntry(void) {
-    boot_entry_key = BOOT_ENTRY_MAGIC;
+    boot_entry_key = BL_BOOT_ENTRY_MAGIC;
 
     NVIC_SystemReset();
 }
@@ -35,14 +39,8 @@ static void SYSSTATE_Reset(void) {
 
 void SYSSTATE_Update(void) {
     if (sys_state == sys_state_normal) {
-        if (COMM_ResetRequest()) {
-            sys_state = sys_state_goto_reset;
-            SEC_TurnOff();
-            SWTIMER_Setup(transition_timer, SYS_STATE_RESET_DELAY);
-        }
-        else if(COMM_BootRequest()) {
+        if(DIAG_BootRequest()) {
             sys_state = sys_state_goto_boot;
-            SEC_TurnOff();
             SWTIMER_Setup(transition_timer, SYS_STATE_BOOT_ENTRY_DELAY);
         }
     }
@@ -58,5 +56,7 @@ void SYSSTATE_Update(void) {
     }
     else if (sys_state == sys_state_goto_sleep) {
         // TODO: sleep support
+        RIDE_Stop();
+        //RIDELOGS_SaveContainer();
     }
 }

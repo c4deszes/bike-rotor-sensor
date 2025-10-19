@@ -28,6 +28,16 @@ jobs:
         working-directory: line-protocol/python-lib
         run: python -m pip install -e .[dev]
 
+      - name: Checkout (bike-uds-tool)
+        uses: actions/checkout@v4
+        with:
+          repository: c4deszes/bike-uds-tool
+          path: bike-uds-tool
+
+      - name: Setup bike-uds-tool
+        working-directory: bike-uds-tool/python-lib
+        run: python -m pip install -e .[dev]
+
       - name: GCC Problem Matcher
         uses: ammaraskar/gcc-problem-matcher@0.3.0
 

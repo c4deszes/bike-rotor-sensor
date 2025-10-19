@@ -12,7 +12,6 @@ Device variants
 
     * TLE5045: 2-wire iGMR sensor
     * TLE4942-1C: 2-wire hall effect sensor with direction detection
-    * Generic 3-wire sensors with open-collector outputs and 5V supply
 
 User configuration
 ------------------
@@ -23,8 +22,12 @@ User configuration
 
     The following settings shall be configurable externally:
 
-    * Front/rear wheel circumferences
+    * Front/rear wheel circumferences and pole counts
     * Front/rear wheel sensor types
+    * Drivetrain parameters (tooth count)
+    * Ride status transition timings
+    * Pressure sensor parameters (reference pressure)
+    * ITPMS settings
 
 Calibration
 -----------
@@ -36,3 +39,6 @@ Calibration
     The user shall be able to calibrate the intertial motion unit, the calibration takes place in
     the stand still level position and the device records the currently felt acceleration (gravity)
     and later uses that to determine the forward and sideways acceleration components.
+
+    This configuration may be enhanced by an online calibration that tries to measure the gravity
+    component.

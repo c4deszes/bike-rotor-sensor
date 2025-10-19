@@ -4,11 +4,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "bsp/sensor.h"
+#include "app/feature.h"
 
 typedef struct {
     uint8_t tail;
     uint8_t head;
-    osh_sensor_sample_t samples[64];  // TODO: move size to macro value
+    osh_sensor_sample_t samples[SPM_SENSOR_BUFFER_SIZE];
     osh_sensor_direction_t direction;
     osh_sensor_state_t state;
 } osh_sensor_data;

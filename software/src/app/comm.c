@@ -3,60 +3,49 @@
 
 #include "line_protocol.h"
 #include "line_api.h"
+#include "flash_line_api.h"
+#include "flash_line_diag.h"
+#include "uds_gen.h"
+#include "bl/api.h"
+#include "app/imu.h"
+#include "app/cadence.h"
+#include "app/ride.h"
 
-#include "app/spm.h"
+#include "app/gear.h"
+#include "app/speed.h"
 #include "app/sec.h"
+#include "app/altitude.h"
+#include "app/distance.h"
+#include "app/current.h"
+#include "app/config.h"
 
 RINGBUFFER_8(COMM_UsartBufferTx, 128);
 RINGBUFFER_8(COMM_UsartBufferRx, 128);
 
-static LINE_Diag_PowerStatus_t power_status = {
-    .U_status = LINE_DIAG_POWER_STATUS_VOLTAGE_OK,
-    .BOD_status = LINE_DIAG_POWER_STATUS_BOD_NONE,
-    .I_operating = LINE_DIAG_POWER_STATUS_OP_CURRENT(100),
-    .I_sleep = LINE_DIAG_POWER_STATUS_SLEEP_CURRENT(100)
-};
-static LINE_Diag_SoftwareVersion_t sw_version = {
-    .major = 0,
-    .minor = 1,
-    .patch = 0
-};
-
-uint8_t LINE_Diag_GetOperationStatus(void) {
-    return LINE_DIAG_OP_STATUS_OK;
-}
-
-LINE_Diag_PowerStatus_t* LINE_Diag_GetPowerStatus(void) {
-    return &power_status;
-}
-
-uint32_t LINE_Diag_GetSerialNumber(void) {
-    return 0xABCDEF01;
-}
-
-LINE_Diag_SoftwareVersion_t* LINE_Diag_GetSoftwareVersion(void) {
-    return &sw_version;
-}
-
 void COMM_Initialize(void) {
-    USART_Initialize(19200, &COMM_UsartBufferTx, &COMM_UsartBufferRx);
+    USART_Initialize(LINE_NETWORK_BicycleNetwork_BAUDRATE,
+                     &COMM_UsartBufferTx,
+                     &COMM_UsartBufferRx);
     USART_Enable();
 
-    LINE_Transport_Init(true);
     LINE_App_Init();
-    LINE_Diag_SetAddress(LINE_NODE_RotorSensor_DIAG_ADDRESS);
+    UDS_Init();
+
+    FLASH_LINE_Init(LINE_NODE_RotorSensor_DIAG_CHANNEL, FLASH_LINE_APPLICATION_MODE);
 }
 
 void COMM_UpdatePhy(void) {
     uint8_t length = USART_Available();
     while (length > 0) {
         uint8_t data = USART_Read();
-        LINE_Transport_Receive(data);
+        LINE_Transport_Receive(LINE_CHANNEL_BicycleNetwork, data);
         length--;
     }
+
+    LINE_Transport_Update(LINE_CHANNEL_BicycleNetwork, 1);
 }
 
-void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checksum) {
+void LINE_Transport_WriteResponse(uint8_t channel, uint8_t size, uint8_t* payload, uint8_t checksum) {
     const uint8_t fix = 69;
     USART_WriteData(&size, sizeof(uint8_t));
     // TODO: fix for skipped 3rd byte
@@ -67,49 +56,144 @@ void LINE_Transport_WriteResponse(uint8_t size, uint8_t* payload, uint8_t checks
     USART_FlushOutput();
 }
 
-uint8_t COMM_EncodeGlobalSpeedState(spm_speed_state_t state) {
+// TODO: remove this function
+void LINE_Transport_WriteRequest(uint8_t channel, uint16_t request) {
+    return;
+}
+
+static uint8_t COMM_EncodeSpeedState(speed_status_t state) {
     switch (state) {
-        case spm_speed_state_ok: return LINE_ENCODER_GlobalSpeedStateEncoder_Ok;
-        case spm_speed_slow_response: return LINE_ENCODER_GlobalSpeedStateEncoder_SlowResponse;
-        case spm_speed_state_unreliable: return LINE_ENCODER_GlobalSpeedStateEncoder_Unreliable;
-        case spm_speed_state_error: return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+        case speed_status_ok: return LINE_ENCODER_SpeedStateEncoder_Ok;
+        case speed_status_slow_response: return LINE_ENCODER_SpeedStateEncoder_SlowResponse;
+        case speed_status_unreliable: return LINE_ENCODER_SpeedStateEncoder_Unreliable;
+        case speed_status_error: return LINE_ENCODER_SpeedStateEncoder_Error;
     }
-    return LINE_ENCODER_GlobalSpeedStateEncoder_Error;
+    return LINE_ENCODER_SpeedStateEncoder_Error;
 }
 
-uint8_t COMM_EncodeChannelSpeedState(sec_state_t sensor, spm_speed_t speed) {
-    if (sensor == sec_state_off) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_Off;
+static uint8_t COMM_EncodeSpeedSensorState(sec_state_t state) {
+    switch (state) {
+        case sec_state_ok: return LINE_ENCODER_SpeedSensorStateEncoder_Ok;
+        case sec_state_warning: return LINE_ENCODER_SpeedSensorStateEncoder_SensorWarning;
+        case sec_state_error: return LINE_ENCODER_SpeedSensorStateEncoder_SensorError;
+        case sec_state_open: return LINE_ENCODER_SpeedSensorStateEncoder_OutputOpen;
+        case sec_state_short: return LINE_ENCODER_SpeedSensorStateEncoder_OutputShorted;
+        case sec_state_off: return LINE_ENCODER_SpeedSensorStateEncoder_Off;
     }
-    else if (sensor == sec_state_short) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_OutputShorted;
-    }
-    else if (sensor == sec_state_open) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_OutputOpen;
-    }
-    else if (sensor == sec_state_error) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_SensorError;
-    }
-    else if (speed == spm_speed_state_unreliable) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_SpeedUnreliable;
-    }
-    else if (speed == sec_state_warning) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_SensorWarning;
-    }
-    else if (speed == spm_speed_state_ok) {
-        return LINE_ENCODER_ChannelSpeedStateEncoder_Ok;
-    }
-
-    return LINE_ENCODER_ChannelSpeedStateEncoder_OutputShorted;
+    return LINE_ENCODER_SpeedSensorStateEncoder_SensorError;
 }
 
-void COMM_UpdateSignals(void) {
-    LINE_Request_SpeedStatus_data.fields.GlobalSpeed = spm_global_speed;
-    LINE_Request_SpeedStatus_data.fields.GlobalSpeedState = COMM_EncodeGlobalSpeedState(spm_global_state);
+static uint32_t COMM_EncodeDistance(uint32_t distance) {
+    return distance / 1000; // from mm to m
+}
 
-    // TODO: Retrieve SEC state using proper channel numbers
-    LINE_Request_SpeedSensorMonitoring_data.fields.FrontSpeed = spm_front_wheel.speed;
-    LINE_Request_SpeedSensorMonitoring_data.fields.RearSpeed = spm_rear_wheel.speed;
-    LINE_Request_SpeedSensorMonitoring_data.fields.FrontWheelSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(0), spm_front_wheel.state);
-    LINE_Request_SpeedSensorMonitoring_data.fields.RearWheelSpeedState = COMM_EncodeChannelSpeedState(SEC_GetChannelState(1), spm_rear_wheel.state);
+static uint8_t COMM_EncoderDistanceStatus(DIST_Status_t status) {
+    switch (status) {
+        case DIST_Status_NotAvailable: return LINE_ENCODER_DistanceStatusEncoder_NotAvailable;
+        case DIST_Status_Ok: return LINE_ENCODER_DistanceStatusEncoder_Ok;
+        case DIST_Status_Error: return LINE_ENCODER_DistanceStatusEncoder_Error;
+        case DIST_Status_PermanentError: return LINE_ENCODER_DistanceStatusEncoder_PermanentError;
+    }
+    return LINE_ENCODER_DistanceStatusEncoder_Error;
+}
+
+static uint8_t COMM_EncodeCadenceStatus(CADENCE_Status_t status) {
+    switch (status) {
+        case CADENCE_Status_NotAvailable: return LINE_ENCODER_CadenceStatusEncoder_NotAvailable;
+        case CADENCE_Status_Ok: return LINE_ENCODER_CadenceStatusEncoder_Ok;
+        case CADENCE_Status_Coasting: return LINE_ENCODER_CadenceStatusEncoder_Coasting;
+        case CADENCE_Status_Error: return LINE_ENCODER_CadenceStatusEncoder_Error;
+    }
+    return LINE_ENCODER_CadenceStatusEncoder_Error;
+}
+
+static uint8_t COMM_EncodeRideStatus(RIDE_Status_t status) {
+    switch (status) {
+        case RIDE_Status_NotStarted: return LINE_ENCODER_RideStatusEncoder_NotStarted;
+        case RIDE_Status_Active: return LINE_ENCODER_RideStatusEncoder_Active;
+        case RIDE_Status_Idle: return LINE_ENCODER_RideStatusEncoder_Idle;
+        case RIDE_Status_Paused: return LINE_ENCODER_RideStatusEncoder_Paused;
+    }
+    return LINE_ENCODER_RideStatusEncoder_Idle;
+}
+
+static uint8_t COMM_EncodeAltitudeStatus(ALT_Status_t status) {
+    switch (status) {
+        case ALT_Status_NotAvailable: return LINE_ENCODER_GenericStatusFlag_Error;
+        case ALT_Status_Ok: return LINE_ENCODER_GenericStatusFlag_Ok;
+        case ALT_Status_Error: return LINE_ENCODER_GenericStatusFlag_Error;
+        case ALT_Status_PermanentError: return LINE_ENCODER_GenericStatusFlag_Error;
+    }
+    return LINE_ENCODER_GenericStatusFlag_Error;
+}
+
+static uint8_t COMM_EncodeGearState(GEAR_Status_t status) {
+    switch (status) {
+        case GEAR_Status_Unknown: return LINE_ENCODER_GearStatusEncoder_Unknown;
+        case GEAR_Status_Ok: return LINE_ENCODER_GearStatusEncoder_Ok;
+        case GEAR_Status_OutOfRange: return LINE_ENCODER_GearStatusEncoder_OutOfRange;
+        case GEAR_Status_Error: return LINE_ENCODER_GearStatusEncoder_Error;
+    }
+    return LINE_ENCODER_GearStatusEncoder_Error;
+}
+
+void COMM_UpdateFastSignals(void) {
+    /* SpeedStatus frame */
+    LINE_Request_SpeedStatus_data.fields.Speed = SPEED_GetSpeed();
+    LINE_Request_SpeedStatus_data.fields.SpeedState = COMM_EncodeSpeedState(SPEED_GetStatus());
+    LINE_Request_SpeedStatus_data.fields.BrakeState = LINE_ENCODER_BrakeStateEncoder_Disabled;                  // TODO: braking
+    LINE_Request_SpeedStatus_data.fields.FrontWheelSlip = LINE_ENCODER_WheelSlipEncoder_NotSlipping;            // TODO: lockup/slip
+    LINE_Request_SpeedStatus_data.fields.FrontWheelLockup = LINE_ENCODER_WheelLockupEncoder_NoLockup;
+    LINE_Request_SpeedStatus_data.fields.RearWheelSlip = LINE_ENCODER_WheelSlipEncoder_NotSlipping;
+    LINE_Request_SpeedStatus_data.fields.RearWheelLockup = LINE_ENCODER_WheelLockupEncoder_NoLockup;
+
+    /* DrivetrainStatus frame */
+    LINE_Request_DrivetrainStatus_data.fields.Cadence = CAD_GetCadence();
+    LINE_Request_DrivetrainStatus_data.fields.CadenceStatus = COMM_EncodeCadenceStatus(CAD_GetStatus());
+    LINE_Request_DrivetrainStatus_data.fields.EstimatedGear = GEAR_GetGear();
+    LINE_Request_DrivetrainStatus_data.fields.GearStatus = COMM_EncodeGearState(GEAR_GetStatus());
+}
+
+void COMM_UpdateSlowSignals(void) {
+    /* RideStatus frame */
+    LINE_Request_RideStatus_data.fields.Duration = RIDE_GetDuration();
+    LINE_Request_RideStatus_data.fields.RideStatus = COMM_EncodeRideStatus(RIDE_GetStatus());
+    LINE_Request_RideStatus_data.fields.DistanceStatus = COMM_EncoderDistanceStatus(RIDE_GetStatus() == RIDE_Status_NotStarted ? DIST_Status_NotAvailable : DIST_GetStatus());
+    LINE_Request_RideStatus_data.fields.Distance = COMM_EncodeDistance(RIDE_GetStatus() == RIDE_Status_NotStarted ? 0 : DIST_GetDistance());
+
+    /* RoadStatus frame */
+    LINE_Request_RoadStatus_data.fields.Altitude = LINE_ENCODER_AltitudeEncoder_Encode(ALT_GetAltitude());
+    LINE_Request_RoadStatus_data.fields.Grade = LINE_ENCODER_GradeEncoder_Encode(0);                        // TODO: connect from ride.c
+    LINE_Request_RoadStatus_data.fields.RoadQuality = LINE_ENCODER_RoadQualityEncoder_NotMeasured;          // TODO: connect from road quality component
+    LINE_Request_RoadStatus_data.fields.ITPMS = LINE_ENCODER_ITPMSEncoder_Stopped;                          // TODO: connect from ITPMS component
+    LINE_Request_RoadStatus_data.fields.AltitudeError = COMM_EncodeAltitudeStatus(ALT_GetStatus());
+    LINE_Request_RoadStatus_data.fields.TemperatureError = ALT_HasTemperatureError() ? LINE_ENCODER_GenericStatusFlag_Error : LINE_ENCODER_GenericStatusFlag_Ok;
+    LINE_Request_RoadStatus_data.fields.PressureError = ALT_HasPressureError() ? LINE_ENCODER_GenericStatusFlag_Error : LINE_ENCODER_GenericStatusFlag_Ok;
+
+    /* RideStatistics frame */
+    LINE_Request_RideStatistics_data.fields.TopSpeed = RIDE_GetTopSpeed();
+    LINE_Request_RideStatistics_data.fields.AverageSpeed = RIDE_GetAverageSpeed();
+    LINE_Request_RideStatistics_data.fields.Elevation = 0;
+    LINE_Request_RideStatistics_data.fields.Descent = 0;
+}
+
+void COMM_UpdateDebugSignals() {
+    /* RotorSensorPressureDebug frame */
+    LINE_Request_RotorSensorPressureDebug_data.fields.Pressure = ALT_GetPressure();
+
+    /* RotorSensorMotionDebug frame */
+    LINE_Request_RotorSensorMotionDebug_data.fields.aX = IMU_Accel.x;
+    LINE_Request_RotorSensorMotionDebug_data.fields.aY = IMU_Accel.y;
+    LINE_Request_RotorSensorMotionDebug_data.fields.aZ = IMU_Accel.z;
+    LINE_Request_RotorSensorMotionDebug_data.fields.gX = IMU_Gyro.x;
+    LINE_Request_RotorSensorMotionDebug_data.fields.gY = IMU_Gyro.y;
+    LINE_Request_RotorSensorMotionDebug_data.fields.gZ = IMU_Gyro.z;
+
+    /* RotorSensorSpeedDebug frame */
+    LINE_Request_RotorSensorSpeedDebug_data.fields.FrontSpeed = SPEED_FrontWheel.speed;
+    LINE_Request_RotorSensorSpeedDebug_data.fields.RearSpeed = SPEED_RearWheel.speed;
+    LINE_Request_RotorSensorSpeedDebug_data.fields.FrontSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_FRONT_SENSOR_CHANNEL));
+    LINE_Request_RotorSensorSpeedDebug_data.fields.RearSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_REAR_SENSOR_CHANNEL));
+    LINE_Request_RotorSensorSpeedDebug_data.fields.CrankSensorStatus = COMM_EncodeSpeedSensorState(SEC_GetChannelState(SPM_CRANK_SENSOR_CHANNEL));
+    LINE_Request_RotorSensorSpeedDebug_data.fields.CrankPosition = 0;       // TODO: connect from cadence component
 }
