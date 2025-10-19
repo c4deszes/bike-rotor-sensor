@@ -117,37 +117,18 @@ add_executable(
     src/app/ridelogs.c
     src/app/sec.c
     src/app/speed.c
-    src/app/tasks.c
     src/app/sys_state.c
+    src/app/tasks.c
     src/app/volt.c
 
     # BSP layer
     src/bsp/bmi088.c
     src/bsp/bmp581.c
+    src/bsp/board.c
     src/bsp/osh_phy.c
     src/bsp/sensor_generic.c
     src/bsp/sensor.c
-    src/bsp/board.c
     src/bsp/usart.c
-
-    src/hal/ac.c
-    src/hal/adc.c
-    src/hal/eic.c
-    src/hal/gclk.c
-    src/hal/gpio.c
-    src/hal/pm.c
-    src/hal/evsys.c
-    src/hal/rtc.c
-    src/hal/nvic.c
-    src/hal/tc.c
-    src/hal/tcc.c
-    src/hal/wdt.c
-    src/hal/startup.c
-    src/hal/sysctrl.c
-    src/hal/sercom_usart.c
-
-    src/common/ringbuffer.c
-    src/common/swtimer.c
 )
 target_include_directories(application PRIVATE include
                                                ${APP_GENCODE_DIR})
@@ -161,7 +142,7 @@ target_link_libraries(application PRIVATE   samd21e18a
 
 set_target_properties(application PROPERTIES SUFFIX ".elf")
 target_link_options(application PRIVATE "-mcpu=cortex-m0" "-mthumb")
-target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/ATSAMD21E18A.ld)
+target_link_options(application PRIVATE -T${CMAKE_CURRENT_SOURCE_DIR}/ld/application.ld)
 target_link_options(application PRIVATE -Wl,-Map=application.map -Wl,--gc-sections)
 
 add_library(test-lib INTERFACE)
@@ -198,7 +179,7 @@ add_custom_target(application-merge
 )
 
 add_custom_target(application-full
-    DEPENDS application-hex application-lss application-memory
+    DEPENDS application-hex application-lss application-memory factory_header app_header application-merge
 )
 
 #####################################################################################################
