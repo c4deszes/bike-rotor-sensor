@@ -57,6 +57,6 @@ void SYSSTATE_Update(void) {
     else if (sys_state == sys_state_goto_sleep) {
         // TODO: sleep support
         RIDE_Stop();
-        RIDELOGS_SaveContainer();
+        //RIDELOGS_SaveContainer();
     }
 }
