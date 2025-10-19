@@ -8,7 +8,6 @@
 #include "app/speed.h"
 #include "app/imu.h"
 #include "app/itpms.h"
-#include "app/sys_state.h"
 #include "common/swtimer.h"
 #include "bsp/sensor.h"
 #include "app/cadence.h"

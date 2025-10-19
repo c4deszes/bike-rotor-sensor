@@ -3,7 +3,6 @@
 
 #include "hal/sysctrl.h"
 #include "hal/gclk.h"
-#include "hal/pm.h"
 
 #include "sam.h"
 
