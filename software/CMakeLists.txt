@@ -19,10 +19,10 @@ include(tools/cmake/CPM.cmake)
 ####################################################################################################
 # Dependencies
 ####################################################################################################
-CPMAddPackage("gh:c4deszes/samd21-hal#feature/new-peripherals2")
-CPMAddPackage("gh:c4deszes/bike-line-protocol@0.2.0")
-CPMAddPackage("gh:c4deszes/bike-flash-tool#feature/line-lib-update")
-CPMAddPackage("gh:c4deszes/samd21-line-bootloader@0.3.0")
+CPMAddPackage("gh:c4deszes/samd21-hal@0.4.0")
+CPMAddPackage("gh:c4deszes/bike-line-protocol@0.3.0")
+CPMAddPackage("gh:c4deszes/bike-flash-tool@0.2.0")
+CPMAddPackage("gh:c4deszes/samd21-line-bootloader@0.4.0")
 CPMAddPackage("gh:c4deszes/bike-uds-tool@0.2.0")
 
 # Test configuration
