@@ -28,7 +28,7 @@ void SYSSTATE_Initialize(void) {
 
 uint64_t boot_entry_key __attribute__((section(".bl_shared_ram")));
 static void SYSSTATE_BootEntry(void) {
-    boot_entry_key = BOOT_ENTRY_MAGIC;
+    boot_entry_key = BL_BOOT_ENTRY_MAGIC;
 
     NVIC_SystemReset();
 }

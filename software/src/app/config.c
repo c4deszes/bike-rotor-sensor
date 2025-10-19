@@ -46,9 +46,9 @@ void CONFIG_ReloadUdsProperties(void) {
     CONFIG_Props.Ride_ResumeTimeout = UDS_Properties_RotorSensor.Ride_ResumeTimeout;
 
     CONFIG_Props.Altitude_Enabled = UDS_Properties_RotorSensor.Altitude_Enabled;
-    CONFIG_Props.Altitude_QNH = UDS_Properties_RotorSensor.Altitude_QNH;
+    //CONFIG_Props.Altitude_QNH = UDS_Properties_RotorSensor.Altitude_QNH;
 
-    CONFIG_Props.ITPMS_AutoStart = UDS_Properties_RotorSensor.ITPMS_AutoStart;
-    CONFIG_Props.ITPMS_MinimumSpeed = UDS_Properties_RotorSensor.ITPMS_MinimumSpeed;
-    CONFIG_Props.ITPMS_SpeedThreshold = UDS_Properties_RotorSensor.ITPMS_SpeedThreshold;
+    //CONFIG_Props.ITPMS_AutoStart = UDS_Properties_RotorSensor.ITPMS_AutoStart;
+    //CONFIG_Props.ITPMS_MinimumSpeed = UDS_Properties_RotorSensor.ITPMS_MinimumSpeed;
+    //CONFIG_Props.ITPMS_SpeedThreshold = UDS_Properties_RotorSensor.ITPMS_SpeedThreshold;
 }
